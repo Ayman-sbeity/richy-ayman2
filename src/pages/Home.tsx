@@ -4,15 +4,34 @@ import { styled } from "@mui/material/styles";
 import { SearchBar } from "../components/UI";
 
 const HeroSection = styled(Box)(({ theme }) => ({
-  background: "linear-gradient(135deg, #d92228 0%, #b91c22 100%)",
+  position: 'relative',
+  background: `url('/mountainhead-house.webp') no-repeat center center`,
+  backgroundSize: 'cover',
+  backgroundAttachment: 'fixed',
   color: "white",
-  padding: theme.spacing(10, 3),
+  padding: theme.spacing(15, 3),
   textAlign: "center",
+  minHeight: '70vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 1,
+  },
 }));
 
 const HeroContent = styled(Box)(({ theme }) => ({
   maxWidth: 800,
   margin: "0 auto",
+  position: 'relative',
+  zIndex: 2,
 }));
 
 const ContentSection = styled(Box)(({ theme }) => ({
@@ -35,8 +54,10 @@ const Home: React.FC = () => {
             sx={{
               fontWeight: 700,
               mb: 3,
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-              fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
+              textShadow: "0 4px 8px rgba(0, 0, 0, 0.6)",
+              fontSize: { xs: "2.5rem", sm: "3rem", md: "4rem" },
+              letterSpacing: '-0.5px',
+              lineHeight: 1.2,
             }}
           >
             Find Your Dream Home
@@ -45,8 +66,11 @@ const Home: React.FC = () => {
             variant="h6"
             sx={{
               mb: 5,
-              opacity: 0.95,
-              fontSize: { xs: "1rem", sm: "1.25rem" },
+              opacity: 1,
+              fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.4rem" },
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+              fontWeight: 300,
+              letterSpacing: '0.5px',
             }}
           >
             Discover the perfect property with our comprehensive real estate
