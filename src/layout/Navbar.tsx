@@ -85,8 +85,8 @@ const Navbar: React.FC = () => {
   ];
 
   const actionButtons = [
-    { label: 'Log in', variant: 'outlined' as const },
-    { label: 'Sign up', variant: 'contained' as const },
+    { label: 'Log in', variant: 'outlined' as const, href: '/login' },
+    { label: 'Sign up', variant: 'contained' as const, href: '/signup' },
   ];
 
   const handleMobileMenuToggle = () => {
