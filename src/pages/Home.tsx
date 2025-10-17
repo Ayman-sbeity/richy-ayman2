@@ -1,7 +1,10 @@
-import React from "react";
-import { Box, Typography, Container } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { SearchBar } from "../components/UI";
+import SearchIcon from '@mui/icons-material/Search';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import HomeIcon from '@mui/icons-material/Home';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -41,9 +44,25 @@ const ContentSection = styled(Box)(({ theme }) => ({
   position: 'relative',
 }));
 
+const SearchContainer = styled(Box)(({ theme }) => ({
+  backgroundColor: 'rgba(255, 255, 255, 0.98)',
+  borderRadius: '8px',
+  padding: '32px',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+  maxWidth: '800px',
+  margin: '0 auto',
+  [theme.breakpoints.down('sm')]: {
+    padding: '24px 16px',
+  },
+}));
+
 const Home: React.FC = () => {
-  const handleSearch = (query: string) => {
-    console.log("Search query:", query);
+  const [location, setLocation] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  const [priceRange, setPriceRange] = useState('');
+
+  const handleSearch = () => {
+    console.log("Search:", { location, propertyType, priceRange });
   };
 
   return (
@@ -84,22 +103,197 @@ const Home: React.FC = () => {
             Discover the perfect property with our comprehensive real estate
             platform
           </Typography>
-          <Box 
-            sx={{ 
-              maxWidth: 600, 
-              margin: "0 auto",
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
-                transition: 'box-shadow 0.3s ease',
-                '&:hover': {
-                  boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
-                },
-              },
-            }}
-          >
-            <SearchBar onSearch={handleSearch} variant="hero" fullWidth />
-          </Box>
+          <SearchContainer>
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 3,
+                color: '#333',
+                fontWeight: 500,
+                textAlign: 'center',
+                fontSize: { xs: '1rem', sm: '1.1rem' },
+              }}
+            >
+              Start Your Property Search
+            </Typography>
+            
+            <Stack spacing={2}>
+              <Box 
+                sx={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+                  gap: 2,
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel>Location</InputLabel>
+                  <Select
+                    value={location}
+                    label="Location"
+                    onChange={(e) => setLocation(e.target.value)}
+                    sx={{
+                      '& .MuiSelect-select': {
+                        display: 'flex',
+                        alignItems: 'center',
+                      },
+                    }}
+                  >
+                    <MenuItem value="new-york">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        New York, NY
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="los-angeles">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Los Angeles, CA
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="chicago">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Chicago, IL
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="houston">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Houston, TX
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="miami">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Miami, FL
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="seattle">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Seattle, WA
+                      </Box>
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <InputLabel>Property Type</InputLabel>
+                  <Select
+                    value={propertyType}
+                    label="Property Type"
+                    onChange={(e) => setPropertyType(e.target.value)}
+                  >
+                    <MenuItem value="house">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <HomeIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        House
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="apartment">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <HomeIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Apartment
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="condo">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <HomeIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Condo
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="townhouse">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <HomeIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Townhouse
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="villa">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <HomeIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Villa
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="land">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <HomeIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        Land
+                      </Box>
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <InputLabel>Price Range</InputLabel>
+                  <Select
+                    value={priceRange}
+                    label="Price Range"
+                    onChange={(e) => setPriceRange(e.target.value)}
+                  >
+                    <MenuItem value="0-200k">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AttachMoneyIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        $0 - $200,000
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="200k-400k">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AttachMoneyIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        $200,000 - $400,000
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="400k-600k">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AttachMoneyIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        $400,000 - $600,000
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="600k-800k">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AttachMoneyIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        $600,000 - $800,000
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="800k-1m">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AttachMoneyIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        $800,000 - $1,000,000
+                      </Box>
+                    </MenuItem>
+                    <MenuItem value="1m+">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <AttachMoneyIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
+                        $1,000,000+
+                      </Box>
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                onClick={handleSearch}
+                startIcon={<SearchIcon />}
+                sx={{
+                  backgroundColor: '#d92228',
+                  color: 'white',
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  boxShadow: '0 4px 12px rgba(217, 34, 40, 0.3)',
+                  '&:hover': {
+                    backgroundColor: '#b91c22',
+                    boxShadow: '0 6px 16px rgba(217, 34, 40, 0.4)',
+                  },
+                }}
+              >
+                Search Properties
+              </Button>
+            </Stack>
+          </SearchContainer>
         </HeroContent>
       </HeroSection>
 
