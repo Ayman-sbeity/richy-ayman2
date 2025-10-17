@@ -33,7 +33,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
-  maxHeight: '100vh',
+  maxHeight: 'none',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -54,8 +54,16 @@ const StyledContainer = styled(Container)(({ theme }) => ({
     opacity: 0.3,
     zIndex: 0,
   },
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(3, 2),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    alignItems: 'flex-start',
+  },
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3, 1.5),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
   },
 }));
 
@@ -64,6 +72,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: 20,
   maxWidth: 500,
   width: '100%',
+  maxHeight: '95vh',
+  overflowY: 'auto',
   boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
   animation: 'fadeInUp 0.6s ease-out',
   position: 'relative',
@@ -80,8 +90,34 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
       transform: 'translateY(0)',
     },
   },
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    background: 'rgba(0,0,0,0.05)',
+    borderRadius: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: 'rgba(217,34,40,0.3)',
+    borderRadius: '10px',
+    '&:hover': {
+      background: 'rgba(217,34,40,0.5)',
+    },
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(4),
+    borderRadius: 16,
+    maxWidth: 460,
+  },
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(3, 2.5),
+    borderRadius: 12,
+    maxWidth: '100%',
+    margin: theme.spacing(0, 1),
+    maxHeight: '92vh',
+  },
+  [theme.breakpoints.down(400)]: {
+    padding: theme.spacing(2.5, 2),
   },
 }));
 
@@ -89,6 +125,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     borderRadius: 12,
     transition: 'all 0.3s ease',
+    fontSize: '1rem',
     '&:hover': {
       transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(102, 126, 234, 0.15)',
@@ -96,6 +133,16 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     '&.Mui-focused': {
       transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(102, 126, 234, 0.25)',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    fontSize: '1rem',
+  },
+  '& .MuiOutlinedInput-input': {
+    padding: '14px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '12px',
+      fontSize: '16px', // Prevents zoom on iOS
     },
   },
 }));
@@ -114,19 +161,43 @@ const StyledButton = styled(Button)(({ theme }) => ({
   '&:active': {
     transform: 'translateY(0)',
   },
+  [theme.breakpoints.down('sm')]: {
+    padding: '12px 20px',
+    fontSize: '0.95rem',
+  },
 }));
 
 const SocialButton = styled(Button)(({ theme }) => ({
   borderRadius: 12,
-  padding: '10px',
+  padding: '10px 8px',
   border: '1px solid #e0e0e0',
   textTransform: 'none',
   flex: 1,
+  minWidth: 0,
   transition: 'all 0.3s ease',
+  fontSize: '0.875rem',
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
     borderColor: '#667eea',
+  },
+  '& .MuiButton-startIcon': {
+    marginRight: theme.spacing(0.5),
+    [theme.breakpoints.down('sm')]: {
+      marginRight: theme.spacing(0.25),
+      marginLeft: 0,
+    },
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px 6px',
+    fontSize: '0.75rem',
+  },
+  [theme.breakpoints.down(400)]: {
+    padding: '8px 4px',
+    fontSize: '0.7rem',
+    '& .MuiButton-startIcon': {
+      fontSize: '1rem',
+    },
   },
 }));
 
@@ -304,14 +375,29 @@ const Signup: React.FC = () => {
                 },
               }}
             />
-            <Typography variant="h4" fontWeight="700" gutterBottom>
+            <Typography 
+              variant="h4" 
+              fontWeight="700" 
+              gutterBottom
+              sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2.125rem' } }}
+            >
               Account Created!
             </Typography>
-            <Typography variant="body1" color="text.secondary" mb={2}>
+            <Typography 
+              variant="body1" 
+              color="text.secondary" 
+              mb={2}
+              sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+            >
               Your account has been successfully created.
             </Typography>
             <LinearProgress sx={{ borderRadius: 2 }} />
-            <Typography variant="body2" color="text.secondary" mt={2}>
+            <Typography 
+              variant="body2" 
+              color="text.secondary" 
+              mt={2}
+              sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
+            >
               Redirecting to login...
             </Typography>
           </Box>
@@ -324,7 +410,7 @@ const Signup: React.FC = () => {
     <StyledContainer maxWidth={false}>
       <StyledPaper elevation={8}>
         {/* Header */}
-        <Box textAlign="center" mb={4}>
+        <Box textAlign="center" mb={{ xs: 3, sm: 4 }}>
           <Typography
             variant="h4"
             fontWeight="700"
@@ -334,6 +420,7 @@ const Signup: React.FC = () => {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               animation: 'fadeIn 0.8s ease-out',
+              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' },
               '@keyframes fadeIn': {
                 from: { opacity: 0 },
                 to: { opacity: 1 },
@@ -342,21 +429,32 @@ const Signup: React.FC = () => {
           >
             Create Account
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography 
+            variant="body1" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+          >
             Join us to discover amazing properties
           </Typography>
         </Box>
 
         {/* Error Alert */}
         {error && (
-          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+          <Alert 
+            severity="error" 
+            sx={{ 
+              mb: { xs: 2, sm: 3 }, 
+              borderRadius: 2,
+              fontSize: { xs: '0.875rem', sm: '1rem' },
+            }}
+          >
             {error}
           </Alert>
         )}
 
         {/* Signup Form */}
         <form onSubmit={handleSubmit}>
-          <Box display="flex" flexDirection="column" gap={2.5}>
+          <Box display="flex" flexDirection="column" gap={{ xs: 2, sm: 2.5 }}>
             {/* Full Name Field */}
             <StyledTextField
               fullWidth
@@ -508,21 +606,37 @@ const Signup: React.FC = () => {
                   checked={formData.agreeToTerms}
                   onChange={handleChange}
                   color="primary"
+                  sx={{
+                    '& .MuiSvgIcon-root': {
+                      fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                    },
+                  }}
                 />
               }
               label={
-                <Typography variant="body2">
+                <Typography 
+                  variant="body2"
+                  sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
+                >
                   I agree to the{' '}
                   <Link
                     href="/terms"
-                    sx={{ color: '#d92228', textDecoration: 'none' }}
+                    sx={{ 
+                      color: '#d92228', 
+                      textDecoration: 'none',
+                      fontSize: { xs: '0.813rem', sm: '0.875rem' },
+                    }}
                   >
                     Terms and Conditions
                   </Link>{' '}
                   and{' '}
                   <Link
                     href="/privacy"
-                    sx={{ color: '#d92228', textDecoration: 'none' }}
+                    sx={{ 
+                      color: '#d92228', 
+                      textDecoration: 'none',
+                      fontSize: { xs: '0.813rem', sm: '0.875rem' },
+                    }}
                   >
                     Privacy Policy
                   </Link>
@@ -553,29 +667,33 @@ const Signup: React.FC = () => {
         </form>
 
         {/* Divider */}
-        <Divider sx={{ my: 3 }}>
-          <Typography variant="body2" color="text.secondary">
+        <Divider sx={{ my: { xs: 2.5, sm: 3 } }}>
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
+          >
             OR
           </Typography>
         </Divider>
 
         {/* Social Signup */}
-        <Box display="flex" gap={1.5} mb={3}>
+        <Box display="flex" gap={{ xs: 1, sm: 1.5 }} mb={{ xs: 2.5, sm: 3 }}>
           <SocialButton
             onClick={() => handleSocialSignup('Google')}
-            startIcon={<Google />}
+            startIcon={<Google sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
             Google
           </SocialButton>
           <SocialButton
             onClick={() => handleSocialSignup('Facebook')}
-            startIcon={<Facebook />}
+            startIcon={<Facebook sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
             Facebook
           </SocialButton>
           <SocialButton
             onClick={() => handleSocialSignup('Apple')}
-            startIcon={<Apple />}
+            startIcon={<Apple sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
             Apple
           </SocialButton>
@@ -583,7 +701,11 @@ const Signup: React.FC = () => {
 
         {/* Login Link */}
         <Box textAlign="center">
-          <Typography variant="body2" color="text.secondary">
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+          >
             Already have an account?{' '}
             <Link
               component={RouterLink}
@@ -592,6 +714,7 @@ const Signup: React.FC = () => {
                 color: '#d92228',
                 fontWeight: 600,
                 textDecoration: 'none',
+                fontSize: { xs: '0.875rem', sm: '1rem' },
                 '&:hover': {
                   textDecoration: 'underline',
                 },

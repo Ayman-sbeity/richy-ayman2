@@ -49,8 +49,14 @@ const StyledContainer = styled(Container)(({ theme }) => ({
     opacity: 0.3,
     zIndex: 0,
   },
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     padding: theme.spacing(2),
+    alignItems: 'flex-start',
+    paddingTop: theme.spacing(4),
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2, 1.5),
+    paddingTop: theme.spacing(3),
   },
 }));
 
@@ -75,8 +81,19 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
       transform: 'translateY(0)',
     },
   },
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(4),
+    borderRadius: 16,
+    maxWidth: 440,
+  },
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(3, 2.5),
+    borderRadius: 12,
+    maxWidth: '100%',
+    margin: theme.spacing(0, 1),
+  },
+  [theme.breakpoints.down(400)]: {
+    padding: theme.spacing(2.5, 2),
   },
 }));
 
@@ -84,6 +101,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     borderRadius: 12,
     transition: 'all 0.3s ease',
+    fontSize: '1rem',
     '&:hover': {
       transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(102, 126, 234, 0.15)',
@@ -91,6 +109,16 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     '&.Mui-focused': {
       transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(102, 126, 234, 0.25)',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    fontSize: '1rem',
+  },
+  '& .MuiOutlinedInput-input': {
+    padding: '14px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '12px',
+      fontSize: '16px', // Prevents zoom on iOS
     },
   },
 }));
@@ -109,19 +137,43 @@ const StyledButton = styled(Button)(({ theme }) => ({
   '&:active': {
     transform: 'translateY(0)',
   },
+  [theme.breakpoints.down('sm')]: {
+    padding: '12px 20px',
+    fontSize: '0.95rem',
+  },
 }));
 
 const SocialButton = styled(Button)(({ theme }) => ({
   borderRadius: 12,
-  padding: '10px',
+  padding: '10px 8px',
   border: '1px solid #e0e0e0',
   textTransform: 'none',
   flex: 1,
+  minWidth: 0,
   transition: 'all 0.3s ease',
+  fontSize: '0.875rem',
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
     borderColor: '#667eea',
+  },
+  '& .MuiButton-startIcon': {
+    marginRight: theme.spacing(0.5),
+    [theme.breakpoints.down('sm')]: {
+      marginRight: theme.spacing(0.25),
+      marginLeft: 0,
+    },
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px 6px',
+    fontSize: '0.75rem',
+  },
+  [theme.breakpoints.down(400)]: {
+    padding: '8px 4px',
+    fontSize: '0.7rem',
+    '& .MuiButton-startIcon': {
+      fontSize: '1rem',
+    },
   },
 }));
 
@@ -193,7 +245,7 @@ const Login: React.FC = () => {
     <StyledContainer maxWidth={false}>
       <StyledPaper elevation={8}>
         {/* Header */}
-        <Box textAlign="center" mb={4}>
+        <Box textAlign="center" mb={4} sx={{ mb: { xs: 3, sm: 4 } }}>
           <Typography
             variant="h4"
             fontWeight="700"
@@ -203,6 +255,7 @@ const Login: React.FC = () => {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               animation: 'fadeIn 0.8s ease-out',
+              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' },
               '@keyframes fadeIn': {
                 from: { opacity: 0 },
                 to: { opacity: 1 },
@@ -211,21 +264,32 @@ const Login: React.FC = () => {
           >
             Welcome Back
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography 
+            variant="body1" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+          >
             Log in to find your dream property
           </Typography>
         </Box>
 
         {/* Error Alert */}
         {error && (
-          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+          <Alert 
+            severity="error" 
+            sx={{ 
+              mb: { xs: 2, sm: 3 }, 
+              borderRadius: 2,
+              fontSize: { xs: '0.875rem', sm: '1rem' },
+            }}
+          >
             {error}
           </Alert>
         )}
 
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
-          <Box display="flex" flexDirection="column" gap={2.5}>
+          <Box display="flex" flexDirection="column" gap={{ xs: 2, sm: 2.5 }}>
             {/* Email Field */}
             <StyledTextField
               fullWidth
@@ -277,6 +341,8 @@ const Login: React.FC = () => {
               display="flex"
               justifyContent="space-between"
               alignItems="center"
+              flexWrap="wrap"
+              gap={1}
             >
               <FormControlLabel
                 control={
@@ -285,9 +351,18 @@ const Login: React.FC = () => {
                     checked={formData.rememberMe}
                     onChange={handleChange}
                     color="primary"
+                    sx={{
+                      '& .MuiSvgIcon-root': {
+                        fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                      },
+                    }}
                   />
                 }
-                label="Remember me"
+                label={
+                  <Typography sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>
+                    Remember me
+                  </Typography>
+                }
               />
               <Link
                 component={RouterLink}
@@ -296,6 +371,7 @@ const Login: React.FC = () => {
                   textDecoration: 'none',
                   color: '#d92228',
                   fontWeight: 500,
+                  fontSize: { xs: '0.875rem', sm: '1rem' },
                   '&:hover': {
                     textDecoration: 'underline',
                   },
@@ -328,29 +404,33 @@ const Login: React.FC = () => {
         </form>
 
         {/* Divider */}
-        <Divider sx={{ my: 3 }}>
-          <Typography variant="body2" color="text.secondary">
+        <Divider sx={{ my: { xs: 2.5, sm: 3 } }}>
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
+          >
             OR
           </Typography>
         </Divider>
 
         {/* Social Login */}
-        <Box display="flex" gap={1.5} mb={3}>
+        <Box display="flex" gap={{ xs: 1, sm: 1.5 }} mb={{ xs: 2.5, sm: 3 }}>
           <SocialButton
             onClick={() => handleSocialLogin('Google')}
-            startIcon={<Google />}
+            startIcon={<Google sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
             Google
           </SocialButton>
           <SocialButton
             onClick={() => handleSocialLogin('Facebook')}
-            startIcon={<Facebook />}
+            startIcon={<Facebook sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
             Facebook
           </SocialButton>
           <SocialButton
             onClick={() => handleSocialLogin('Apple')}
-            startIcon={<Apple />}
+            startIcon={<Apple sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
             Apple
           </SocialButton>
@@ -358,7 +438,11 @@ const Login: React.FC = () => {
 
         {/* Sign Up Link */}
         <Box textAlign="center">
-          <Typography variant="body2" color="text.secondary">
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+          >
             Don't have an account?{' '}
             <Link
               component={RouterLink}
@@ -367,6 +451,7 @@ const Login: React.FC = () => {
                 color: '#d92228',
                 fontWeight: 600,
                 textDecoration: 'none',
+                fontSize: { xs: '0.875rem', sm: '1rem' },
                 '&:hover': {
                   textDecoration: 'underline',
                 },
