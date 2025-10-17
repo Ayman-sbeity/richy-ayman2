@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack, Card, CardMedia, CardContent, Chip } from "@mui/material";
+import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack, Card, CardMedia, CardContent, Chip, Avatar, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -9,6 +9,12 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import PeopleIcon from '@mui/icons-material/People';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+import MapIcon from '@mui/icons-material/Map';
+import ArticleIcon from '@mui/icons-material/Article';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -553,6 +559,395 @@ const Home: React.FC = () => {
           </Box>
         </Container>
       </ContentSection>
+
+      {/* Interactive Map Section */}
+      <Box sx={{ backgroundColor: '#fff', py: 8 }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              textAlign: "center",
+              mb: 2,
+              color: "#1a1a1a",
+              fontWeight: 500,
+              fontSize: { xs: "1.875rem", sm: "2.25rem", md: "2.75rem" },
+              letterSpacing: '0.5px',
+              fontFamily: 'Georgia, serif',
+            }}
+          >
+            Explore Properties by Location
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#666",
+              mb: 6,
+              fontSize: '1.1rem',
+            }}
+          >
+            Find your perfect home in Lebanon's most desirable locations
+          </Typography>
+
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+              gap: 3,
+            }}
+          >
+            {[
+              { name: 'Beirut', properties: 1250, icon: '🏙️' },
+              { name: 'Jounieh', properties: 680, icon: '🏖️' },
+              { name: 'Byblos', properties: 420, icon: '🏰' },
+              { name: 'Tripoli', properties: 550, icon: '🕌' },
+              { name: 'Saida', properties: 380, icon: '🏛️' },
+              { name: 'Batroun', properties: 290, icon: '⛵' },
+              { name: 'Zahle', properties: 310, icon: '🏔️' },
+              { name: 'Tyre', properties: 240, icon: '🌊' },
+            ].map((location, index) => (
+              <Card
+                key={index}
+                sx={{
+                  textAlign: 'center',
+                  p: 3,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 8px 20px rgba(217, 34, 40, 0.15)',
+                    backgroundColor: '#fffaf0',
+                  },
+                }}
+              >
+                <Typography sx={{ fontSize: '3rem', mb: 1 }}>
+                  {location.icon}
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5, color: '#1a1a1a' }}>
+                  {location.name}
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#d92228', fontWeight: 500 }}>
+                  {location.properties} Properties
+                </Typography>
+              </Card>
+            ))}
+          </Box>
+
+          <Box sx={{ textAlign: 'center', mt: 5 }}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<MapIcon />}
+              sx={{
+                backgroundColor: '#d92228',
+                color: 'white',
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 500,
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#b91c22',
+                },
+              }}
+            >
+              View Interactive Map
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Meet Our Agents Section */}
+      <ContentSection>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              textAlign: "center",
+              mb: 2,
+              color: "#1a1a1a",
+              fontWeight: 500,
+              fontSize: { xs: "1.875rem", sm: "2.25rem", md: "2.75rem" },
+              letterSpacing: '0.5px',
+              fontFamily: 'Georgia, serif',
+            }}
+          >
+            Meet Our Expert Agents
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#666",
+              mb: 6,
+              fontSize: '1.1rem',
+            }}
+          >
+            Work with the best real estate professionals in Lebanon
+          </Typography>
+
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+              gap: 4,
+              maxWidth: '800px',
+              margin: '0 auto',
+            }}
+          >
+            {[
+              { name: 'Ayman Sbeity', specialty: 'Luxury Properties & Investment', phone: '+961 3 123 456', email: 'ayman@realty.com', deals: 200 },
+              { name: 'Richy', specialty: 'Residential & Commercial Sales', phone: '+961 3 234 567', email: 'richy@realty.com', deals: 180 },
+            ].map((agent, index) => (
+              <Card
+                key={index}
+                sx={{
+                  textAlign: 'center',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                  },
+                }}
+              >
+                <CardContent>
+                  <Avatar
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      margin: '0 auto 16px',
+                      backgroundColor: '#d92228',
+                      fontSize: '2.5rem',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {agent.name.split(' ').map(n => n[0]).join('')}
+                  </Avatar>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    {agent.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#d92228', mb: 2, fontWeight: 500 }}>
+                    {agent.specialty}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: '#999', display: 'block', mb: 2 }}>
+                    {agent.deals}+ Successful Deals
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mb: 2 }}>
+                    <IconButton
+                      size="small"
+                      sx={{
+                        backgroundColor: '#f0f0f0',
+                        '&:hover': { backgroundColor: '#d92228', color: 'white' },
+                      }}
+                    >
+                      <PhoneIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      sx={{
+                        backgroundColor: '#f0f0f0',
+                        '&:hover': { backgroundColor: '#d92228', color: 'white' },
+                      }}
+                    >
+                      <EmailIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      borderColor: '#d92228',
+                      color: '#d92228',
+                      textTransform: 'none',
+                      '&:hover': {
+                        borderColor: '#b91c22',
+                        backgroundColor: 'rgba(217, 34, 40, 0.05)',
+                      },
+                    }}
+                  >
+                    View Profile
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+
+          <Box sx={{ textAlign: 'center', mt: 5 }}>
+            <Button
+              variant="outlined"
+              size="large"
+              sx={{
+                borderColor: '#d92228',
+                color: '#d92228',
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 500,
+                textTransform: 'none',
+                '&:hover': {
+                  borderColor: '#b91c22',
+                  backgroundColor: 'rgba(217, 34, 40, 0.05)',
+                },
+              }}
+            >
+              Meet All Our Agents
+            </Button>
+          </Box>
+        </Container>
+      </ContentSection>
+
+      {/* Latest Blog/News Section */}
+      <Box sx={{ backgroundColor: '#fff', py: 8 }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              textAlign: "center",
+              mb: 2,
+              color: "#1a1a1a",
+              fontWeight: 500,
+              fontSize: { xs: "1.875rem", sm: "2.25rem", md: "2.75rem" },
+              letterSpacing: '0.5px',
+              fontFamily: 'Georgia, serif',
+            }}
+          >
+            Latest Insights & News
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#666",
+              mb: 6,
+              fontSize: '1.1rem',
+            }}
+          >
+            Stay informed with the latest real estate trends and market updates
+          </Typography>
+
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+              gap: 4,
+            }}
+          >
+            {[
+              {
+                title: 'Lebanon Real Estate Market Trends 2025',
+                excerpt: 'Discover the latest trends shaping Lebanon\'s real estate market and what it means for buyers and investors...',
+                date: 'October 15, 2025',
+                category: 'Market Analysis',
+                readTime: '5 min read',
+              },
+              {
+                title: 'Top 10 Neighborhoods in Beirut for Families',
+                excerpt: 'Looking for a family-friendly neighborhood in Beirut? Here are our top picks with excellent schools and amenities...',
+                date: 'October 12, 2025',
+                category: 'Buying Guide',
+                readTime: '7 min read',
+              },
+              {
+                title: 'Investment Opportunities in Lebanese Coastal Cities',
+                excerpt: 'Explore lucrative investment opportunities in Jounieh, Byblos, and other coastal gems of Lebanon...',
+                date: 'October 8, 2025',
+                category: 'Investment',
+                readTime: '6 min read',
+              },
+            ].map((article, index) => (
+              <Card
+                key={index}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                  },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image="/mountainhead-house.webp"
+                  alt={article.title}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                  <Chip
+                    label={article.category}
+                    size="small"
+                    sx={{
+                      alignSelf: 'flex-start',
+                      backgroundColor: '#fff3f0',
+                      color: '#d92228',
+                      fontWeight: 500,
+                      mb: 2,
+                    }}
+                  />
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, lineHeight: 1.4 }}>
+                    {article.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#666', mb: 3, flexGrow: 1 }}>
+                    {article.excerpt}
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="caption" sx={{ color: '#999', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <CalendarTodayIcon sx={{ fontSize: '0.875rem' }} />
+                      {article.date}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#999' }}>
+                      {article.readTime}
+                    </Typography>
+                  </Box>
+                  <Button
+                    fullWidth
+                    endIcon={<ArrowForwardIcon />}
+                    sx={{
+                      color: '#d92228',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      justifyContent: 'space-between',
+                      '&:hover': {
+                        backgroundColor: 'rgba(217, 34, 40, 0.05)',
+                      },
+                    }}
+                  >
+                    Read More
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+
+          <Box sx={{ textAlign: 'center', mt: 6 }}>
+            <Button
+              variant="contained"
+              size="large"
+              endIcon={<ArticleIcon />}
+              sx={{
+                backgroundColor: '#d92228',
+                color: 'white',
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 500,
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#b91c22',
+                },
+              }}
+            >
+              View All Articles
+            </Button>
+          </Box>
+        </Container>
+      </Box>
     </Box>
   );
 };
