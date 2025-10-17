@@ -81,7 +81,7 @@ const Navbar: React.FC = () => {
     { label: 'Sell', href: '/sell' },
     { label: 'Rent', href: '/listings?type=rent' },
     { label: 'About Us', href: '/about' },
-    { label: 'Find Agents', href: '/agents' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   const actionButtons = [
