@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack } from "@mui/material";
+import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack, Card, CardMedia, CardContent, Chip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import HomeIcon from '@mui/icons-material/Home';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import PeopleIcon from '@mui/icons-material/People';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -138,40 +142,40 @@ const Home: React.FC = () => {
                       },
                     }}
                   >
-                    <MenuItem value="new-york">
+                    <MenuItem value="beirut">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
-                        New York, NY
+                        Beirut
                       </Box>
                     </MenuItem>
-                    <MenuItem value="los-angeles">
+                    <MenuItem value="jounieh">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
-                        Los Angeles, CA
+                        Jounieh
                       </Box>
                     </MenuItem>
-                    <MenuItem value="chicago">
+                    <MenuItem value="byblos">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
-                        Chicago, IL
+                        Byblos (Jbeil)
                       </Box>
                     </MenuItem>
-                    <MenuItem value="houston">
+                    <MenuItem value="tripoli">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
-                        Houston, TX
+                        Tripoli
                       </Box>
                     </MenuItem>
-                    <MenuItem value="miami">
+                    <MenuItem value="saida">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
-                        Miami, FL
+                        Saida (Sidon)
                       </Box>
                     </MenuItem>
-                    <MenuItem value="seattle">
+                    <MenuItem value="batroun">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <LocationOnIcon sx={{ color: '#d92228', fontSize: '1.2rem' }} />
-                        Seattle, WA
+                        Batroun
                       </Box>
                     </MenuItem>
                   </Select>
@@ -297,6 +301,57 @@ const Home: React.FC = () => {
         </HeroContent>
       </HeroSection>
 
+      {/* Stats Section */}
+      <Box sx={{ backgroundColor: '#fff', py: 6 }}>
+        <Container maxWidth="lg">
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+              gap: 4,
+            }}
+          >
+            <Box sx={{ textAlign: 'center' }}>
+              <ApartmentIcon sx={{ fontSize: '3rem', color: '#d92228', mb: 2 }} />
+              <Typography variant="h3" sx={{ fontWeight: 700, color: '#1a1a1a', mb: 1 }}>
+                5,000+
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
+                Properties Listed
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <PeopleIcon sx={{ fontSize: '3rem', color: '#d92228', mb: 2 }} />
+              <Typography variant="h3" sx={{ fontWeight: 700, color: '#1a1a1a', mb: 1 }}>
+                200+
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
+                Expert Agents
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <TrendingUpIcon sx={{ fontSize: '3rem', color: '#d92228', mb: 2 }} />
+              <Typography variant="h3" sx={{ fontWeight: 700, color: '#1a1a1a', mb: 1 }}>
+                15+
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
+                Cities Covered
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <VerifiedIcon sx={{ fontSize: '3rem', color: '#d92228', mb: 2 }} />
+              <Typography variant="h3" sx={{ fontWeight: 700, color: '#1a1a1a', mb: 1 }}>
+                98%
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
+                Customer Satisfaction
+              </Typography>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Featured Properties Section */}
       <ContentSection>
         <Container maxWidth="lg">
           <Typography
@@ -304,43 +359,198 @@ const Home: React.FC = () => {
             component="h2"
             sx={{
               textAlign: "center",
-              mb: 3,
+              mb: 2,
               color: "#1a1a1a",
               fontWeight: 500,
               fontSize: { xs: "1.875rem", sm: "2.25rem", md: "2.75rem" },
               letterSpacing: '0.5px',
               fontFamily: 'Georgia, serif',
-              position: 'relative',
-              paddingBottom: '16px',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                bottom: '0',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '60px',
-                height: '2px',
-                backgroundColor: '#d92228',
-              },
             }}
           >
-            Welcome to RealtyFinder
+            Featured Properties
           </Typography>
           <Typography
-            variant="h6"
+            variant="body1"
             sx={{
               textAlign: "center",
-              color: "#555555",
-              maxWidth: 650,
-              margin: "24px auto 0",
-              lineHeight: 1.7,
-              fontSize: { xs: "1.05rem", sm: "1.15rem", md: "1.2rem" },
-              fontWeight: 400,
-              fontFamily: '"Helvetica Neue", Arial, sans-serif',
+              color: "#666",
+              mb: 6,
+              fontSize: '1.1rem',
             }}
           >
-            Your trusted partner in finding the perfect home.
+            Discover our handpicked selection of premium properties across Lebanon
           </Typography>
+
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+              gap: 4,
+            }}
+          >
+            {/* Property 1 */}
+            <Card
+              sx={{
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                },
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="240"
+                image="/mountainhead-house.webp"
+                alt="Luxury Villa in Beirut"
+                sx={{ objectFit: 'cover' }}
+              />
+              <CardContent>
+                <Chip
+                  label="For Sale"
+                  size="small"
+                  sx={{
+                    backgroundColor: '#d92228',
+                    color: 'white',
+                    fontWeight: 500,
+                    mb: 2,
+                  }}
+                />
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                  Luxury Villa in Beirut
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: '#666', mb: 2, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                >
+                  <LocationOnIcon sx={{ fontSize: '1rem', color: '#d92228' }} />
+                  Achrafieh, Beirut
+                </Typography>
+                <Typography variant="h5" sx={{ color: '#d92228', fontWeight: 700 }}>
+                  $850,000
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#999', mt: 1 }}>
+                  4 Beds • 3 Baths • 3,200 sqft
+                </Typography>
+              </CardContent>
+            </Card>
+
+            {/* Property 2 */}
+            <Card
+              sx={{
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                },
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="240"
+                image="/mountainhead-house.webp"
+                alt="Modern Apartment in Jounieh"
+                sx={{ objectFit: 'cover' }}
+              />
+              <CardContent>
+                <Chip
+                  label="For Rent"
+                  size="small"
+                  sx={{
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    fontWeight: 500,
+                    mb: 2,
+                  }}
+                />
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                  Modern Apartment in Jounieh
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: '#666', mb: 2, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                >
+                  <LocationOnIcon sx={{ fontSize: '1rem', color: '#d92228' }} />
+                  Maameltein, Jounieh
+                </Typography>
+                <Typography variant="h5" sx={{ color: '#d92228', fontWeight: 700 }}>
+                  $2,500/mo
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#999', mt: 1 }}>
+                  3 Beds • 2 Baths • 1,800 sqft
+                </Typography>
+              </CardContent>
+            </Card>
+
+            {/* Property 3 */}
+            <Card
+              sx={{
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
+                },
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="240"
+                image="/mountainhead-house.webp"
+                alt="Beachfront Property in Byblos"
+                sx={{ objectFit: 'cover' }}
+              />
+              <CardContent>
+                <Chip
+                  label="For Sale"
+                  size="small"
+                  sx={{
+                    backgroundColor: '#d92228',
+                    color: 'white',
+                    fontWeight: 500,
+                    mb: 2,
+                  }}
+                />
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                  Beachfront Property in Byblos
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: '#666', mb: 2, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                >
+                  <LocationOnIcon sx={{ fontSize: '1rem', color: '#d92228' }} />
+                  Old Souk, Byblos
+                </Typography>
+                <Typography variant="h5" sx={{ color: '#d92228', fontWeight: 700 }}>
+                  $1,200,000
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#999', mt: 1 }}>
+                  5 Beds • 4 Baths • 4,500 sqft
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
+
+          <Box sx={{ textAlign: 'center', mt: 6 }}>
+            <Button
+              variant="outlined"
+              size="large"
+              sx={{
+                borderColor: '#d92228',
+                color: '#d92228',
+                px: 4,
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 500,
+                textTransform: 'none',
+                '&:hover': {
+                  borderColor: '#b91c22',
+                  backgroundColor: 'rgba(217, 34, 40, 0.05)',
+                },
+              }}
+            >
+              View All Properties
+            </Button>
+          </Box>
         </Container>
       </ContentSection>
     </Box>
