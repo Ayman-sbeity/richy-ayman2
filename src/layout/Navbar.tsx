@@ -77,9 +77,9 @@ const Navbar: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const navigationItems: NavigationItem[] = [
-    { label: 'Buy', href: '/buy' },
+    { label: 'Buy', href: '/listings?type=sale' },
     { label: 'Sell', href: '/sell' },
-    { label: 'Rent', href: '/rent' },
+    { label: 'Rent', href: '/listings?type=rent' },
     { label: 'Mortgage', href: '/mortgage' },
     { label: 'Find Agents', href: '/agents' },
   ];

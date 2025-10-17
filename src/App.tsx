@@ -2,6 +2,8 @@ import React from "react";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Listings from "./pages/Listings";
+import ListingDetail from "./pages/ListingDetail";
 import NotFound from "./pages/NotFound";
 import { Layout } from "./layout";
 import "./App.css";
@@ -13,6 +15,8 @@ const App: React.FC = () => {
       <Route path="/" element={<Layout />}> 
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
+        <Route path="listings" element={<Listings />} />
+        <Route path="listings/:id" element={<ListingDetail />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

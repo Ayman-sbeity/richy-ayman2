@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack, Card, CardMedia, CardContent, Chip, Avatar, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
@@ -67,12 +68,20 @@ const SearchContainer = styled(Box)(({ theme }) => ({
 }));
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [priceRange, setPriceRange] = useState('');
 
   const handleSearch = () => {
-    console.log("Search:", { location, propertyType, priceRange });
+    // Build query params
+    const params = new URLSearchParams();
+    if (location) params.append('city', location);
+    if (propertyType) params.append('type', propertyType);
+    if (priceRange) params.append('price', priceRange);
+    
+    // Navigate to listings with filters
+    navigate(`/listings?${params.toString()}`);
   };
 
   return (
