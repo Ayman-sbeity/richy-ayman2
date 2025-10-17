@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
     { label: 'Buy', href: '/listings?type=sale' },
     { label: 'Sell', href: '/sell' },
     { label: 'Rent', href: '/listings?type=rent' },
-    { label: 'Mortgage', href: '/mortgage' },
+    { label: 'About Us', href: '/about' },
     { label: 'Find Agents', href: '/agents' },
   ];
 
