@@ -10,7 +10,7 @@ interface AdSenseAdProps {
 
 declare global {
   interface Window {
-    adsbygoogle?: Array<{ push: (config: object) => void }>;
+    adsbygoogle?: any[];
   }
 }
 
@@ -24,12 +24,16 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
 
   useEffect(() => {
     try {
-      // This will push a new ad configuration to AdSense
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        (window.adsbygoogle as any).push({});
-      }
+      // Push ad configuration after component mounts
+      const timer = setTimeout(() => {
+        if (typeof window !== 'undefined' && window.adsbygoogle) {
+          window.adsbygoogle.push({});
+        }
+      }, 100);
+      
+      return () => clearTimeout(timer);
     } catch (err) {
-      console.log('AdSense is not available yet. This is normal in development.');
+      console.error('AdSense error:', err);
     }
   }, []);
 
@@ -39,6 +43,8 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
         my: 3,
         display: 'flex',
         justifyContent: 'center',
+        minHeight: '250px',
+        position: 'relative',
         ...style,
       }}
     >
@@ -58,12 +64,15 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
             fontSize: '14px',
             textAlign: 'center',
             padding: '16px',
+            zIndex: 1,
           }}
         >
           <div>
-            Google AdSense Ad<br />
+            📢 Google AdSense Ad<br />
             (Slot: {adSlot})<br />
-            <small>Ads only show in production</small>
+            <small style={{ fontSize: '12px', fontWeight: 'normal' }}>
+              Ads only show in production
+            </small>
           </div>
         </Box>
       )}
@@ -73,12 +82,14 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
           display: fullWidth ? 'block' : 'inline-block',
           width: fullWidth ? '100%' : '300px',
           height: '250px',
+          visibility: isDevelopment ? 'hidden' : 'visible',
+          position: isDevelopment ? 'absolute' : 'relative',
           ...style,
         }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // Replace with your publisher ID
+        data-ad-client="ca-pub-3544612181938151"
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
-        data-full-width-responsive={fullWidth}
+        data-full-width-responsive={fullWidth ? 'true' : 'false'}
       />
     </Box>
   );
