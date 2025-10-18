@@ -20,7 +20,8 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
   fullWidth = false,
   style,
 }) => {
-  const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+  // Always show ads in production (Vercel automatically sets NODE_ENV to 'production')
+  const isProduction = process.env.NODE_ENV === 'production';
 
   useEffect(() => {
     try {
@@ -48,7 +49,8 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
         ...style,
       }}
     >
-      {isDevelopment && (
+      {/* Show placeholder ONLY in development */}
+      {!isProduction && (
         <Box
           sx={{
             width: fullWidth ? '100%' : '300px',
@@ -82,8 +84,6 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
           display: fullWidth ? 'block' : 'inline-block',
           width: fullWidth ? '100%' : '300px',
           height: '250px',
-        //   visibility: isDevelopment ? 'hidden' : 'visible',
-          position: isDevelopment ? 'absolute' : 'relative',
           ...style,
         }}
         data-ad-client="ca-pub-3544612181938151"
