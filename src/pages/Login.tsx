@@ -25,7 +25,7 @@ import {
   Apple,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -179,6 +179,9 @@ const SocialButton = styled(Button)(({ theme }) => ({
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/';
+  
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -205,9 +208,10 @@ const Login: React.FC = () => {
     // Simulate API call
     setTimeout(() => {
       if (formData.email && formData.password) {
-        // Success
+        // Success - Set authentication status
+        localStorage.setItem('isAuthenticated', 'true');
         console.log('Login successful:', formData);
-        navigate('/');
+        navigate(redirectPath);
       } else {
         setError('Please enter valid credentials');
       }
