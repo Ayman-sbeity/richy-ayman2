@@ -620,22 +620,34 @@ const Signup: React.FC = () => {
                 >
                   I agree to the{' '}
                   <Link
-                    href="/terms"
+                    component={RouterLink}
+                    to="/terms"
+                    target="_blank"
                     sx={{ 
                       color: '#d92228', 
                       textDecoration: 'none',
                       fontSize: { xs: '0.813rem', sm: '0.875rem' },
+                      fontWeight: 600,
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
                     }}
                   >
                     Terms and Conditions
                   </Link>{' '}
                   and{' '}
                   <Link
-                    href="/privacy"
+                    component={RouterLink}
+                    to="/privacy"
+                    target="_blank"
                     sx={{ 
                       color: '#d92228', 
                       textDecoration: 'none',
                       fontSize: { xs: '0.813rem', sm: '0.875rem' },
+                      fontWeight: 600,
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
                     }}
                   >
                     Privacy Policy
