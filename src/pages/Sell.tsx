@@ -18,6 +18,15 @@ import {
   Stepper,
   Step,
   StepLabel,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ToggleButton,
+  ToggleButtonGroup,
+  Divider,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -31,6 +40,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DescriptionIcon from '@mui/icons-material/Description';
+import StarIcon from '@mui/icons-material/Star';
+import { subscriptionPlans, getPlansByUserType, calculateYearlySavings } from '../data/subscriptionPlans';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -90,6 +101,8 @@ const Sell: React.FC = () => {
   
   const [formData, setFormData] = useState({
     sellerType: '', // 'owner' or 'realtor'
+    subscriptionPlan: '', // plan id
+    billingCycle: 'monthly' as 'monthly' | 'yearly',
     title: '',
     description: '',
     propertyType: '',
@@ -111,7 +124,7 @@ const Sell: React.FC = () => {
     licenseNumber: '',
   });
 
-  const steps = ['Account Type', 'Property Details', 'Features & Amenities', 'Photos & Contact'];
+  const steps = ['Account Type', 'Subscription Plan', 'Property Details', 'Features & Amenities', 'Photos & Contact'];
 
   const propertyTypes = ['Apartment', 'House', 'Villa', 'Penthouse', 'Studio', 'Duplex', 'Land', 'Commercial'];
   const listingTypes = ['Sale', 'Rent'];
@@ -192,15 +205,23 @@ const Sell: React.FC = () => {
   const isStepValid = () => {
     switch (activeStep) {
       case 0:
+        // Account type selection
         return formData.sellerType !== '';
       case 1:
+        // Subscription plan selection
+        return formData.subscriptionPlan !== '';
+      case 2:
+        // Property details
         return formData.title && formData.propertyType && formData.listingType && 
                formData.price && formData.location && formData.city;
-      case 2:
-        return formData.bedrooms && formData.bathrooms && formData.area;
       case 3:
+        // Features & amenities
+        return formData.bedrooms && formData.bathrooms && formData.area;
+      case 4:
+        // Photos & contact
         const basicContactValid = images.length > 0 && formData.contactName && 
                                    formData.contactEmail && formData.contactPhone;
+        // If realtor, also require agency name and license
         if (formData.sellerType === 'realtor') {
           return basicContactValid && formData.agencyName && formData.licenseNumber;
         }
@@ -332,8 +353,327 @@ const Sell: React.FC = () => {
           </FormSection>
         )}
 
-        {/* Step 1: Property Details */}
-        {activeStep === 1 && (
+        {/* Step 1: Subscription Plan Selection */}
+        {activeStep === 1 && formData.sellerType && (
+          <FormSection>
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                fontWeight: 800, 
+                mb: 1.5, 
+                textAlign: 'center',
+                background: 'linear-gradient(135deg, #d92228 0%, #b01820 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontSize: { xs: '1.75rem', md: '2.25rem' }
+              }}
+            >
+              Choose Your Perfect Plan
+            </Typography>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                color: '#666', 
+                mb: 5, 
+                textAlign: 'center',
+                fontSize: '1.1rem',
+                maxWidth: 600,
+                mx: 'auto'
+              }}
+            >
+              Select the plan that best fits your property listing needs
+            </Typography>
+
+            {/* Billing Cycle Toggle */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+              <ToggleButtonGroup
+                value={formData.billingCycle}
+                exclusive
+                onChange={(e, value) => value && handleInputChange('billingCycle', value)}
+                sx={{
+                  '& .MuiToggleButton-root': {
+                    px: 4,
+                    py: 1.5,
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    '&.Mui-selected': {
+                      backgroundColor: '#d92228',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: '#b91c22',
+                      },
+                    },
+                  },
+                }}
+              >
+                <ToggleButton value="monthly">
+                  Monthly
+                </ToggleButton>
+                <ToggleButton value="yearly">
+                  Yearly <Chip label="Save up to 20%" size="small" sx={{ ml: 1, backgroundColor: '#28a745', color: 'white' }} />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
+
+            {/* Subscription Plans */}
+            <Box sx={{ 
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: { xs: 2, md: 3 },
+              flexWrap: { xs: 'wrap', md: 'nowrap' },
+              px: 2,
+              mt: 2,
+              minHeight: '450px'
+            }}>
+              {getPlansByUserType(formData.sellerType as 'owner' | 'realtor').map((plan) => {
+                const isSelected = formData.subscriptionPlan === plan.id;
+                const price = formData.billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice;
+                const savings = formData.billingCycle === 'yearly' ? Number(calculateYearlySavings(plan.monthlyPrice, plan.yearlyPrice).toFixed(2)) : 0;
+                
+                return (
+                  <Card
+                    key={plan.id}
+                    elevation={isSelected ? 8 : plan.highlighted ? 6 : 2}
+                    onClick={() => handleInputChange('subscriptionPlan', plan.id)}
+                    sx={{
+                      cursor: 'pointer',
+                      position: 'relative',
+                      transition: 'all 0.2s ease',
+                      width: { xs: '100%', sm: '280px', md: '280px' },
+                      height: '420px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      overflow: 'visible',
+                      // Enhanced styling for Professional plan
+                      ...(plan.highlighted && {
+                        background: 'linear-gradient(145deg, #ffffff 0%, #fff9f9 50%, #fff0f0 100%)',
+                        border: isSelected ? '3px solid #d92228' : '2px solid #f0a500',
+                        boxShadow: isSelected 
+                          ? '0 12px 40px rgba(217, 34, 40, 0.25)'
+                          : '0 8px 30px rgba(240, 165, 0, 0.15)',
+                      }),
+                      // Styling for other plans
+                      ...(!plan.highlighted && {
+                        border: isSelected ? '2px solid #d92228' : '1px solid #e0e0e0',
+                        backgroundColor: '#ffffff',
+                        boxShadow: isSelected 
+                          ? '0 8px 24px rgba(217, 34, 40, 0.15)'
+                          : '0 2px 12px rgba(0,0,0,0.06)',
+                      }),
+                      '&:hover': {
+                        boxShadow: plan.highlighted 
+                          ? '0 16px 50px rgba(240, 165, 0, 0.2)' 
+                          : '0 6px 20px rgba(0,0,0,0.12)',
+                        ...(plan.highlighted && {
+                          borderColor: isSelected ? '#d92228' : '#e0a500',
+                        }),
+                      },
+                    }}
+                  >
+                    {/* Selection Checkmark - Small and positioned at top right */}
+                    {isSelected && (
+                      <Box sx={{ 
+                        position: 'absolute', 
+                        top: 12, 
+                        right: 12,
+                        zIndex: 10,
+                        backgroundColor: '#d92228',
+                        borderRadius: '50%',
+                        width: 24,
+                        height: 24,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 3px 10px rgba(217, 34, 40, 0.4)',
+                      }}>
+                        <CheckCircleIcon sx={{ fontSize: 16, color: 'white' }} />
+                      </Box>
+                    )}
+
+                    {/* Most Popular Badge */}
+                    {plan.highlighted && (
+                      <Chip
+                        label="⭐ MOST POPULAR"
+                        sx={{
+                          position: 'absolute',
+                          top: -14,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          background: 'linear-gradient(135deg, #f0a500 0%, #e0a500 100%)',
+                          color: 'white',
+                          fontWeight: 700,
+                          fontSize: '0.75rem',
+                          letterSpacing: '0.5px',
+                          height: 28,
+                          px: 2,
+                          boxShadow: '0 4px 14px rgba(240, 165, 0, 0.4)',
+                          '& .MuiChip-label': {
+                            px: 1.5,
+                          },
+                        }}
+                      />
+                    )}
+                    
+                    <CardContent sx={{ 
+                      p: plan.highlighted ? 2.5 : 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%',
+                      flex: 1,
+                      '&:last-child': {
+                        pb: plan.highlighted ? 2.5 : 2,
+                      }
+                    }}>
+                      {/* Plan Name */}
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontWeight: 700, 
+                          mb: 0.8, 
+                          textAlign: 'center',
+                          color: plan.highlighted ? '#d92228' : '#1a1a1a',
+                          fontSize: plan.highlighted ? '1.15rem' : '1rem',
+                          letterSpacing: '-0.3px',
+                          textTransform: 'uppercase',
+                          ...(plan.highlighted && {
+                            background: 'linear-gradient(135deg, #d92228 0%, #b01820 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text',
+                          })
+                        }}
+                      >
+                        {plan.name}
+                      </Typography>
+                      
+                      {/* Description */}
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          color: plan.highlighted ? '#555' : '#666', 
+                          mb: 2, 
+                          textAlign: 'center', 
+                          minHeight: 32,
+                          lineHeight: 1.4,
+                          fontSize: plan.highlighted ? '0.85rem' : '0.8rem',
+                          fontWeight: plan.highlighted ? 500 : 400
+                        }}
+                      >
+                        {plan.description}
+                      </Typography>
+                      
+                      {/* Price Section */}
+                      <Box sx={{ 
+                        textAlign: 'center', 
+                        mb: 2,
+                        py: plan.highlighted ? 2 : 1.5,
+                        px: 1.5,
+                        borderRadius: 2,
+                        background: plan.highlighted 
+                          ? 'linear-gradient(135deg, rgba(217, 34, 40, 0.08) 0%, rgba(217, 34, 40, 0.02) 100%)'
+                          : 'rgba(0,0,0,0.02)',
+                        ...(plan.highlighted && {
+                          border: '1px solid rgba(217, 34, 40, 0.15)',
+                        })
+                      }}>
+                        <Typography 
+                          variant="h4" 
+                          sx={{ 
+                            fontWeight: 900, 
+                            color: plan.highlighted ? '#d92228' : '#333',
+                            display: 'inline',
+                            fontSize: plan.highlighted ? '2rem' : '1.75rem',
+                            lineHeight: 1,
+                            ...(plan.highlighted && {
+                              textShadow: '0 2px 8px rgba(217, 34, 40, 0.15)',
+                            })
+                          }}
+                        >
+                          ${price}
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: plan.highlighted ? '#d92228' : '#666', 
+                            display: 'inline', 
+                            ml: 1,
+                            fontSize: plan.highlighted ? '0.95rem' : '0.85rem',
+                            fontWeight: plan.highlighted ? 600 : 500
+                          }}
+                        >
+                          /{formData.billingCycle === 'monthly' ? 'mo' : 'yr'}
+                        </Typography>
+                        
+                        {savings > 0 && (
+                          <Box sx={{ 
+                            mt: 1,
+                            display: 'block', // changed from inline-block to block to place savings below the price
+                            px: 1.5,
+                            py: 0.35,
+                            borderRadius: 0.8,
+                            backgroundColor: '#28a745',
+                          }}>
+                            <Typography variant="caption" sx={{ color: 'white', fontWeight: 700, fontSize: '0.7rem' }}>
+                              💰 Save ${savings}/yr
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+                      
+                      <Divider sx={{ 
+                        mb: 2, 
+                        borderColor: plan.highlighted ? 'rgba(217, 34, 40, 0.2)' : '#e0e0e0', 
+                        borderWidth: plan.highlighted ? 1 : 0.5,
+                      }} />
+                      
+
+                      <List dense sx={{ mb: 0, flex: 1, py: 0 }}>
+                        {plan.features.slice(0, 5).map((feature, index) => (
+                          <ListItem key={index} sx={{ 
+                            px: 0, 
+                            py: 0.4,
+                            ...(plan.highlighted && {
+                              borderRadius: 0.5,
+                              transition: 'all 0.15s',
+                              '&:hover': {
+                                backgroundColor: 'rgba(217, 34, 40, 0.02)',
+                              }
+                            })
+                          }}>
+                            <ListItemIcon sx={{ minWidth: 28 }}>
+                              <CheckCircleIcon sx={{ 
+                                fontSize: 16, 
+                                color: plan.highlighted ? '#d92228' : '#4caf50',
+                              }} />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary={feature}
+                              primaryTypographyProps={{
+                                fontSize: plan.highlighted ? '0.8rem' : '0.75rem',
+                                color: '#333',
+                                fontWeight: plan.highlighted ? 500 : 400,
+                                lineHeight: 1.3
+                              }}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                      
+       
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </Box>
+
+       
+          </FormSection>
+        )}
+
+        {activeStep === 2 && (
           <FormSection>
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
               <DescriptionIcon sx={{ color: '#d92228' }} />
@@ -446,8 +786,8 @@ const Sell: React.FC = () => {
           </FormSection>
         )}
 
-        {/* Step 2: Features & Amenities */}
-        {activeStep === 2 && (
+        {/* Step 3: Features & Amenities */}
+        {activeStep === 3 && (
           <FormSection>
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
               Features & Amenities
@@ -552,8 +892,8 @@ const Sell: React.FC = () => {
           </FormSection>
         )}
 
-        {/* Step 3: Photos & Contact */}
-        {activeStep === 3 && (
+        {/* Step 4: Photos & Contact */}
+        {activeStep === 4 && (
           <>
             <FormSection>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>

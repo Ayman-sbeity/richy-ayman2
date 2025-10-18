@@ -16,6 +16,7 @@ import MapIcon from '@mui/icons-material/Map';
 import ArticleIcon from '@mui/icons-material/Article';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { AdSenseAd } from '../components/UI';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -954,6 +955,25 @@ const Home: React.FC = () => {
             >
               View All Articles
             </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Google AdSense Ad */}
+      <Box sx={{ backgroundColor: '#f8f9fa', py: 6 }}>
+        <Container maxWidth="lg">
+          <AdSenseAd 
+            adSlot="4155245346"
+            fullWidth={true}
+          />
+          
+          {/* Second Ad Unit - Fluid Format */}
+          <Box sx={{ mt: 6, pt: 3, borderTop: '1px solid #e0e0e0' }}>
+            <AdSenseAd 
+              adSlot="9340764048"
+              adFormat="auto"
+              fullWidth={true}
+            />
           </Box>
         </Container>
       </Box>
