@@ -963,7 +963,7 @@ const Home: React.FC = () => {
       <Box sx={{ backgroundColor: '#f8f9fa', py: 6 }}>
         <Container maxWidth="lg">
           <AdSenseAd 
-            adSlot="4155245346"
+            adSlot="4007518640"
             fullWidth={true}
           />
           
