@@ -82,7 +82,7 @@ const AdSenseAd: React.FC<AdSenseAdProps> = ({
           display: fullWidth ? 'block' : 'inline-block',
           width: fullWidth ? '100%' : '300px',
           height: '250px',
-          visibility: isDevelopment ? 'hidden' : 'visible',
+        //   visibility: isDevelopment ? 'hidden' : 'visible',
           position: isDevelopment ? 'absolute' : 'relative',
           ...style,
         }}
