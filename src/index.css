@@ -15,6 +15,20 @@ body {
   color: #333;
 }
 
+/* Arabic font support */
+html[lang="ar"] body {
+  font-family: 'Segoe UI', 'Arial', 'Tahoma', sans-serif;
+}
+
+/* RTL support for Arabic */
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] body {
+  text-align: right;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

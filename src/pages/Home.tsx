@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from '../contexts/LanguageContext';
 import { Box, Typography, Container, Button, Select, MenuItem, FormControl, InputLabel, Stack, Card, CardMedia, CardContent, Chip, Avatar, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
@@ -70,6 +71,7 @@ const SearchContainer = styled(Box)(({ theme }) => ({
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [priceRange, setPriceRange] = useState('');
@@ -103,7 +105,7 @@ const Home: React.FC = () => {
               fontFamily: 'Georgia, serif',
             }}
           >
-            Find Your Dream Home
+            {t.pages.home.hero.title}
           </Typography>
           <Typography
             variant="h6"
@@ -120,8 +122,7 @@ const Home: React.FC = () => {
               fontFamily: '"Helvetica Neue", Arial, sans-serif',
             }}
           >
-            Discover the perfect property with our comprehensive real estate
-            platform
+            {t.pages.home.hero.subtitle}
           </Typography>
           <SearchContainer>
             <Typography
@@ -134,7 +135,7 @@ const Home: React.FC = () => {
                 fontSize: { xs: '1rem', sm: '1.1rem' },
               }}
             >
-              Start Your Property Search
+              {t.pages.home.hero.searchStartLabel}
             </Typography>
             
             <Stack spacing={2}>
@@ -146,10 +147,10 @@ const Home: React.FC = () => {
                 }}
               >
                 <FormControl fullWidth>
-                  <InputLabel>Location</InputLabel>
+                  <InputLabel>{t.pages.home.hero.location}</InputLabel>
                   <Select
                     value={location}
-                    label="Location"
+                    label={t.pages.home.hero.location}
                     onChange={(e) => setLocation(e.target.value)}
                     sx={{
                       '& .MuiSelect-select': {
@@ -198,10 +199,10 @@ const Home: React.FC = () => {
                 </FormControl>
 
                 <FormControl fullWidth>
-                  <InputLabel>Property Type</InputLabel>
+                  <InputLabel>{t.pages.home.featured.propertyType}</InputLabel>
                   <Select
                     value={propertyType}
-                    label="Property Type"
+                    label={t.pages.home.featured.propertyType}
                     onChange={(e) => setPropertyType(e.target.value)}
                   >
                     <MenuItem value="house">
@@ -244,10 +245,10 @@ const Home: React.FC = () => {
                 </FormControl>
 
                 <FormControl fullWidth>
-                  <InputLabel>Price Range</InputLabel>
+                  <InputLabel>{t.pages.home.hero.priceRange}</InputLabel>
                   <Select
                     value={priceRange}
-                    label="Price Range"
+                    label={t.pages.home.hero.priceRange}
                     onChange={(e) => setPriceRange(e.target.value)}
                   >
                     <MenuItem value="0-200k">
@@ -310,7 +311,7 @@ const Home: React.FC = () => {
                   },
                 }}
               >
-                Search Properties
+                {t.pages.common.searchProperties}
               </Button>
             </Stack>
           </SearchContainer>
@@ -333,7 +334,7 @@ const Home: React.FC = () => {
                 5,000+
               </Typography>
               <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
-                Properties Listed
+                {t.pages.home.stats.propertiesLabel}
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
@@ -342,7 +343,7 @@ const Home: React.FC = () => {
                 200+
               </Typography>
               <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
-                Expert Agents
+                {t.pages.home.stats.agentsLabel}
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
@@ -351,7 +352,7 @@ const Home: React.FC = () => {
                 15+
               </Typography>
               <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
-                Cities Covered
+                {t.pages.home.stats.citiesLabel}
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
@@ -360,7 +361,7 @@ const Home: React.FC = () => {
                 98%
               </Typography>
               <Typography variant="body1" sx={{ color: '#666', fontWeight: 500 }}>
-                Customer Satisfaction
+                {t.pages.home.stats.satisfactionLabel}
               </Typography>
             </Box>
           </Box>
@@ -383,7 +384,7 @@ const Home: React.FC = () => {
               fontFamily: 'Georgia, serif',
             }}
           >
-            Featured Properties
+            {t.pages.home.featured.title}
           </Typography>
           <Typography
             variant="body1"
@@ -394,7 +395,7 @@ const Home: React.FC = () => {
               fontSize: '1.1rem',
             }}
           >
-            Discover our handpicked selection of premium properties across Lebanon
+            {t.pages.home.featured.subtitle}
           </Typography>
 
           <Box
@@ -423,7 +424,7 @@ const Home: React.FC = () => {
               />
               <CardContent>
                 <Chip
-                  label="For Sale"
+                  label={t.pages.home.featured.forSale}
                   size="small"
                   sx={{
                     backgroundColor: '#d92228',
@@ -470,7 +471,7 @@ const Home: React.FC = () => {
               />
               <CardContent>
                 <Chip
-                  label="For Rent"
+                  label={t.pages.home.featured.forRent}
                   size="small"
                   sx={{
                     backgroundColor: '#28a745',
@@ -517,7 +518,7 @@ const Home: React.FC = () => {
               />
               <CardContent>
                 <Chip
-                  label="For Sale"
+                  label={t.pages.home.featured.forSale}
                   size="small"
                   sx={{
                     backgroundColor: '#d92228',
@@ -564,7 +565,7 @@ const Home: React.FC = () => {
                 },
               }}
             >
-              View All Properties
+              {t.pages.home.featured.viewAll}
             </Button>
           </Box>
         </Container>
@@ -586,7 +587,7 @@ const Home: React.FC = () => {
               fontFamily: 'Georgia, serif',
             }}
           >
-            Explore Properties by Location
+            {t.pages.home.locations.title}
           </Typography>
           <Typography
             variant="body1"
@@ -597,7 +598,7 @@ const Home: React.FC = () => {
               fontSize: '1.1rem',
             }}
           >
-            Find your perfect home in Lebanon's most desirable locations
+            {t.pages.home.locations.subtitle}
           </Typography>
 
           <Box
@@ -684,7 +685,7 @@ const Home: React.FC = () => {
               fontFamily: 'Georgia, serif',
             }}
           >
-            Meet Our Expert Agents
+            {t.pages.home.agents.title}
           </Typography>
           <Typography
             variant="body1"
@@ -695,7 +696,7 @@ const Home: React.FC = () => {
               fontSize: '1.1rem',
             }}
           >
-            Work with the best real estate professionals in Lebanon
+            {t.pages.home.agents.subtitle}
           </Typography>
 
           <Box
@@ -825,7 +826,7 @@ const Home: React.FC = () => {
               fontFamily: 'Georgia, serif',
             }}
           >
-            Latest Insights & News
+            {t.pages.home.news.title}
           </Typography>
           <Typography
             variant="body1"
@@ -836,7 +837,7 @@ const Home: React.FC = () => {
               fontSize: '1.1rem',
             }}
           >
-            Stay informed with the latest real estate trends and market updates
+            {t.pages.home.news.subtitle}
           </Typography>
 
           <Box
@@ -953,7 +954,7 @@ const Home: React.FC = () => {
                 },
               }}
             >
-              View All Articles
+              {t.pages.home.news.viewAllArticles}
             </Button>
           </Box>
         </Container>

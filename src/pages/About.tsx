@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -52,6 +53,8 @@ const TeamCard = styled(Card)(({ theme }) => ({
 }));
 
 const About: React.FC = () => {
+  const { t } = useLanguage();
+  
   return (
     <Box>
       {/* Hero Section */}
@@ -67,7 +70,7 @@ const About: React.FC = () => {
               letterSpacing: '-0.5px'
             }}
           >
-            About Manzilocom Lebanon
+            {t.pages.about.hero.title}
           </Typography>
           <Typography 
             variant="h5" 
@@ -78,7 +81,7 @@ const About: React.FC = () => {
               opacity: 0.95
             }}
           >
-            Lebanon's Premier Real Estate Discovery Platform
+            {t.pages.about.hero.subtitle}
           </Typography>
           <Typography 
             variant="body1" 
@@ -90,7 +93,7 @@ const About: React.FC = () => {
               opacity: 0.9
             }}
           >
-            Connecting Lebanese property seekers with their dream homes across Beirut, Mount Lebanon, and beyond.
+            {t.pages.about.hero.description}
           </Typography>
         </HeroContent>
       </HeroSection>
@@ -105,7 +108,7 @@ const About: React.FC = () => {
             align="center"
             sx={{ fontWeight: 700, mb: 3 }}
           >
-            Our Story
+            {t.pages.about.ourStory.title}
           </Typography>
           <Typography 
             variant="body1" 
@@ -117,11 +120,7 @@ const About: React.FC = () => {
               textAlign: 'justify'
             }}
           >
-            Born from a passion for Lebanon's diverse real estate landscape, Manzilocom was founded in 2020 by two 
-            visionary real estate professionals—Ayman Sbeity and Richy—who recognized the need for a modern, transparent 
-            platform to connect property seekers with their ideal homes. With deep roots in the Lebanese market and an 
-            intimate understanding of the unique challenges facing buyers, sellers, and investors, our founders combined 
-            their decades of experience to create a solution that truly serves the Lebanese community.
+            {t.pages.about.ourStory.paragraph1}
           </Typography>
           <Typography 
             variant="body1" 
@@ -133,10 +132,7 @@ const About: React.FC = () => {
               textAlign: 'justify'
             }}
           >
-            From the coastal properties of Beirut to the mountain retreats of Mount Lebanon, from bustling commercial spaces 
-            in Tripoli to elegant villas in Jounieh, we've built our reputation on trust, expertise, and an unwavering commitment 
-            to our clients' success. Today, Manzilocom stands as Lebanon's trusted partner in real estate discovery, having 
-            facilitated over 380 successful transactions and counting.
+            {t.pages.about.ourStory.paragraph2}
           </Typography>
         </Section>
 
@@ -152,13 +148,10 @@ const About: React.FC = () => {
               boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
             }}>
               <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 700, color: '#d92228' }}>
-                Our Mission
+                {t.pages.about.mission.title}
               </Typography>
               <Typography variant="body1" sx={{ fontSize: '1.05rem', lineHeight: 1.8, color: '#444' }}>
-                To empower the Lebanese community with innovative tools, comprehensive market insights, and personalized 
-                service that makes real estate decisions confident and informed. We're committed to maintaining the highest 
-                standards of transparency, integrity, and professionalism while honoring Lebanon's rich cultural heritage 
-                and architectural diversity.
+                {t.pages.about.mission.description}
               </Typography>
             </Box>
             <Box sx={{ 
@@ -168,13 +161,10 @@ const About: React.FC = () => {
               boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
             }}>
               <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 700, color: '#d92228' }}>
-                Our Vision
+                {t.pages.about.vision.title}
               </Typography>
               <Typography variant="body1" sx={{ fontSize: '1.05rem', lineHeight: 1.8, color: '#444' }}>
-                To be recognized as Lebanon's most trusted and innovative real estate platform, setting new benchmarks for 
-                excellence in property services while contributing to the growth and prosperity of Lebanese communities. 
-                We envision a future where every Lebanese resident and diaspora member can effortlessly connect with their 
-                dream property in their homeland.
+                {t.pages.about.vision.description}
               </Typography>
             </Box>
           </Box>
@@ -191,7 +181,7 @@ const About: React.FC = () => {
             align="center"
             sx={{ fontWeight: 700, mb: 2 }}
           >
-            Meet Our Founders
+            {t.pages.about.founders.title}
           </Typography>
           <Typography 
             variant="body1" 
@@ -205,7 +195,7 @@ const About: React.FC = () => {
               margin: '16px auto 48px'
             }}
           >
-            With over 380 successful deals combined, our founders bring unparalleled expertise and dedication to every client.
+            {t.pages.about.founders.subtitle}
           </Typography>
           <Box sx={{ 
             display: 'grid', 
@@ -231,7 +221,7 @@ const About: React.FC = () => {
               </Avatar>
               <CardContent>
                 <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                  Ayman Sbeity
+                  {t.pages.about.founders.ayman.name}
                 </Typography>
                 <Typography 
                   variant="subtitle1" 
@@ -242,7 +232,7 @@ const About: React.FC = () => {
                     fontSize: '1rem'
                   }}
                 >
-                  Luxury Properties & Investment Specialist
+                  {t.pages.about.founders.ayman.title}
                 </Typography>
                 <Box sx={{ 
                   display: 'inline-block',
@@ -253,27 +243,25 @@ const About: React.FC = () => {
                   backgroundColor: '#f0f0f0'
                 }}>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: '#333' }}>
-                    200+ Successful Deals
+                    {t.pages.about.founders.ayman.deals}
                   </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ mt: 2, lineHeight: 1.7, color: '#555' }}>
-                  Co-founder and luxury property expert with an exceptional track record in high-end residential and 
-                  investment properties across Lebanon. Ayman's deep market knowledge and client-first approach have 
-                  made him a trusted advisor for discerning buyers and investors.
+                  {t.pages.about.founders.ayman.description}
                 </Typography>
                 <Divider sx={{ my: 2 }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <PhoneIcon sx={{ fontSize: 18, color: '#d92228' }} />
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      +961 3 123 456
+                      {t.pages.about.founders.ayman.phone}
                     </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, mt: 1 }}>
                   <EmailIcon sx={{ fontSize: 18, color: '#d92228' }} />
                   <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                    ayman@realty.com
+                    {t.pages.about.founders.ayman.email}
                   </Typography>
                 </Box>
               </CardContent>
@@ -296,7 +284,7 @@ const About: React.FC = () => {
               </Avatar>
               <CardContent>
                 <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                  Richy
+                  {t.pages.about.founders.richy.name}
                 </Typography>
                 <Typography 
                   variant="subtitle1" 
@@ -307,7 +295,7 @@ const About: React.FC = () => {
                     fontSize: '1rem'
                   }}
                 >
-                  Residential & Commercial Sales Expert
+                  {t.pages.about.founders.richy.title}
                 </Typography>
                 <Box sx={{ 
                   display: 'inline-block',
@@ -318,27 +306,25 @@ const About: React.FC = () => {
                   backgroundColor: '#f0f0f0'
                 }}>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: '#333' }}>
-                    180+ Successful Deals
+                    {t.pages.about.founders.richy.deals}
                   </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ mt: 2, lineHeight: 1.7, color: '#555' }}>
-                  Co-founder specializing in residential and commercial properties throughout Lebanon. Richy's dedication 
-                  to understanding client needs and delivering exceptional results has earned him recognition as one of 
-                  Lebanon's most reliable real estate professionals.
+                  {t.pages.about.founders.richy.description}
                 </Typography>
                 <Divider sx={{ my: 2 }} />
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <PhoneIcon sx={{ fontSize: 18, color: '#d92228' }} />
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      +961 3 234 567
+                      {t.pages.about.founders.richy.phone}
                     </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, mt: 1 }}>
                   <EmailIcon sx={{ fontSize: 18, color: '#d92228' }} />
                   <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                    richy@realty.com
+                    {t.pages.about.founders.richy.email}
                   </Typography>
                 </Box>
               </CardContent>
@@ -357,7 +343,7 @@ const About: React.FC = () => {
             align="center"
             sx={{ fontWeight: 700, mb: 2 }}
           >
-            Get In Touch
+            {t.pages.about.contact.title}
           </Typography>
           <Typography 
             variant="body1" 
@@ -368,7 +354,7 @@ const About: React.FC = () => {
               mb: 5
             }}
           >
-            Ready to find your dream property in Lebanon? We're here to help you every step of the way.
+            {t.pages.about.contact.subtitle}
           </Typography>
           <Box sx={{ 
             display: 'grid', 
@@ -388,12 +374,10 @@ const About: React.FC = () => {
             }}>
               <LocationOnIcon sx={{ fontSize: 56, color: '#d92228', mb: 2 }} />
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                Visit Us
+                {t.pages.about.contact.visitUs}
               </Typography>
-              <Typography variant="body2" sx={{ color: '#555', lineHeight: 1.7 }}>
-                Downtown Beirut<br />
-                Martyr's Square District<br />
-                Beirut, Lebanon
+              <Typography variant="body2" sx={{ color: '#555', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                {t.pages.about.contact.visitAddress}
               </Typography>
             </Box>
             <Box sx={{ 
@@ -408,12 +392,10 @@ const About: React.FC = () => {
             }}>
               <PhoneIcon sx={{ fontSize: 56, color: '#d92228', mb: 2 }} />
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                Call Us
+                {t.pages.about.contact.callUs}
               </Typography>
-              <Typography variant="body2" sx={{ color: '#555', lineHeight: 1.7 }}>
-                Ayman: +961 3 123 456<br />
-                Richy: +961 3 234 567<br />
-                Available 7 days a week
+              <Typography variant="body2" sx={{ color: '#555', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                {t.pages.about.contact.callDetails}
               </Typography>
             </Box>
             <Box sx={{ 
@@ -428,12 +410,10 @@ const About: React.FC = () => {
             }}>
               <EmailIcon sx={{ fontSize: 56, color: '#d92228', mb: 2 }} />
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                Email Us
+                {t.pages.about.contact.emailUs}
               </Typography>
-              <Typography variant="body2" sx={{ color: '#555', lineHeight: 1.7 }}>
-                info@realtyfinder.com<br />
-                support@realtyfinder.com<br />
-                Quick response guaranteed
+              <Typography variant="body2" sx={{ color: '#555', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                {t.pages.about.contact.emailDetails}
               </Typography>
             </Box>
           </Box>

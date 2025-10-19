@@ -15,8 +15,10 @@ import {
   SearchBar, 
   NavigationMenu, 
   ActionButtons,
-  NavigationItem 
+  NavigationItem,
+  LanguageToggle
 } from '../components/UI';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: '#ffffff',
@@ -75,18 +77,19 @@ const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { t } = useLanguage();
 
   const navigationItems: NavigationItem[] = [
-    { label: 'Buy', href: '/listings?type=sale' },
-    { label: 'Sell', href: '/sell' },
-    { label: 'Rent', href: '/listings?type=rent' },
-    { label: 'About Us', href: '/about' },
-    { label: 'Contact', href: '/contact' },
+    { label: t.nav.buy, href: '/listings?type=sale' },
+    { label: t.nav.sell, href: '/sell' },
+    { label: t.nav.rent, href: '/listings?type=rent' },
+    { label: t.nav.aboutUs, href: '/about' },
+    { label: t.nav.contact, href: '/contact' },
   ];
 
   const actionButtons = [
-    { label: 'Log in', variant: 'outlined' as const, href: '/login' },
-    { label: 'Sign up', variant: 'contained' as const, href: '/signup' },
+    { label: t.nav.login, variant: 'outlined' as const, href: '/login' },
+    { label: t.nav.signup, variant: 'contained' as const, href: '/signup' },
   ];
 
   const handleMobileMenuToggle = () => {
@@ -119,13 +122,17 @@ const Navbar: React.FC = () => {
                   />
                 </SearchContainer>
 
+                {/* Language Toggle */}
+                <LanguageToggle />
+
                 {/* Action Buttons */}
                 <ActionButtons buttons={actionButtons} />
               </>
             ) : (
               <>
                 {/* Mobile Menu Button */}
-                <Box sx={{ marginLeft: 'auto' }}>
+                <Box sx={{ marginLeft: 'auto', display: 'flex', gap: 1 }}>
+                  <LanguageToggle />
                   <MobileMenuButton
                     onClick={handleMobileMenuToggle}
                     aria-label="open menu"

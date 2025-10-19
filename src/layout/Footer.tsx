@@ -20,6 +20,7 @@ import {
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { Logo } from "../components/UI";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const FooterContainer = styled(Box)(({ theme }) => ({
   backgroundColor: "#2d2d2d",
@@ -96,59 +97,60 @@ interface FooterSectionType {
 const Footer: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const { t } = useLanguage();
 
   const footerSections: FooterSectionType[] = [
     {
-      title: "Buy",
+      title: t.footer.sections.buy.title,
       links: [
-        { label: "Homes for sale", href: "/homes-for-sale" },
-        { label: "Open houses", href: "/open-houses" },
-        { label: "New homes", href: "/new-homes" },
-        { label: "Recently sold", href: "/recently-sold" },
-        { label: "Price reduced", href: "/price-reduced" },
+        { label: t.footer.sections.buy.homesForSale, href: "/homes-for-sale" },
+        { label: t.footer.sections.buy.openHouses, href: "/open-houses" },
+        { label: t.footer.sections.buy.newHomes, href: "/new-homes" },
+        { label: t.footer.sections.buy.recentlySold, href: "/recently-sold" },
+        { label: t.footer.sections.buy.priceReduced, href: "/price-reduced" },
       ],
     },
     {
-      title: "Sell",
+      title: t.footer.sections.sell.title,
       links: [
-        { label: "Sell your home", href: "/sell-your-home" },
-        { label: "Get home value", href: "/market-analysis" },
-        { label: "Seller's guide", href: "/sellers-guide" },
-        { label: "Closing costs calculator", href: "/closing-costs" },
-        { label: "Find a seller's agent", href: "/find-agent" },
+        { label: t.footer.sections.sell.sellYourHome, href: "/sell-your-home" },
+        { label: t.footer.sections.sell.getHomeValue, href: "/market-analysis" },
+        { label: t.footer.sections.sell.sellersGuide, href: "/sellers-guide" },
+        { label: t.footer.sections.sell.closingCosts, href: "/closing-costs" },
+        { label: t.footer.sections.sell.findAgent, href: "/find-agent" },
       ],
     },
     {
-      title: "Rent",
+      title: t.footer.sections.rent.title,
       links: [
-        { label: "Apartments for rent", href: "/apartments" },
-        { label: "Houses for rent", href: "/houses-for-rent" },
-        { label: "Post a rental listing", href: "/post-rental" },
-        { label: "Rental manager", href: "/rental-manager" },
-        { label: "Rental guide", href: "/rental-guide" },
+        { label: t.footer.sections.rent.apartments, href: "/apartments" },
+        { label: t.footer.sections.rent.houses, href: "/houses-for-rent" },
+        { label: t.footer.sections.rent.postRental, href: "/post-rental" },
+        { label: t.footer.sections.rent.rentalManager, href: "/rental-manager" },
+        { label: t.footer.sections.rent.rentalGuide, href: "/rental-guide" },
       ],
     },
     {
-      title: "Mortgage & Finance",
+      title: t.footer.sections.mortgage.title,
       links: [
-        { label: "Mortgage rates", href: "/mortgage-rates" },
-        { label: "Refinance rates", href: "/refinance-rates" },
-        { label: "Mortgage calculator", href: "/mortgage-calculator" },
+        { label: t.footer.sections.mortgage.mortgageRates, href: "/mortgage-rates" },
+        { label: t.footer.sections.mortgage.refinanceRates, href: "/refinance-rates" },
+        { label: t.footer.sections.mortgage.mortgageCalc, href: "/mortgage-calculator" },
         {
-          label: "Affordability calculator",
+          label: t.footer.sections.mortgage.affordabilityCalc,
           href: "/affordability-calculator",
         },
-        { label: "Mortgage guide", href: "/mortgage-guide" },
+        { label: t.footer.sections.mortgage.mortgageGuide, href: "/mortgage-guide" },
       ],
     },
     {
-      title: "Resources",
+      title: t.footer.sections.resources.title,
       links: [
-        { label: "Find an agent", href: "/agents" },
-        { label: "Market data", href: "/market-data" },
-        { label: "Home buying guide", href: "/home-buying-guide" },
-        { label: "Real estate news", href: "/real-estate-news" },
-        { label: "Mobile apps", href: "/mobile-apps" },
+        { label: t.footer.sections.resources.findAgent, href: "/agents" },
+        { label: t.footer.sections.resources.marketData, href: "/market-data" },
+        { label: t.footer.sections.resources.buyingGuide, href: "/home-buying-guide" },
+        { label: t.footer.sections.resources.realEstateNews, href: "/real-estate-news" },
+        { label: t.footer.sections.resources.mobileApps, href: "/mobile-apps" },
       ],
     },
   ];
@@ -161,11 +163,11 @@ const Footer: React.FC = () => {
   ];
 
   const legalLinks = [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
-    { label: "Accessibility", href: "/accessibility" },
-    { label: "Sitemap", href: "/sitemap" },
+    { label: t.footer.legal.privacyPolicy, href: "/privacy" },
+    { label: t.footer.legal.termsOfService, href: "/terms" },
+    { label: t.footer.legal.cookiePolicy, href: "/cookies" },
+    { label: t.footer.legal.accessibility, href: "/accessibility" },
+    { label: t.footer.legal.sitemap, href: "/sitemap" },
   ];
 
   return (
@@ -208,7 +210,7 @@ const Footer: React.FC = () => {
           }}
         >
           <FooterSection>
-            <FooterTitle variant="h6">Get the RealtyFinder app</FooterTitle>
+            <FooterTitle variant="h6">{t.footer.app.title}</FooterTitle>
             <Stack direction={isMobile ? "column" : "row"} spacing={2}>
               <AppButton href="#">
                 <Apple sx={{ mr: 1 }} />
@@ -217,10 +219,10 @@ const Footer: React.FC = () => {
                     variant="caption"
                     sx={{ color: "#cccccc", display: "block" }}
                   >
-                    Download on the
+                    {t.footer.app.downloadOn}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    App Store
+                    {t.footer.app.appStore}
                   </Typography>
                 </Box>
               </AppButton>
@@ -231,10 +233,10 @@ const Footer: React.FC = () => {
                     variant="caption"
                     sx={{ color: "#cccccc", display: "block" }}
                   >
-                    Get it on
+                    {t.footer.app.getItOn}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    Google Play
+                    {t.footer.app.googlePlay}
                   </Typography>
                 </Box>
               </AppButton>
@@ -242,7 +244,7 @@ const Footer: React.FC = () => {
           </FooterSection>
 
           <FooterSection>
-            <FooterTitle variant="h6">Follow us</FooterTitle>
+            <FooterTitle variant="h6">{t.footer.social.title}</FooterTitle>
             <Stack direction="row" spacing={2}>
               {socialIcons.map((social, index) => (
                 <Link key={index} href={social.href} sx={{ color: "inherit" }}>
@@ -284,7 +286,7 @@ const Footer: React.FC = () => {
 
           <Box sx={{ textAlign: isMobile ? "left" : "right" }}>
             <Typography variant="body2" sx={{ color: "#cccccc", mb: 1 }}>
-              © 2024 RealtyFinder. All rights reserved.
+              {t.footer.copyright}
             </Typography>
             <Typography
               variant="caption"
@@ -296,8 +298,7 @@ const Footer: React.FC = () => {
                 marginLeft: isMobile ? 0 : "auto",
               }}
             >
-              All information provided is deemed reliable but is not guaranteed
-              and should be independently verified.
+              {t.footer.disclaimer}
             </Typography>
           </Box>
         </Box>
