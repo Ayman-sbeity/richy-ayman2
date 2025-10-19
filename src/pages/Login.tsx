@@ -26,6 +26,7 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -179,6 +180,7 @@ const SocialButton = styled(Button)(({ theme }) => ({
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/';
   
@@ -266,14 +268,14 @@ const Login: React.FC = () => {
               },
             }}
           >
-            Welcome Back
+            {t.pages.login.title}
           </Typography>
           <Typography 
             variant="body1" 
             color="text.secondary"
             sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
           >
-            Log in to find your dream property
+            {t.pages.login.subtitle}
           </Typography>
         </Box>
 
@@ -297,7 +299,7 @@ const Login: React.FC = () => {
             {/* Email Field */}
             <StyledTextField
               fullWidth
-              label="Email Address"
+              label={t.pages.login.email}
               name="email"
               type="email"
               value={formData.email}
@@ -315,7 +317,7 @@ const Login: React.FC = () => {
             {/* Password Field */}
             <StyledTextField
               fullWidth
-              label="Password"
+              label={t.pages.login.password}
               name="password"
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
@@ -364,7 +366,7 @@ const Login: React.FC = () => {
                 }
                 label={
                   <Typography sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>
-                    Remember me
+                    {t.pages.login.rememberMe}
                   </Typography>
                 }
               />
@@ -381,7 +383,7 @@ const Login: React.FC = () => {
                   },
                 }}
               >
-                Forgot Password?
+                {t.pages.login.forgotPassword}
               </Link>
             </Box>
 
@@ -401,7 +403,7 @@ const Login: React.FC = () => {
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                'Log In'
+                t.pages.login.loginButton
               )}
             </StyledButton>
           </Box>
@@ -414,7 +416,7 @@ const Login: React.FC = () => {
             color="text.secondary"
             sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
           >
-            OR
+            {t.pages.login.orContinueWith}
           </Typography>
         </Divider>
 
@@ -447,7 +449,7 @@ const Login: React.FC = () => {
             color="text.secondary"
             sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
           >
-            Don't have an account?{' '}
+            {t.pages.login.noAccount}{' '}
             <Link
               component={RouterLink}
               to="/signup"
@@ -461,7 +463,7 @@ const Login: React.FC = () => {
                 },
               }}
             >
-              Sign Up
+              {t.pages.login.signupLink}
             </Link>
           </Typography>
         </Box>

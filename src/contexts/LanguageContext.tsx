@@ -181,23 +181,38 @@ interface Translations {
       hero: {
         title: string;
         subtitle: string;
+        description: string;
       };
       form: {
         title: string;
+        description: string;
         name: string;
         email: string;
         phone: string;
         subject: string;
         message: string;
         send: string;
+        messageSentSuccess: string;
+        messageSentError: string;
       };
       info: {
+        location: string;
         address: string;
+        callUs: string;
         email: string;
         phone: string;
+        whatsapp: string;
         hours: string;
+        businessHours: string;
+        getDirections: string;
+        sendEmail: string;
+      };
+      sidebar: {
+        title: string;
+        features: string[];
       };
       followUs: string;
+      connectWith: string;
     };
     login: {
       title: string;
@@ -214,15 +229,47 @@ interface Translations {
     signup: {
       title: string;
       subtitle: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-      confirmPassword: string;
-      agreeToTerms: string;
-      signupButton: string;
-      haveAccount: string;
-      loginLink: string;
+      form: {
+        fullName: string;
+        email: string;
+        phone: string;
+        password: string;
+        confirmPassword: string;
+        passwordStrength: string;
+        passwordStrengthWeak: string;
+        passwordStrengthFair: string;
+        passwordStrengthGood: string;
+        passwordStrengthStrong: string;
+        createAccount: string;
+        termsPrefix: string;
+        termsPart1: string;
+        termsLink: string;
+        termsPart2: string;
+        privacyLink: string;
+      };
+      success: {
+        title: string;
+        description: string;
+        redirecting: string;
+      };
+      social: {
+        orContinueWith: string;
+        google: string;
+        facebook: string;
+        apple: string;
+      };
+      login: {
+        haveAccount: string;
+        link: string;
+      };
+      validation: {
+        fillAllFields: string;
+        invalidEmail: string;
+        passwordTooShort: string;
+        passwordsMismatch: string;
+        passwordsMismatchError: string;
+        agreeToTerms: string;
+      };
     };
     sell: {
       hero: {
@@ -447,23 +494,45 @@ const translations: Record<Language, Translations> = {
         hero: {
           title: 'Get in Touch',
           subtitle: 'We\'re here to help you find your dream property',
+          description: 'Have questions? Our expert team is ready to assist you with any inquiries about properties in Lebanon.',
         },
         form: {
           title: 'Send us a Message',
+          description: 'Fill out the form below and our team will get back to you within 24 hours. We\'re excited to help you find your perfect property!',
           name: 'Full Name',
           email: 'Email Address',
           phone: 'Phone Number',
           subject: 'Subject',
-          message: 'Message',
+          message: 'Your Message',
           send: 'Send Message',
+          messageSentSuccess: 'Message sent successfully! We\'ll get back to you soon.',
+          messageSentError: 'Please fill in all required fields correctly.',
         },
         info: {
-          address: 'Our Address',
+          location: 'Our Office',
+          address: 'Downtown Beirut, Martyr\'s Square District, Beirut, Lebanon',
+          callUs: 'Call Us',
           email: 'Email Us',
-          phone: 'Call Us',
+          phone: 'Phone',
+          whatsapp: 'WhatsApp',
           hours: 'Business Hours',
+          businessHours: 'Monday - Friday: 9:00 AM - 7:00 PM, Saturday: 10:00 AM - 5:00 PM, Sunday: By Appointment',
+          getDirections: 'Get Directions',
+          sendEmail: 'Send Email',
         },
-        followUs: 'Follow Us',
+        sidebar: {
+          title: 'Why Choose Manzilocom?',
+          features: [
+            '380+ Successful Deals',
+            'Expert Market Knowledge',
+            '24/7 Customer Support',
+            'Verified Property Listings',
+            'Transparent Transactions',
+            'Local Expertise in Lebanon',
+          ],
+        },
+        followUs: 'Follow us on social media for the latest property listings, market insights, and real estate tips.',
+        connectWith: 'Connect With Us',
       },
       login: {
         title: 'Welcome Back',
@@ -479,16 +548,48 @@ const translations: Record<Language, Translations> = {
       },
       signup: {
         title: 'Create Account',
-        subtitle: 'Join us today',
-        firstName: 'First Name',
-        lastName: 'Last Name',
-        email: 'Email Address',
-        password: 'Password',
-        confirmPassword: 'Confirm Password',
-        agreeToTerms: 'I agree to the Terms and Conditions',
-        signupButton: 'Sign Up',
-        haveAccount: 'Already have an account?',
-        loginLink: 'Sign in',
+        subtitle: 'Join us to discover amazing properties',
+        form: {
+          fullName: 'Full Name',
+          email: 'Email Address',
+          phone: 'Phone Number (Optional)',
+          password: 'Password',
+          confirmPassword: 'Confirm Password',
+          passwordStrength: 'Password strength:',
+          passwordStrengthWeak: 'Weak',
+          passwordStrengthFair: 'Fair',
+          passwordStrengthGood: 'Good',
+          passwordStrengthStrong: 'Strong',
+          createAccount: 'Create Account',
+          termsPrefix: 'I agree to the',
+          termsPart1: 'Terms and Conditions',
+          termsLink: '/terms',
+          termsPart2: 'and',
+          privacyLink: 'Privacy Policy',
+        },
+        success: {
+          title: 'Account Created!',
+          description: 'Your account has been successfully created.',
+          redirecting: 'Redirecting to login...',
+        },
+        social: {
+          orContinueWith: 'OR',
+          google: 'Google',
+          facebook: 'Facebook',
+          apple: 'Apple',
+        },
+        login: {
+          haveAccount: 'Already have an account?',
+          link: 'Log In',
+        },
+        validation: {
+          fillAllFields: 'Please fill in all required fields',
+          invalidEmail: 'Please enter a valid email address',
+          passwordTooShort: 'Password must be at least 8 characters long',
+          passwordsMismatch: 'Passwords do not match',
+          passwordsMismatchError: 'Passwords do not match',
+          agreeToTerms: 'Please agree to the Terms and Conditions',
+        },
       },
       sell: {
         hero: {
@@ -711,23 +812,45 @@ const translations: Record<Language, Translations> = {
         hero: {
           title: 'تواصل معنا',
           subtitle: 'نحن هنا لمساعدتك في العثور على عقار أحلامك',
+          description: 'هل لديك أسئلة؟ فريقنا الخبير مستعد لمساعدتك بشأن أي استفسارات عن العقارات في لبنان.',
         },
         form: {
           title: 'أرسل لنا رسالة',
+          description: 'أكمل النموذج أدناه وسيعود إليك فريقنا في غضون 24 ساعة. نحن متحمسون لمساعدتك في العثور على العقار المثالي!',
           name: 'الاسم الكامل',
           email: 'البريد الإلكتروني',
           phone: 'رقم الهاتف',
           subject: 'الموضوع',
-          message: 'الرسالة',
+          message: 'رسالتك',
           send: 'إرسال الرسالة',
+          messageSentSuccess: 'تم إرسال الرسالة بنجاح! سنعود إليك قريباً.',
+          messageSentError: 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح.',
         },
         info: {
-          address: 'عنواننا',
+          location: 'مكتبنا',
+          address: 'وسط بيروت، حي ساحة الشهداء، بيروت، لبنان',
+          callUs: 'اتصل بنا',
           email: 'راسلنا',
-          phone: 'اتصل بنا',
+          phone: 'الهاتف',
+          whatsapp: 'واتساب',
           hours: 'ساعات العمل',
+          businessHours: 'الاثنين - الجمعة: 9:00 صباحاً - 7:00 مساءً، السبت: 10:00 صباحاً - 5:00 مساءً، الأحد: بموعد',
+          getDirections: 'احصل على الاتجاهات',
+          sendEmail: 'إرسال بريد إلكتروني',
         },
-        followUs: 'تابعنا',
+        sidebar: {
+          title: 'لماذا اختيار Manzilocom؟',
+          features: [
+            '380+ صفقة ناجحة',
+            'معرفة متخصصة بالسوق',
+            'دعم العملاء 24/7',
+            'قوائم عقارات موثقة',
+            'معاملات شفافة',
+            'خبرة محلية في لبنان',
+          ],
+        },
+        followUs: 'تابعنا على وسائل التواصل الاجتماعي للحصول على أحدث قوائم العقارات والرؤى السوقية ونصائح العقارات.',
+        connectWith: 'تواصل معنا',
       },
       login: {
         title: 'مرحباً بعودتك',
@@ -743,16 +866,48 @@ const translations: Record<Language, Translations> = {
       },
       signup: {
         title: 'إنشاء حساب',
-        subtitle: 'انضم إلينا اليوم',
-        firstName: 'الاسم الأول',
-        lastName: 'اسم العائلة',
-        email: 'البريد الإلكتروني',
-        password: 'كلمة المرور',
-        confirmPassword: 'تأكيد كلمة المرور',
-        agreeToTerms: 'أوافق على الشروط والأحكام',
-        signupButton: 'إنشاء حساب',
-        haveAccount: 'لديك حساب بالفعل؟',
-        loginLink: 'تسجيل الدخول',
+        subtitle: 'انضم إلينا لاكتشاف خصائص رائعة',
+        form: {
+          fullName: 'الاسم الكامل',
+          email: 'البريد الإلكتروني',
+          phone: 'رقم الهاتف (اختياري)',
+          password: 'كلمة المرور',
+          confirmPassword: 'تأكيد كلمة المرور',
+          passwordStrength: 'قوة كلمة المرور:',
+          passwordStrengthWeak: 'ضعيفة',
+          passwordStrengthFair: 'متوسطة',
+          passwordStrengthGood: 'جيدة',
+          passwordStrengthStrong: 'قوية',
+          createAccount: 'إنشاء حساب',
+          termsPrefix: 'أوافق على',
+          termsPart1: 'الشروط والأحكام',
+          termsLink: '/terms',
+          termsPart2: 'و',
+          privacyLink: 'سياسة الخصوصية',
+        },
+        success: {
+          title: 'تم إنشاء الحساب!',
+          description: 'تم إنشاء حسابك بنجاح.',
+          redirecting: 'إعادة التوجيه إلى تسجيل الدخول...',
+        },
+        social: {
+          orContinueWith: 'أو',
+          google: 'جوجل',
+          facebook: 'فيسبوك',
+          apple: 'أبل',
+        },
+        login: {
+          haveAccount: 'لديك حساب بالفعل؟',
+          link: 'تسجيل الدخول',
+        },
+        validation: {
+          fillAllFields: 'يرجى ملء جميع الحقول المطلوبة',
+          invalidEmail: 'يرجى إدخال عنوان بريد إلكتروني صحيح',
+          passwordTooShort: 'يجب أن تكون كلمة المرور 8 أحرف على الأقل',
+          passwordsMismatch: 'كلمات المرور غير متطابقة',
+          passwordsMismatchError: 'كلمات المرور غير متطابقة',
+          agreeToTerms: 'يرجى الموافقة على الشروط والأحكام',
+        },
       },
       sell: {
         hero: {

@@ -30,6 +30,7 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -226,6 +227,7 @@ const PasswordStrengthBar = styled(Box)<{ strength: number }>(
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -263,27 +265,27 @@ const Signup: React.FC = () => {
 
   const validateForm = (): boolean => {
     if (!formData.fullName || !formData.email || !formData.password) {
-      setError('Please fill in all required fields');
+      setError(t.pages.signup.validation.fillAllFields);
       return false;
     }
 
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setError('Please enter a valid email address');
+      setError(t.pages.signup.validation.invalidEmail);
       return false;
     }
 
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long');
+      setError(t.pages.signup.validation.passwordTooShort);
       return false;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t.pages.signup.validation.passwordsMismatch);
       return false;
     }
 
     if (!formData.agreeToTerms) {
-      setError('Please agree to the Terms and Conditions');
+      setError(t.pages.signup.validation.agreeToTerms);
       return false;
     }
 
@@ -381,7 +383,7 @@ const Signup: React.FC = () => {
               gutterBottom
               sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2.125rem' } }}
             >
-              Account Created!
+              {t.pages.signup.success.title}
             </Typography>
             <Typography 
               variant="body1" 
@@ -389,7 +391,7 @@ const Signup: React.FC = () => {
               mb={2}
               sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
             >
-              Your account has been successfully created.
+              {t.pages.signup.success.description}
             </Typography>
             <LinearProgress sx={{ borderRadius: 2 }} />
             <Typography 
@@ -398,7 +400,7 @@ const Signup: React.FC = () => {
               mt={2}
               sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
             >
-              Redirecting to login...
+              {t.pages.signup.success.redirecting}
             </Typography>
           </Box>
         </StyledPaper>
@@ -427,14 +429,14 @@ const Signup: React.FC = () => {
               },
             }}
           >
-            Create Account
+            {t.pages.signup.title}
           </Typography>
           <Typography 
             variant="body1" 
             color="text.secondary"
             sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
           >
-            Join us to discover amazing properties
+            {t.pages.signup.subtitle}
           </Typography>
         </Box>
 
@@ -458,7 +460,7 @@ const Signup: React.FC = () => {
             {/* Full Name Field */}
             <StyledTextField
               fullWidth
-              label="Full Name"
+              label={t.pages.signup.form.fullName}
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
@@ -475,7 +477,7 @@ const Signup: React.FC = () => {
             {/* Email Field */}
             <StyledTextField
               fullWidth
-              label="Email Address"
+              label={t.pages.signup.form.email}
               name="email"
               type="email"
               value={formData.email}
@@ -493,7 +495,7 @@ const Signup: React.FC = () => {
             {/* Phone Field */}
             <StyledTextField
               fullWidth
-              label="Phone Number (Optional)"
+              label={t.pages.signup.form.phone}
               name="phone"
               type="tel"
               value={formData.phone}
@@ -511,7 +513,7 @@ const Signup: React.FC = () => {
             <Box>
               <StyledTextField
                 fullWidth
-                label="Password"
+                label={t.pages.signup.form.password}
                 name="password"
                 type={showPassword ? 'text' : 'password'}
                 value={formData.password}
@@ -546,14 +548,14 @@ const Signup: React.FC = () => {
                   color="text.secondary"
                   sx={{ mt: 0.5, display: 'block' }}
                 >
-                  Password strength:{' '}
+                  {t.pages.signup.form.passwordStrength}{' '}
                   {passwordStrength < 30
-                    ? 'Weak'
+                    ? t.pages.signup.form.passwordStrengthWeak
                     : passwordStrength < 60
-                    ? 'Fair'
+                    ? t.pages.signup.form.passwordStrengthFair
                     : passwordStrength < 80
-                    ? 'Good'
-                    : 'Strong'}
+                    ? t.pages.signup.form.passwordStrengthGood
+                    : t.pages.signup.form.passwordStrengthStrong}
                 </Typography>
               )}
             </Box>
@@ -561,7 +563,7 @@ const Signup: React.FC = () => {
             {/* Confirm Password Field */}
             <StyledTextField
               fullWidth
-              label="Confirm Password"
+              label={t.pages.signup.form.confirmPassword}
               name="confirmPassword"
               type={showConfirmPassword ? 'text' : 'password'}
               value={formData.confirmPassword}
@@ -574,7 +576,7 @@ const Signup: React.FC = () => {
               helperText={
                 formData.confirmPassword !== '' &&
                 formData.password !== formData.confirmPassword
-                  ? 'Passwords do not match'
+                  ? t.pages.signup.validation.passwordsMismatchError
                   : ''
               }
               InputProps={{
@@ -618,7 +620,7 @@ const Signup: React.FC = () => {
                   variant="body2"
                   sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
                 >
-                  I agree to the{' '}
+                  {t.pages.signup.form.termsPrefix}{' '}
                   <Link
                     component={RouterLink}
                     to="/terms"
@@ -633,9 +635,9 @@ const Signup: React.FC = () => {
                       },
                     }}
                   >
-                    Terms and Conditions
+                    {t.pages.signup.form.termsPart1}
                   </Link>{' '}
-                  and{' '}
+                  {t.pages.signup.form.termsPart2}{' '}
                   <Link
                     component={RouterLink}
                     to="/privacy"
@@ -650,7 +652,7 @@ const Signup: React.FC = () => {
                       },
                     }}
                   >
-                    Privacy Policy
+                    {t.pages.signup.form.privacyLink}
                   </Link>
                 </Typography>
               }
@@ -672,7 +674,7 @@ const Signup: React.FC = () => {
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                'Create Account'
+                t.pages.signup.form.createAccount
               )}
             </StyledButton>
           </Box>
@@ -685,7 +687,7 @@ const Signup: React.FC = () => {
             color="text.secondary"
             sx={{ fontSize: { xs: '0.813rem', sm: '0.875rem' } }}
           >
-            OR
+            {t.pages.signup.social.orContinueWith}
           </Typography>
         </Divider>
 
@@ -695,19 +697,19 @@ const Signup: React.FC = () => {
             onClick={() => handleSocialSignup('Google')}
             startIcon={<Google sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
-            Google
+            {t.pages.signup.social.google}
           </SocialButton>
           <SocialButton
             onClick={() => handleSocialSignup('Facebook')}
             startIcon={<Facebook sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
-            Facebook
+            {t.pages.signup.social.facebook}
           </SocialButton>
           <SocialButton
             onClick={() => handleSocialSignup('Apple')}
             startIcon={<Apple sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />}
           >
-            Apple
+            {t.pages.signup.social.apple}
           </SocialButton>
         </Box>
 
@@ -718,7 +720,7 @@ const Signup: React.FC = () => {
             color="text.secondary"
             sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
           >
-            Already have an account?{' '}
+            {t.pages.signup.login.haveAccount}{' '}
             <Link
               component={RouterLink}
               to="/login"
@@ -732,7 +734,7 @@ const Signup: React.FC = () => {
                 },
               }}
             >
-              Log In
+              {t.pages.signup.login.link}
             </Link>
           </Typography>
         </Box>

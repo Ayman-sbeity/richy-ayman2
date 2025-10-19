@@ -13,6 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useLanguage } from '../contexts/LanguageContext';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -110,6 +111,7 @@ interface FormData {
 }
 
 const Contact: React.FC = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -176,7 +178,7 @@ const Contact: React.FC = () => {
 
       setSnackbar({
         open: true,
-        message: "Message sent successfully! We'll get back to you soon.",
+        message: t.pages.contact.form.messageSentSuccess,
         severity: "success",
       });
 
@@ -191,7 +193,7 @@ const Contact: React.FC = () => {
     } else {
       setSnackbar({
         open: true,
-        message: "Please fill in all required fields correctly.",
+        message: t.pages.contact.form.messageSentError,
         severity: "error",
       });
     }
@@ -228,7 +230,7 @@ const Contact: React.FC = () => {
               letterSpacing: "-0.5px",
             }}
           >
-            Get In Touch
+            {t.pages.contact.hero.title}
           </Typography>
           <Typography
             variant="h5"
@@ -239,7 +241,7 @@ const Contact: React.FC = () => {
               opacity: 0.95,
             }}
           >
-            We're Here to Help You Find Your Dream Property
+            {t.pages.contact.hero.subtitle}
           </Typography>
           <Typography
             variant="body1"
@@ -251,8 +253,7 @@ const Contact: React.FC = () => {
               opacity: 0.9,
             }}
           >
-            Have questions? Our expert team is ready to assist you with any
-            inquiries about properties in Lebanon.
+            {t.pages.contact.hero.description}
           </Typography>
         </HeroContent>
       </HeroSection>
@@ -282,7 +283,7 @@ const Contact: React.FC = () => {
                   variant="h6"
                   sx={{ fontWeight: 600, mb: 2, color: "#333" }}
                 >
-                  Our Office
+                  {t.pages.contact.info.location}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -313,7 +314,7 @@ const Contact: React.FC = () => {
                     )
                   }
                 >
-                  Get Directions
+                  {t.pages.contact.info.getDirections}
                 </Button>
               </CardContent>
             </InfoCard>
@@ -339,7 +340,7 @@ const Contact: React.FC = () => {
                   variant="h6"
                   sx={{ fontWeight: 600, mb: 2, color: "#333" }}
                 >
-                  Call Us
+                  {t.pages.contact.info.callUs}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -377,7 +378,7 @@ const Contact: React.FC = () => {
                     }}
                     onClick={() => handleWhatsAppClick("+96176883720")}
                   >
-                    WhatsApp
+                    {t.pages.contact.info.whatsapp}
                   </Button>
                 </Box>
               </CardContent>
@@ -404,7 +405,7 @@ const Contact: React.FC = () => {
                   variant="h6"
                   sx={{ fontWeight: 600, mb: 2, color: "#333" }}
                 >
-                  Email Us
+                  {t.pages.contact.info.email}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -445,7 +446,7 @@ const Contact: React.FC = () => {
                   }}
                   onClick={() => handleEmailClick("info@manzilocom.com")}
                 >
-                  Send Email
+                  {t.pages.contact.info.sendEmail}
                 </Button>
               </CardContent>
             </InfoCard>
@@ -471,21 +472,18 @@ const Contact: React.FC = () => {
                   variant="h6"
                   sx={{ fontWeight: 600, mb: 2, color: "#333" }}
                 >
-                  Business Hours
+                  {t.pages.contact.info.hours}
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: "#666", lineHeight: 1.8 }}
                 >
-                  Monday - Friday
-                  <br />
-                  9:00 AM - 7:00 PM
-                  <br />
-                  Saturday
-                  <br />
-                  10:00 AM - 5:00 PM
-                  <br />
-                  Sunday: By Appointment
+                  {t.pages.contact.info.businessHours.split('\n').map((line: string, idx: number) => (
+                    <React.Fragment key={idx}>
+                      {line}
+                      {idx < t.pages.contact.info.businessHours.split('\n').length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
                 </Typography>
               </CardContent>
             </InfoCard>
@@ -503,22 +501,20 @@ const Contact: React.FC = () => {
                 gutterBottom
                 sx={{ fontWeight: 700, mb: 1, color: "#333" }}
               >
-                Send Us a Message
+                {t.pages.contact.form.title}
               </Typography>
               <Typography
                 variant="body1"
                 sx={{ color: "#666", mb: 4, lineHeight: 1.6 }}
               >
-                Fill out the form below and our team will get back to you
-                within 24 hours. We're excited to help you find your perfect
-                property!
+                {t.pages.contact.form.description}
               </Typography>
 
               <form onSubmit={handleSubmit}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <TextField
                     fullWidth
-                    label="Full Name"
+                    label={t.pages.contact.form.name}
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
@@ -538,7 +534,7 @@ const Contact: React.FC = () => {
                   />
                   <TextField
                     fullWidth
-                    label="Email Address"
+                    label={t.pages.contact.form.email}
                     name="email"
                     type="email"
                     value={formData.email}
@@ -559,7 +555,7 @@ const Contact: React.FC = () => {
                   />
                   <TextField
                     fullWidth
-                    label="Phone Number"
+                    label={t.pages.contact.form.phone}
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
@@ -580,7 +576,7 @@ const Contact: React.FC = () => {
                   />
                   <TextField
                     fullWidth
-                    label="Subject"
+                    label={t.pages.contact.form.subject}
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
@@ -602,7 +598,7 @@ const Contact: React.FC = () => {
                 <Box sx={{ mt: 3 }}>
                   <TextField
                     fullWidth
-                    label="Your Message"
+                    label={t.pages.contact.form.message}
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
@@ -645,7 +641,7 @@ const Contact: React.FC = () => {
                       transition: "all 0.3s ease",
                     }}
                   >
-                    Send Message
+                    {t.pages.contact.form.send}
                   </Button>
                 </Box>
               </form>
@@ -666,16 +662,9 @@ const Contact: React.FC = () => {
                   variant="h5"
                   sx={{ fontWeight: 700, mb: 3, color: "#333" }}
                 >
-                  Why Choose Manzilocom?
+                  {t.pages.contact.sidebar.title}
                 </Typography>
-                {[
-                  "380+ Successful Deals",
-                  "Expert Market Knowledge",
-                  "24/7 Customer Support",
-                  "Verified Property Listings",
-                  "Transparent Transactions",
-                  "Local Expertise in Lebanon",
-                ].map((item, index) => (
+                {t.pages.contact.sidebar.features.map((item: string, index: number) => (
                   <Box
                     key={index}
                     sx={{
@@ -703,14 +692,13 @@ const Contact: React.FC = () => {
                   variant="h6"
                   sx={{ fontWeight: 600, mb: 2, color: "#333" }}
                 >
-                  Connect With Us
+                  {t.pages.contact.connectWith}
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: "#666", mb: 3, lineHeight: 1.6 }}
                 >
-                  Follow us on social media for the latest property listings,
-                  market insights, and real estate tips.
+                  {t.pages.contact.followUs}
                 </Typography>
                 <Box>
                   <SocialButton
