@@ -271,6 +271,66 @@ interface Translations {
         agreeToTerms: string;
       };
     };
+    forgotPassword: {
+      title: string;
+      subtitle: string;
+      backToLogin: string;
+      form: {
+        email: string;
+        sendResetLink: string;
+      };
+      success: {
+        title: string;
+        description: string;
+        emailSentTo: string;
+        checkSpam: string;
+        backToLogin: string;
+      };
+      remember: {
+        question: string;
+        link: string;
+      };
+      validation: {
+        emailRequired: string;
+        invalidEmail: string;
+      };
+    };
+    listings: {
+      title: string;
+      available: string;
+      property: string;
+      properties: string;
+      filter: {
+        title: string;
+        transactionType: string;
+        city: string;
+        allCities: string;
+        propertyType: string;
+        allTypes: string;
+        priceRange: string;
+        minBedrooms: string;
+        minBathrooms: string;
+        any: string;
+        features: string;
+        clearFilters: string;
+        filtersButton: string;
+        results: string;
+      };
+      transactionTypes: {
+        all: string;
+        sale: string;
+        rent: string;
+      };
+      noResults: {
+        title: string;
+        subtitle: string;
+        clearButton: string;
+      };
+      pagination: {
+        showing: string;
+        of: string;
+      };
+    };
     sell: {
       hero: {
         title: string;
@@ -591,6 +651,66 @@ const translations: Record<Language, Translations> = {
           agreeToTerms: 'Please agree to the Terms and Conditions',
         },
       },
+      forgotPassword: {
+        title: 'Forgot Password?',
+        subtitle: "Enter your email and we'll send you a link to reset your password",
+        backToLogin: 'Back to Login',
+        form: {
+          email: 'Email Address',
+          sendResetLink: 'Send Reset Link',
+        },
+        success: {
+          title: 'Check Your Email',
+          description: "We've sent a password reset link to",
+          emailSentTo: 'your email address',
+          checkSpam: "Click the link in the email to reset your password. If you don't see it, check your spam folder.",
+          backToLogin: 'Back to Login',
+        },
+        remember: {
+          question: 'Remember your password?',
+          link: 'Log In',
+        },
+        validation: {
+          emailRequired: 'Please enter your email address',
+          invalidEmail: 'Please enter a valid email address',
+        },
+      },
+      listings: {
+        title: 'Property Listings',
+        available: 'available',
+        property: 'property',
+        properties: 'properties',
+        filter: {
+          title: 'Filter Listings',
+          transactionType: 'Transaction Type',
+          city: 'City',
+          allCities: 'All Cities',
+          propertyType: 'Property Type',
+          allTypes: 'All Types',
+          priceRange: 'Price Range',
+          minBedrooms: 'Minimum Bedrooms',
+          minBathrooms: 'Minimum Bathrooms',
+          any: 'Any',
+          features: 'Features',
+          clearFilters: 'Clear All Filters',
+          filtersButton: 'Filters',
+          results: 'Results',
+        },
+        transactionTypes: {
+          all: 'All',
+          sale: 'For Sale',
+          rent: 'For Rent',
+        },
+        noResults: {
+          title: 'No properties found',
+          subtitle: 'Try adjusting your filters to see more results',
+          clearButton: 'Clear All Filters',
+        },
+        pagination: {
+          showing: 'Showing',
+          of: 'of',
+        },
+      },
       sell: {
         hero: {
           title: 'List Your Property',
@@ -907,6 +1027,66 @@ const translations: Record<Language, Translations> = {
           passwordsMismatch: 'كلمات المرور غير متطابقة',
           passwordsMismatchError: 'كلمات المرور غير متطابقة',
           agreeToTerms: 'يرجى الموافقة على الشروط والأحكام',
+        },
+      },
+      forgotPassword: {
+        title: 'هل نسيت كلمة المرور؟',
+        subtitle: 'أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور',
+        backToLogin: 'العودة إلى تسجيل الدخول',
+        form: {
+          email: 'البريد الإلكتروني',
+          sendResetLink: 'إرسال رابط إعادة التعيين',
+        },
+        success: {
+          title: 'تحقق من بريدك الإلكتروني',
+          description: 'لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى',
+          emailSentTo: 'عنوان بريدك الإلكتروني',
+          checkSpam: 'انقر على الرابط في البريد الإلكتروني لإعادة تعيين كلمة المرور. إذا لم تجده، تحقق من مجلد البريد العشوائي.',
+          backToLogin: 'العودة إلى تسجيل الدخول',
+        },
+        remember: {
+          question: 'هل تتذكر كلمة المرور؟',
+          link: 'تسجيل الدخول',
+        },
+        validation: {
+          emailRequired: 'يرجى إدخال بريدك الإلكتروني',
+          invalidEmail: 'يرجى إدخال عنوان بريد إلكتروني صحيح',
+        },
+      },
+      listings: {
+        title: 'قوائم العقارات',
+        available: 'متاح',
+        property: 'عقار',
+        properties: 'عقارات',
+        filter: {
+          title: 'تصفية القوائم',
+          transactionType: 'نوع المعاملة',
+          city: 'المدينة',
+          allCities: 'جميع المدن',
+          propertyType: 'نوع العقار',
+          allTypes: 'جميع الأنواع',
+          priceRange: 'نطاق السعر',
+          minBedrooms: 'الحد الأدنى لغرف النوم',
+          minBathrooms: 'الحد الأدنى للحمامات',
+          any: 'أي',
+          features: 'الميزات',
+          clearFilters: 'مسح جميع الفلاتر',
+          filtersButton: 'الفلاتر',
+          results: 'نتائج',
+        },
+        transactionTypes: {
+          all: 'الكل',
+          sale: 'للبيع',
+          rent: 'للإيجار',
+        },
+        noResults: {
+          title: 'لم يتم العثور على عقارات',
+          subtitle: 'حاول تعديل الفلاتر لرؤية المزيد من النتائج',
+          clearButton: 'مسح جميع الفلاتر',
+        },
+        pagination: {
+          showing: 'عرض',
+          of: 'من',
         },
       },
       sell: {

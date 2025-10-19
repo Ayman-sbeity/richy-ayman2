@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { listings } from '../data/listingsData';
 import { FilterSidebar, PropertyCard, Pagination } from '../components/listings';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const PageHeader = styled(Box)(({ theme }) => ({
   background: 'linear-gradient(135deg, #d92228 0%, #b91c22 100%)',
@@ -46,6 +47,7 @@ const ITEMS_PER_PAGE = 9;
 
 const Listings: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -183,7 +185,7 @@ const Listings: React.FC = () => {
               fontFamily: 'Georgia, serif',
             }}
           >
-            Property Listings
+            {t.pages.listings.title}
           </Typography>
           <Typography
             variant="h6"
@@ -193,8 +195,8 @@ const Listings: React.FC = () => {
             }}
           >
             {filteredListings.length}{' '}
-            {filteredListings.length === 1 ? 'property' : 'properties'}{' '}
-            available
+            {filteredListings.length === 1 ? t.pages.listings.property : t.pages.listings.properties}{' '}
+            {t.pages.listings.available}
           </Typography>
         </Container>
       </PageHeader>
@@ -259,7 +261,7 @@ const Listings: React.FC = () => {
                   boxShadow: '0 2px 8px rgba(217, 34, 40, 0.3)',
                 }}
               >
-                Filters ({filteredListings.length} Results)
+                {t.pages.listings.filter.filtersButton} ({filteredListings.length} {t.pages.listings.filter.results})
               </Button>
             </Box>
 
@@ -280,7 +282,7 @@ const Listings: React.FC = () => {
                     fontSize: { xs: '1.25rem', sm: '1.5rem' },
                   }}
                 >
-                  No properties found
+                  {t.pages.listings.noResults.title}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -290,7 +292,7 @@ const Listings: React.FC = () => {
                     fontSize: { xs: '0.9rem', sm: '1rem' },
                   }}
                 >
-                  Try adjusting your filters to see more results
+                  {t.pages.listings.noResults.subtitle}
                 </Typography>
                 <Button
                   variant="outlined"
@@ -306,7 +308,7 @@ const Listings: React.FC = () => {
                     },
                   }}
                 >
-                  Clear All Filters
+                  {t.pages.listings.noResults.clearButton}
                 </Button>
               </Box>
             ) : (
@@ -363,7 +365,7 @@ const Listings: React.FC = () => {
             }}
           >
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              Filters
+              {t.pages.listings.filter.filtersButton}
             </Typography>
             <IconButton onClick={() => setMobileFilterOpen(false)}>
               <CloseIcon />

@@ -14,6 +14,7 @@ import {
 import { Email, ArrowBack, CheckCircle } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -100,6 +101,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const ForgotPassword: React.FC = () => {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -110,12 +112,12 @@ const ForgotPassword: React.FC = () => {
     setError('');
 
     if (!email) {
-      setError('Please enter your email address');
+      setError(t.pages.forgotPassword.validation.emailRequired);
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Please enter a valid email address');
+      setError(t.pages.forgotPassword.validation.invalidEmail);
       return;
     }
 
@@ -147,10 +149,10 @@ const ForgotPassword: React.FC = () => {
               }}
             />
             <Typography variant="h4" fontWeight="700" gutterBottom>
-              Check Your Email
+              {t.pages.forgotPassword.success.title}
             </Typography>
             <Typography variant="body1" color="text.secondary" mb={3}>
-              We've sent a password reset link to
+              {t.pages.forgotPassword.success.description}
             </Typography>
             <Typography
               variant="body1"
@@ -161,8 +163,7 @@ const ForgotPassword: React.FC = () => {
               {email}
             </Typography>
             <Typography variant="body2" color="text.secondary" mb={4}>
-              Click the link in the email to reset your password. If you don't
-              see it, check your spam folder.
+              {t.pages.forgotPassword.success.checkSpam}
             </Typography>
             <StyledButton
               href="/login"
@@ -173,7 +174,7 @@ const ForgotPassword: React.FC = () => {
                 color: 'white',
               }}
             >
-              Back to Login
+              {t.pages.forgotPassword.success.backToLogin}
             </StyledButton>
           </Box>
         </StyledPaper>
@@ -199,7 +200,7 @@ const ForgotPassword: React.FC = () => {
               },
             }}
           >
-            Back to Login
+            {t.pages.forgotPassword.backToLogin}
           </Button>
         </Box>
 
@@ -220,10 +221,10 @@ const ForgotPassword: React.FC = () => {
               },
             }}
           >
-            Forgot Password?
+            {t.pages.forgotPassword.title}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Enter your email and we'll send you a link to reset your password
+            {t.pages.forgotPassword.subtitle}
           </Typography>
         </Box>
 
@@ -240,7 +241,7 @@ const ForgotPassword: React.FC = () => {
             {/* Email Field */}
             <StyledTextField
               fullWidth
-              label="Email Address"
+              label={t.pages.forgotPassword.form.email}
               type="email"
               value={email}
               onChange={(e) => {
@@ -272,7 +273,7 @@ const ForgotPassword: React.FC = () => {
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                'Send Reset Link'
+                t.pages.forgotPassword.form.sendResetLink
               )}
             </StyledButton>
           </Box>
@@ -281,7 +282,7 @@ const ForgotPassword: React.FC = () => {
         {/* Additional Help */}
         <Box textAlign="center" mt={4}>
           <Typography variant="body2" color="text.secondary">
-            Remember your password?{' '}
+            {t.pages.forgotPassword.remember.question}{' '}
             <Link
               component={RouterLink}
               to="/login"
@@ -294,7 +295,7 @@ const ForgotPassword: React.FC = () => {
                 },
               }}
             >
-              Log In
+              {t.pages.forgotPassword.remember.link}
             </Link>
           </Typography>
         </Box>

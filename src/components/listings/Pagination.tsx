@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface PaginationProps {
   currentPage: number;
@@ -19,6 +20,7 @@ const Pagination: React.FC<PaginationProps> = ({
   totalItems,
 }) => {
   const theme = useTheme();
+  const { t } = useLanguage();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   if (totalPages <= 1) return null;
@@ -90,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
           order: { xs: 2, sm: 1 },
         }}
       >
-        Showing {startItem} - {endItem} of {totalItems} properties
+        {t.pages.listings.pagination.showing} {startItem} - {endItem} {t.pages.listings.pagination.of} {totalItems} {totalItems === 1 ? t.pages.listings.property : t.pages.listings.properties}
       </Typography>
 
       {/* Pagination Buttons */}

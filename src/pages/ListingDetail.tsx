@@ -154,9 +154,7 @@ const ListingDetail: React.FC = () => {
         </ImageGallery>
 
         <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
-          {/* Main Content */}
           <Box sx={{ flex: 1 }}>
-            {/* Title & Price */}
             <Box sx={{ mb: 4 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <Typography
@@ -197,7 +195,6 @@ const ListingDetail: React.FC = () => {
               </Typography>
             </Box>
 
-            {/* Key Specifications */}
             <Box
               sx={{
                 display: 'grid',
@@ -252,7 +249,6 @@ const ListingDetail: React.FC = () => {
               </SpecCard>
             </Box>
 
-            {/* Description */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, fontFamily: 'Georgia, serif' }}>
                 Description
@@ -309,7 +305,6 @@ const ListingDetail: React.FC = () => {
               </Box>
             </Box>
 
-            {/* Features */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, fontFamily: 'Georgia, serif' }}>
                 Features & Amenities
@@ -330,7 +325,6 @@ const ListingDetail: React.FC = () => {
               </Box>
             </Box>
 
-            {/* Location Map Placeholder */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, fontFamily: 'Georgia, serif' }}>
                 Location
@@ -359,7 +353,6 @@ const ListingDetail: React.FC = () => {
             </Box>
           </Box>
 
-          {/* Sidebar - Contact Form */}
           <Box sx={{ width: { xs: '100%', md: 350 } }}>
             <Card sx={{ position: 'sticky', top: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
               <CardContent>

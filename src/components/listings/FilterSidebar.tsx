@@ -13,6 +13,7 @@ import {
   Button,
 } from '@mui/material';
 import { cities, propertyTypes, features } from '../../data/listingsData';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface FilterSidebarProps {
   transactionType: string;
@@ -49,6 +50,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   handleFeatureToggle,
   onClearFilters,
 }) => {
+  const { t } = useLanguage();
+  
   return (
     <Box>
       <Typography
@@ -59,15 +62,15 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           fontSize: { xs: '1.1rem', md: '1.25rem' },
         }}
       >
-        Filter Listings
+        {t.pages.listings.filter.title}
       </Typography>
 
       {/* Transaction Type */}
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>Transaction Type</InputLabel>
+        <InputLabel>{t.pages.listings.filter.transactionType}</InputLabel>
         <Select
           value={transactionType}
-          label="Transaction Type"
+          label={t.pages.listings.filter.transactionType}
           onChange={(e) => setTransactionType(e.target.value)}
           sx={{
             '& .MuiOutlinedInput-notchedOutline': {
@@ -75,21 +78,21 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             },
           }}
         >
-          <MenuItem value="all">All</MenuItem>
-          <MenuItem value="sale">For Sale</MenuItem>
-          <MenuItem value="rent">For Rent</MenuItem>
+          <MenuItem value="all">{t.pages.listings.transactionTypes.all}</MenuItem>
+          <MenuItem value="sale">{t.pages.listings.transactionTypes.sale}</MenuItem>
+          <MenuItem value="rent">{t.pages.listings.transactionTypes.rent}</MenuItem>
         </Select>
       </FormControl>
 
       {/* City */}
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>City</InputLabel>
+        <InputLabel>{t.pages.listings.filter.city}</InputLabel>
         <Select
           value={selectedCity}
-          label="City"
+          label={t.pages.listings.filter.city}
           onChange={(e) => setSelectedCity(e.target.value)}
         >
-          <MenuItem value="">All Cities</MenuItem>
+          <MenuItem value="">{t.pages.listings.filter.allCities}</MenuItem>
           {cities.map((city) => (
             <MenuItem key={city} value={city}>
               {city}
@@ -100,13 +103,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* Property Type */}
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>Property Type</InputLabel>
+        <InputLabel>{t.pages.listings.filter.propertyType}</InputLabel>
         <Select
           value={selectedPropertyType}
-          label="Property Type"
+          label={t.pages.listings.filter.propertyType}
           onChange={(e) => setSelectedPropertyType(e.target.value)}
         >
-          <MenuItem value="">All Types</MenuItem>
+          <MenuItem value="">{t.pages.listings.filter.allTypes}</MenuItem>
           {propertyTypes.map((type) => (
             <MenuItem key={type} value={type}>
               {type}
@@ -118,7 +121,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {/* Price Range */}
       <Box sx={{ mb: 3 }}>
         <Typography gutterBottom sx={{ fontWeight: 500, color: '#333' }}>
-          Price Range: ${priceRange[0].toLocaleString()} - $
+          {t.pages.listings.filter.priceRange}: ${priceRange[0].toLocaleString()} - $
           {priceRange[1].toLocaleString()}
         </Typography>
         <Slider
@@ -141,13 +144,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* Bedrooms */}
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>Minimum Bedrooms</InputLabel>
+        <InputLabel>{t.pages.listings.filter.minBedrooms}</InputLabel>
         <Select
           value={bedrooms}
-          label="Minimum Bedrooms"
+          label={t.pages.listings.filter.minBedrooms}
           onChange={(e) => setBedrooms(e.target.value)}
         >
-          <MenuItem value="">Any</MenuItem>
+          <MenuItem value="">{t.pages.listings.filter.any}</MenuItem>
           <MenuItem value="1">1+</MenuItem>
           <MenuItem value="2">2+</MenuItem>
           <MenuItem value="3">3+</MenuItem>
@@ -158,13 +161,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* Bathrooms */}
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>Minimum Bathrooms</InputLabel>
+        <InputLabel>{t.pages.listings.filter.minBathrooms}</InputLabel>
         <Select
           value={bathrooms}
-          label="Minimum Bathrooms"
+          label={t.pages.listings.filter.minBathrooms}
           onChange={(e) => setBathrooms(e.target.value)}
         >
-          <MenuItem value="">Any</MenuItem>
+          <MenuItem value="">{t.pages.listings.filter.any}</MenuItem>
           <MenuItem value="1">1+</MenuItem>
           <MenuItem value="2">2+</MenuItem>
           <MenuItem value="3">3+</MenuItem>
@@ -177,7 +180,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         variant="subtitle2"
         sx={{ mb: 2, fontWeight: 600, color: '#333' }}
       >
-        Features
+        {t.pages.listings.filter.features}
       </Typography>
       <FormGroup sx={{ mb: 3 }}>
         {features.slice(0, 8).map((feature) => (
@@ -218,7 +221,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           },
         }}
       >
-        Clear All Filters
+        {t.pages.listings.filter.clearFilters}
       </Button>
     </Box>
   );
