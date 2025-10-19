@@ -24,6 +24,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import { listings } from '../data/listingsData';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ImageGallery = styled(Box)(({ theme }) => ({
   display: 'grid',
@@ -65,6 +66,7 @@ const SpecCard = styled(Box)(({ theme }) => ({
 const ListingDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -79,7 +81,7 @@ const ListingDetail: React.FC = () => {
     return (
       <Container maxWidth="lg" sx={{ py: 8, textAlign: 'center' }}>
         <Typography variant="h4" sx={{ mb: 2 }}>
-          Property Not Found
+          {t.pages.listingDetail.propertyNotFound}
         </Typography>
         <Button
           variant="contained"
@@ -89,7 +91,7 @@ const ListingDetail: React.FC = () => {
             '&:hover': { backgroundColor: '#b91c22' },
           }}
         >
-          Back to Listings
+          {t.pages.listingDetail.backToListings}
         </Button>
       </Container>
     );
@@ -109,7 +111,7 @@ const ListingDetail: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thank you! Your inquiry has been sent to the agent.');
+    alert(t.pages.listingDetail.agent.successMessage);
     setFormData({ name: '', email: '', phone: '', message: '' });
   };
 
@@ -458,7 +460,7 @@ const ListingDetail: React.FC = () => {
               variant="h4"
               sx={{ fontWeight: 600, mb: 3, fontFamily: 'Georgia, serif' }}
             >
-              Similar Properties
+              {t.pages.listingDetail.similar.title}
             </Typography>
             <Box
               sx={{

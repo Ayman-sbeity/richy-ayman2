@@ -609,14 +609,14 @@ const Home: React.FC = () => {
             }}
           >
             {[
-              { name: 'Beirut', properties: 1250, icon: '🏙️' },
-              { name: 'Jounieh', properties: 680, icon: '🏖️' },
-              { name: 'Byblos', properties: 420, icon: '🏰' },
-              { name: 'Tripoli', properties: 550, icon: '🕌' },
-              { name: 'Saida', properties: 380, icon: '🏛️' },
-              { name: 'Batroun', properties: 290, icon: '⛵' },
-              { name: 'Zahle', properties: 310, icon: '🏔️' },
-              { name: 'Tyre', properties: 240, icon: '🌊' },
+              { name: t.pages.home.locations.beirut, properties: 1250, icon: '🏙️' },
+              { name: t.pages.home.locations.jounieh, properties: 680, icon: '🏖️' },
+              { name: t.pages.home.locations.byblos, properties: 420, icon: '🏰' },
+              { name: t.pages.home.locations.tripoli, properties: 550, icon: '🕌' },
+              { name: t.pages.home.locations.saida, properties: 380, icon: '🏛️' },
+              { name: t.pages.home.locations.batroun, properties: 290, icon: '⛵' },
+              { name: t.pages.home.locations.zahle, properties: 310, icon: '🏔️' },
+              { name: t.pages.home.locations.tyre, properties: 240, icon: '🌊' },
             ].map((location, index) => (
               <Card
                 key={index}
@@ -639,7 +639,7 @@ const Home: React.FC = () => {
                   {location.name}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#d92228', fontWeight: 500 }}>
-                  {location.properties} Properties
+                  {location.properties} {t.pages.home.locations.properties}
                 </Typography>
               </Card>
             ))}

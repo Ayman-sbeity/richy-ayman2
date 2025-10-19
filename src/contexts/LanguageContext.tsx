@@ -112,6 +112,15 @@ interface Translations {
         title: string;
         subtitle: string;
         viewMap: string;
+        beirut: string;
+        jounieh: string;
+        byblos: string;
+        tripoli: string;
+        saida: string;
+        batroun: string;
+        zahle: string;
+        tyre: string;
+        properties: string;
       };
       agents: {
         title: string;
@@ -331,6 +340,48 @@ interface Translations {
         of: string;
       };
     };
+    listingDetail: {
+      backToListings: string;
+      propertyNotFound: string;
+      forSale: string;
+      forRent: string;
+      perMonth: string;
+      specs: {
+        bedrooms: string;
+        bathrooms: string;
+        sqft: string;
+        parking: string;
+      };
+      sections: {
+        description: string;
+        propertyDetails: string;
+        featuresAmenities: string;
+        location: string;
+        mapComingSoon: string;
+      };
+      details: {
+        propertyType: string;
+        yearBuilt: string;
+        furnished: string;
+        status: string;
+        yes: string;
+        no: string;
+      };
+      agent: {
+        title: string;
+        sendInquiry: string;
+        yourName: string;
+        email: string;
+        phone: string;
+        message: string;
+        messagePlaceholder: string;
+        sendMessage: string;
+        successMessage: string;
+      };
+      similar: {
+        title: string;
+      };
+    };
     sell: {
       hero: {
         title: string;
@@ -372,6 +423,22 @@ interface Translations {
       searchProperties: string;
     };
   };
+  components: {
+    propertyCard: {
+      forSale: string;
+      forRent: string;
+      featured: string;
+      beds: string;
+      baths: string;
+      sqft: string;
+      perMonth: string;
+    };
+  };
+  locations: {
+    cities: Record<string, string>;
+    neighborhoods: Record<string, string>;
+  };
+  listingTitles: Record<string, string>;
 }
 
 const translations: Record<Language, Translations> = {
@@ -485,6 +552,15 @@ const translations: Record<Language, Translations> = {
           title: 'Explore Properties by Location',
           subtitle: "Find your perfect home in Lebanon's most desirable locations",
           viewMap: 'View Interactive Map',
+          beirut: 'Beirut',
+          jounieh: 'Jounieh',
+          byblos: 'Byblos',
+          tripoli: 'Tripoli',
+          saida: 'Saida',
+          batroun: 'Batroun',
+          zahle: 'Zahle',
+          tyre: 'Tyre',
+          properties: 'Properties',
         },
         agents: {
           title: 'Meet Our Expert Agents',
@@ -711,6 +787,48 @@ const translations: Record<Language, Translations> = {
           of: 'of',
         },
       },
+      listingDetail: {
+        backToListings: 'Back to Listings',
+        propertyNotFound: 'Property Not Found',
+        forSale: 'For Sale',
+        forRent: 'For Rent',
+        perMonth: '/month',
+        specs: {
+          bedrooms: 'Bedrooms',
+          bathrooms: 'Bathrooms',
+          sqft: 'Sqft',
+          parking: 'Parking',
+        },
+        sections: {
+          description: 'Description',
+          propertyDetails: 'Property Details',
+          featuresAmenities: 'Features & Amenities',
+          location: 'Location',
+          mapComingSoon: 'Interactive map coming soon',
+        },
+        details: {
+          propertyType: 'Property Type',
+          yearBuilt: 'Year Built',
+          furnished: 'Furnished',
+          status: 'Status',
+          yes: 'Yes',
+          no: 'No',
+        },
+        agent: {
+          title: 'Real Estate Agent',
+          sendInquiry: 'Send Inquiry',
+          yourName: 'Your Name',
+          email: 'Email',
+          phone: 'Phone',
+          message: 'Message',
+          messagePlaceholder: "I'm interested in this property...",
+          sendMessage: 'Send Message',
+          successMessage: 'Thank you! Your inquiry has been sent to the agent.',
+        },
+        similar: {
+          title: 'Similar Properties',
+        },
+      },
       sell: {
         hero: {
           title: 'List Your Property',
@@ -751,6 +869,48 @@ const translations: Record<Language, Translations> = {
         close: 'Close',
         searchProperties: 'Search Properties',
       },
+    },
+    components: {
+      propertyCard: {
+        forSale: 'For Sale',
+        forRent: 'For Rent',
+        featured: 'Featured',
+        beds: 'Beds',
+        baths: 'Baths',
+        sqft: 'sqft',
+        perMonth: '/mo',
+      },
+    },
+    locations: {
+      cities: {
+        'Beirut': 'Beirut',
+        'Jounieh': 'Jounieh',
+        'Byblos': 'Byblos',
+        'Tripoli': 'Tripoli',
+        'Saida': 'Saida',
+        'Batroun': 'Batroun',
+        'Zahle': 'Zahle',
+        'Tyre': 'Tyre',
+      },
+      neighborhoods: {
+        'Achrafieh': 'Achrafieh',
+        'Maameltein': 'Maameltein',
+        'Old Souk': 'Old Souk',
+        'Downtown': 'Downtown',
+        'Mina': 'Mina',
+        'Verdun': 'Verdun',
+        'Sea Road': 'Sea Road',
+      },
+    },
+    listingTitles: {
+      '1': 'Luxury Villa in Achrafieh',
+      '2': 'Modern Apartment in Maameltein',
+      '3': 'Beachfront Property in Byblos',
+      '4': 'Spacious House in Batroun',
+      '5': 'Downtown Beirut Apartment',
+      '6': 'Tripoli Family Home',
+      '7': 'Luxury Condo in Verdun',
+      '8': 'Cozy Apartment in Saida',
     },
   },
   ar: {
@@ -863,6 +1023,15 @@ const translations: Record<Language, Translations> = {
           title: 'استكشف العقارات حسب الموقع',
           subtitle: 'ابحث عن منزل أحلامك في أكثر المواقع المرغوبة في لبنان',
           viewMap: 'عرض الخريطة التفاعلية',
+          beirut: 'بيروت',
+          jounieh: 'جونية',
+          byblos: 'جبيل',
+          tripoli: 'طرابلس',
+          saida: 'صيدا',
+          batroun: 'بطرون',
+          zahle: 'زحلة',
+          tyre: 'صور',
+          properties: 'عقار',
         },
         agents: {
           title: 'تعرف على وكلائنا الخبراء',
@@ -1089,6 +1258,48 @@ const translations: Record<Language, Translations> = {
           of: 'من',
         },
       },
+      listingDetail: {
+        backToListings: 'العودة إلى القوائم',
+        propertyNotFound: 'لم يتم العثور على العقار',
+        forSale: 'للبيع',
+        forRent: 'للإيجار',
+        perMonth: '/شهر',
+        specs: {
+          bedrooms: 'غرف النوم',
+          bathrooms: 'الحمامات',
+          sqft: 'قدم مربع',
+          parking: 'موقف سيارات',
+        },
+        sections: {
+          description: 'الوصف',
+          propertyDetails: 'تفاصيل العقار',
+          featuresAmenities: 'الميزات والمرافق',
+          location: 'الموقع',
+          mapComingSoon: 'الخريطة التفاعلية قريبًا',
+        },
+        details: {
+          propertyType: 'نوع العقار',
+          yearBuilt: 'سنة البناء',
+          furnished: 'مفروش',
+          status: 'الحالة',
+          yes: 'نعم',
+          no: 'لا',
+        },
+        agent: {
+          title: 'وكيل عقارات',
+          sendInquiry: 'إرسال استفسار',
+          yourName: 'اسمك',
+          email: 'البريد الإلكتروني',
+          phone: 'الهاتف',
+          message: 'الرسالة',
+          messagePlaceholder: 'أنا مهتم بهذا العقار...',
+          sendMessage: 'إرسال رسالة',
+          successMessage: 'شكراً! تم إرسال استفسارك إلى الوكيل.',
+        },
+        similar: {
+          title: 'عقارات مشابهة',
+        },
+      },
       sell: {
         hero: {
           title: 'أدرج عقارك',
@@ -1129,6 +1340,48 @@ const translations: Record<Language, Translations> = {
         close: 'إغلاق',
         searchProperties: 'البحث عن عقارات',
       },
+    },
+    components: {
+      propertyCard: {
+        forSale: 'للبيع',
+        forRent: 'للإيجار',
+        featured: 'مميز',
+        beds: 'غرف',
+        baths: 'حمامات',
+        sqft: 'قدم²',
+        perMonth: '/شهر',
+      },
+    },
+    locations: {
+      cities: {
+        'Beirut': 'بيروت',
+        'Jounieh': 'جونية',
+        'Byblos': 'جبيل',
+        'Tripoli': 'طرابلس',
+        'Saida': 'صيدا',
+        'Batroun': 'بترون',
+        'Zahle': 'زحلة',
+        'Tyre': 'صور',
+      },
+      neighborhoods: {
+        'Achrafieh': 'الأشرفية',
+        'Maameltein': 'مع ملتين',
+        'Old Souk': 'السوق القديم',
+        'Downtown': 'الوسط التجاري',
+        'Mina': 'المينا',
+        'Verdun': 'فردان',
+        'Sea Road': 'الطريق البحري',
+      },
+    },
+    listingTitles: {
+      '1': 'فيلا فاخرة في الأشرفية',
+      '2': 'شقة حديثة في مع ملتين',
+      '3': 'عقار على البحر في جبيل',
+      '4': 'منزل واسع في بترون',
+      '5': 'شقة وسط بيروت',
+      '6': 'منزل عائلي في طرابلس',
+      '7': 'كوندو فاخر في فردان',
+      '8': 'شقة مريحة في صيدا',
     },
   },
 };
@@ -1180,4 +1433,22 @@ export const useLanguage = (): LanguageContextType => {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
+};
+
+// Helper function to translate city names
+export const translateCity = (city: string, language: Language): string => {
+  const cityTranslations = translations[language].locations.cities;
+  return cityTranslations[city as keyof typeof cityTranslations] || city;
+};
+
+// Helper function to translate neighborhood names
+export const translateNeighborhood = (neighborhood: string, language: Language): string => {
+  const neighborhoodTranslations = translations[language].locations.neighborhoods;
+  return neighborhoodTranslations[neighborhood as keyof typeof neighborhoodTranslations] || neighborhood;
+};
+
+// Helper function to translate listing titles
+export const translateListingTitle = (listingId: string, language: Language): string => {
+  const titleTranslations = translations[language].listingTitles;
+  return titleTranslations[listingId as keyof typeof titleTranslations] || '';
 };

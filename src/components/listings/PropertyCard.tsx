@@ -5,6 +5,7 @@ import BedIcon from '@mui/icons-material/Bed';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import { Listing } from '../../data/listingsData';
+import { useLanguage, translateCity, translateNeighborhood, translateListingTitle } from '../../contexts/LanguageContext';
 
 interface PropertyCardProps {
   listing: Listing;
@@ -12,6 +13,8 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
+  const { t, language } = useLanguage();
+  
   return (
     <Card
       sx={{
@@ -42,7 +45,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
           }}
         />
         <Chip
-          label={listing.priceType === 'sale' ? 'For Sale' : 'For Rent'}
+          label={listing.priceType === 'sale' ? t.components.propertyCard.forSale : t.components.propertyCard.forRent}
           size="small"
           sx={{
             position: 'absolute',
@@ -58,7 +61,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
         />
         {listing.featured && (
           <Chip
-            label="Featured"
+            label={t.components.propertyCard.featured}
             size="small"
             sx={{
               position: 'absolute',
@@ -88,7 +91,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
             WebkitBoxOrient: 'vertical',
           }}
         >
-          {listing.title}
+          {translateListingTitle(listing.id, language) || listing.title}
         </Typography>
         <Typography
           variant="body2"
@@ -102,7 +105,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
           }}
         >
           <LocationOnIcon sx={{ fontSize: '1rem', color: '#d92228' }} />
-          {listing.location.neighborhood}, {listing.location.city}
+          {translateNeighborhood(listing.location.neighborhood, language)}, {translateCity(listing.location.city, language)}
         </Typography>
         <Typography
           variant="h5"
@@ -115,7 +118,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
         >
           ${listing.price.toLocaleString()}
           {listing.priceType === 'rent' && (
-            <span style={{ fontSize: '0.85em', fontWeight: 500 }}>/mo</span>
+            <span style={{ fontSize: '0.85em', fontWeight: 500 }}>{t.components.propertyCard.perMonth}</span>
           )}
         </Typography>
         <Box
@@ -132,7 +135,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
               variant="body2"
               sx={{ color: '#666', fontSize: { xs: '0.85rem', sm: '0.9rem' } }}
             >
-              {listing.bedrooms} Beds
+              {listing.bedrooms} {t.components.propertyCard.beds}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -141,7 +144,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
               variant="body2"
               sx={{ color: '#666', fontSize: { xs: '0.85rem', sm: '0.9rem' } }}
             >
-              {listing.bathrooms} Baths
+              {listing.bathrooms} {t.components.propertyCard.baths}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -150,7 +153,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
               variant="body2"
               sx={{ color: '#666', fontSize: { xs: '0.85rem', sm: '0.9rem' } }}
             >
-              {listing.area.toLocaleString()} sqft
+              {listing.area.toLocaleString()} {t.components.propertyCard.sqft}
             </Typography>
           </Box>
         </Box>
