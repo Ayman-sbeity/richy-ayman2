@@ -40,8 +40,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DescriptionIcon from '@mui/icons-material/Description';
-import StarIcon from '@mui/icons-material/Star';
 import { subscriptionPlans, getPlansByUserType, calculateYearlySavings } from '../data/subscriptionPlans';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -94,6 +94,7 @@ const DeleteButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const Sell: React.FC = () => {
+  const { t } = useLanguage();
   const [activeStep, setActiveStep] = useState(0);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -124,24 +125,43 @@ const Sell: React.FC = () => {
     licenseNumber: '',
   });
 
-  const steps = ['Account Type', 'Subscription Plan', 'Property Details', 'Features & Amenities', 'Photos & Contact'];
+  const steps = [t.pages.sell.steps.accountType, t.pages.sell.steps.subscriptionPlan, t.pages.sell.steps.propertyDetails, t.pages.sell.steps.features, t.pages.sell.steps.photos];
 
-  const propertyTypes = ['Apartment', 'House', 'Villa', 'Penthouse', 'Studio', 'Duplex', 'Land', 'Commercial'];
-  const listingTypes = ['Sale', 'Rent'];
-  const cities = ['Beirut', 'Mount Lebanon', 'Tripoli', 'Sidon', 'Tyre', 'Jounieh', 'Byblos', 'Zahle'];
+  const propertyTypes = [
+    { value: 'Apartment', label: t.pages.sell.propertyTypes.apartment },
+    { value: 'House', label: t.pages.sell.propertyTypes.house },
+    { value: 'Villa', label: t.pages.sell.propertyTypes.villa },
+    { value: 'Penthouse', label: t.pages.sell.propertyTypes.penthouse },
+    { value: 'Studio', label: t.pages.sell.propertyTypes.studio },
+    { value: 'Duplex', label: t.pages.sell.propertyTypes.duplex },
+    { value: 'Land', label: t.pages.sell.propertyTypes.land },
+    { value: 'Commercial', label: t.pages.sell.propertyTypes.commercial },
+  ];
+  
+  const cities = [
+    { value: 'Beirut', label: t.pages.sell.cities.beirut },
+    { value: 'Mount Lebanon', label: t.pages.sell.cities.mountLebanon },
+    { value: 'Tripoli', label: t.pages.sell.cities.tripoli },
+    { value: 'Sidon', label: t.pages.sell.cities.sidon },
+    { value: 'Tyre', label: t.pages.sell.cities.tyre },
+    { value: 'Jounieh', label: t.pages.sell.cities.jounieh },
+    { value: 'Byblos', label: t.pages.sell.cities.byblos },
+    { value: 'Zahle', label: t.pages.sell.cities.zahle },
+  ];
+  
   const availableFeatures = [
-    'Balcony',
-    'Garden',
-    'Swimming Pool',
-    'Gym',
-    'Security',
-    'Elevator',
-    'Central Heating',
-    'Air Conditioning',
-    'Furnished',
-    'Sea View',
-    'Mountain View',
-    'Parking',
+    t.pages.sell.features.balcony,
+    t.pages.sell.features.garden,
+    t.pages.sell.features.pool,
+    t.pages.sell.features.gym,
+    t.pages.sell.features.security,
+    t.pages.sell.features.elevator,
+    t.pages.sell.features.heating,
+    t.pages.sell.features.ac,
+    t.pages.sell.features.furnished,
+    t.pages.sell.features.seaView,
+    t.pages.sell.features.mountainView,
+    t.pages.sell.features.parkingSpace,
   ];
 
   const handleInputChange = (field: string, value: any) => {
@@ -193,35 +213,27 @@ const Sell: React.FC = () => {
   const handleSubmit = async () => {
     setSubmitting(true);
     
-    // Simulate API call
     setTimeout(() => {
       console.log('Form submitted:', formData, images);
       setSubmitting(false);
       alert('Property listing submitted successfully! Our team will review it shortly.');
-      // Reset form or redirect
     }, 2000);
   };
 
   const isStepValid = () => {
     switch (activeStep) {
       case 0:
-        // Account type selection
         return formData.sellerType !== '';
       case 1:
-        // Subscription plan selection
         return formData.subscriptionPlan !== '';
       case 2:
-        // Property details
         return formData.title && formData.propertyType && formData.listingType && 
                formData.price && formData.location && formData.city;
       case 3:
-        // Features & amenities
         return formData.bedrooms && formData.bathrooms && formData.area;
       case 4:
-        // Photos & contact
         const basicContactValid = images.length > 0 && formData.contactName && 
                                    formData.contactEmail && formData.contactPhone;
-        // If realtor, also require agency name and license
         if (formData.sellerType === 'realtor') {
           return basicContactValid && formData.agencyName && formData.licenseNumber;
         }
@@ -244,7 +256,7 @@ const Sell: React.FC = () => {
               mb: 2,
             }}
           >
-            List Your Property
+            {t.pages.sell.hero.title}
           </Typography>
           <Typography
             variant="h6"
@@ -255,7 +267,7 @@ const Sell: React.FC = () => {
               margin: '0 auto',
             }}
           >
-            Reach thousands of potential buyers and renters across Lebanon
+            {t.pages.sell.hero.subtitle}
           </Typography>
         </Container>
       </HeroSection>
@@ -269,14 +281,13 @@ const Sell: React.FC = () => {
           ))}
         </Stepper>
 
-        {/* Step 0: Account Type Selection */}
         {activeStep === 0 && (
           <FormSection>
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, textAlign: 'center' }}>
-              Who are you?
+              {t.pages.sell.accountType.title}
             </Typography>
             <Typography variant="body1" sx={{ color: '#666', mb: 4, textAlign: 'center' }}>
-              Please select your account type to continue
+              {t.pages.sell.accountType.description}
             </Typography>
 
             <Box sx={{ 
@@ -286,7 +297,6 @@ const Sell: React.FC = () => {
               maxWidth: 800,
               margin: '0 auto'
             }}>
-              {/* Owner Card */}
               <Paper
                 elevation={formData.sellerType === 'owner' ? 8 : 2}
                 onClick={() => handleInputChange('sellerType', 'owner')}
@@ -304,17 +314,16 @@ const Sell: React.FC = () => {
               >
                 <HomeIcon sx={{ fontSize: 64, color: formData.sellerType === 'owner' ? '#d92228' : '#666', mb: 2 }} />
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
-                  Property Owner
+                  {t.pages.sell.accountType.owner.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#666', lineHeight: 1.6 }}>
-                  I own the property and want to sell or rent it directly
+                  {t.pages.sell.accountType.owner.description}
                 </Typography>
                 {formData.sellerType === 'owner' && (
                   <CheckCircleIcon sx={{ fontSize: 48, color: '#d92228', mt: 2 }} />
                 )}
               </Paper>
 
-              {/* Realtor Card */}
               <Paper
                 elevation={formData.sellerType === 'realtor' ? 8 : 2}
                 onClick={() => handleInputChange('sellerType', 'realtor')}
@@ -332,10 +341,10 @@ const Sell: React.FC = () => {
               >
                 <HomeIcon sx={{ fontSize: 64, color: formData.sellerType === 'realtor' ? '#d92228' : '#666', mb: 2 }} />
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
-                  Real Estate Agent
+                  {t.pages.sell.accountType.realtor.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#666', lineHeight: 1.6 }}>
-                  I'm a licensed realtor representing the property owner
+                  {t.pages.sell.accountType.realtor.description}
                 </Typography>
                 {formData.sellerType === 'realtor' && (
                   <CheckCircleIcon sx={{ fontSize: 48, color: '#d92228', mt: 2 }} />
@@ -346,14 +355,13 @@ const Sell: React.FC = () => {
             {formData.sellerType && (
               <Alert severity="info" sx={{ mt: 4, maxWidth: 800, margin: '32px auto 0' }}>
                 {formData.sellerType === 'owner' 
-                  ? 'As a property owner, you can list your property directly without any agency fees.'
-                  : 'As a realtor, you\'ll need to provide your agency information and license number.'}
+                  ? t.pages.sell.accountType.ownerInfo
+                  : t.pages.sell.accountType.realtorInfo}
               </Alert>
             )}
           </FormSection>
         )}
 
-        {/* Step 1: Subscription Plan Selection */}
         {activeStep === 1 && formData.sellerType && (
           <FormSection>
             <Typography 
@@ -369,7 +377,7 @@ const Sell: React.FC = () => {
                 fontSize: { xs: '1.75rem', md: '2.25rem' }
               }}
             >
-              Choose Your Perfect Plan
+              {t.pages.sell.subscription.title}
             </Typography>
             <Typography 
               variant="body1" 
@@ -382,7 +390,7 @@ const Sell: React.FC = () => {
                 mx: 'auto'
               }}
             >
-              Select the plan that best fits your property listing needs
+              {t.pages.sell.subscription.description}
             </Typography>
 
             {/* Billing Cycle Toggle */}
@@ -409,15 +417,14 @@ const Sell: React.FC = () => {
                 }}
               >
                 <ToggleButton value="monthly">
-                  Monthly
+                  {t.pages.sell.subscription.monthly}
                 </ToggleButton>
                 <ToggleButton value="yearly">
-                  Yearly <Chip label="Save up to 20%" size="small" sx={{ ml: 1, backgroundColor: '#28a745', color: 'white' }} />
+                  {t.pages.sell.subscription.yearly} <Chip label={t.pages.sell.subscription.savingsBadge} size="small" sx={{ ml: 1, backgroundColor: '#28a745', color: 'white' }} />
                 </ToggleButton>
               </ToggleButtonGroup>
             </Box>
 
-            {/* Subscription Plans */}
             <Box sx={{ 
               display: 'flex',
               justifyContent: 'center',
@@ -677,14 +684,14 @@ const Sell: React.FC = () => {
           <FormSection>
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
               <DescriptionIcon sx={{ color: '#d92228' }} />
-              Property Details
+              {t.pages.sell.propertyDetails.title}
             </Typography>
 
             <Box sx={{ display: 'grid', gap: 3 }}>
               <TextField
                 fullWidth
-                label="Property Title"
-                placeholder="e.g., Luxury 3BR Apartment in Achrafieh"
+                label={t.pages.sell.propertyDetails.propertyTitle}
+                placeholder={t.pages.sell.propertyDetails.propertyTitlePlaceholder}
                 value={formData.title}
                 onChange={(e) => handleInputChange('title', e.target.value)}
                 required
@@ -692,32 +699,29 @@ const Sell: React.FC = () => {
 
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
                 <FormControl fullWidth required>
-                  <InputLabel>Property Type</InputLabel>
+                  <InputLabel>{t.pages.sell.propertyDetails.propertyType}</InputLabel>
                   <Select
                     value={formData.propertyType}
-                    label="Property Type"
+                    label={t.pages.sell.propertyDetails.propertyType}
                     onChange={(e) => handleInputChange('propertyType', e.target.value)}
                   >
                     {propertyTypes.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        {type}
+                      <MenuItem key={type.value} value={type.value}>
+                        {type.label}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
 
                 <FormControl fullWidth required>
-                  <InputLabel>Listing Type</InputLabel>
+                  <InputLabel>{t.pages.sell.propertyDetails.listingType}</InputLabel>
                   <Select
                     value={formData.listingType}
-                    label="Listing Type"
+                    label={t.pages.sell.propertyDetails.listingType}
                     onChange={(e) => handleInputChange('listingType', e.target.value)}
                   >
-                    {listingTypes.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        For {type}
-                      </MenuItem>
-                    ))}
+                    <MenuItem value="Sale">{t.pages.sell.propertyDetails.forSale}</MenuItem>
+                    <MenuItem value="Rent">{t.pages.sell.propertyDetails.forRent}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -725,9 +729,9 @@ const Sell: React.FC = () => {
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
                 <TextField
                   fullWidth
-                  label="Price"
+                  label={t.pages.sell.propertyDetails.price}
                   type="number"
-                  placeholder="e.g., 450000"
+                  placeholder={t.pages.sell.propertyDetails.pricePlaceholder}
                   value={formData.price}
                   onChange={(e) => handleInputChange('price', e.target.value)}
                   required
@@ -741,15 +745,15 @@ const Sell: React.FC = () => {
                 />
 
                 <FormControl fullWidth required>
-                  <InputLabel>City</InputLabel>
+                  <InputLabel>{t.pages.sell.propertyDetails.city}</InputLabel>
                   <Select
                     value={formData.city}
-                    label="City"
+                    label={t.pages.sell.propertyDetails.city}
                     onChange={(e) => handleInputChange('city', e.target.value)}
                   >
                     {cities.map((city) => (
-                      <MenuItem key={city} value={city}>
-                        {city}
+                      <MenuItem key={city.value} value={city.value}>
+                        {city.label}
                       </MenuItem>
                     ))}
                   </Select>
@@ -758,8 +762,8 @@ const Sell: React.FC = () => {
 
               <TextField
                 fullWidth
-                label="Location / Address"
-                placeholder="e.g., Sassine Square, Achrafieh"
+                label={t.pages.sell.propertyDetails.location}
+                placeholder={t.pages.sell.propertyDetails.locationPlaceholder}
                 value={formData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 required
@@ -774,8 +778,8 @@ const Sell: React.FC = () => {
 
               <TextField
                 fullWidth
-                label="Property Description"
-                placeholder="Describe your property in detail..."
+                label={t.pages.sell.propertyDetails.description}
+                placeholder={t.pages.sell.propertyDetails.descriptionPlaceholder}
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 multiline
@@ -790,14 +794,14 @@ const Sell: React.FC = () => {
         {activeStep === 3 && (
           <FormSection>
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
-              Features & Amenities
+              {t.pages.sell.features.title}
             </Typography>
 
             <Box sx={{ display: 'grid', gap: 3 }}>
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 2 }}>
                 <TextField
                   fullWidth
-                  label="Bedrooms"
+                  label={t.pages.sell.features.bedrooms}
                   type="number"
                   value={formData.bedrooms}
                   onChange={(e) => handleInputChange('bedrooms', e.target.value)}
@@ -813,7 +817,7 @@ const Sell: React.FC = () => {
 
                 <TextField
                   fullWidth
-                  label="Bathrooms"
+                  label={t.pages.sell.features.bathrooms}
                   type="number"
                   value={formData.bathrooms}
                   onChange={(e) => handleInputChange('bathrooms', e.target.value)}
@@ -829,7 +833,7 @@ const Sell: React.FC = () => {
 
                 <TextField
                   fullWidth
-                  label="Area (sqm)"
+                  label={t.pages.sell.features.area}
                   type="number"
                   value={formData.area}
                   onChange={(e) => handleInputChange('area', e.target.value)}
@@ -845,7 +849,7 @@ const Sell: React.FC = () => {
 
                 <TextField
                   fullWidth
-                  label="Parking Spaces"
+                  label={t.pages.sell.features.parking}
                   type="number"
                   value={formData.parkingSpaces}
                   onChange={(e) => handleInputChange('parkingSpaces', e.target.value)}
@@ -855,9 +859,9 @@ const Sell: React.FC = () => {
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
                 <TextField
                   fullWidth
-                  label="Year Built"
+                  label={t.pages.sell.features.yearBuilt}
                   type="number"
-                  placeholder="e.g., 2020"
+                  placeholder={t.pages.sell.features.yearBuiltPlaceholder}
                   value={formData.yearBuilt}
                   onChange={(e) => handleInputChange('yearBuilt', e.target.value)}
                 />
@@ -865,7 +869,7 @@ const Sell: React.FC = () => {
 
               <Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
-                  Select Features
+                  {t.pages.sell.features.selectFeatures}
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                   {availableFeatures.map((feature) => (
@@ -898,7 +902,7 @@ const Sell: React.FC = () => {
             <FormSection>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
                 <PhotoCameraIcon sx={{ color: '#d92228' }} />
-                Property Photos
+                {t.pages.sell.photos.title}
               </Typography>
 
               <input
@@ -914,13 +918,13 @@ const Sell: React.FC = () => {
                 <UploadBox>
                   <CloudUploadIcon sx={{ fontSize: 48, color: '#d92228', mb: 2 }} />
                   <Typography variant="h6" sx={{ mb: 1 }}>
-                    Upload Property Images
+                    {t.pages.sell.photos.upload}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Click to select or drag and drop images here
+                    {t.pages.sell.photos.dragDrop}
                   </Typography>
                   <Typography variant="caption" color="textSecondary" sx={{ mt: 1, display: 'block' }}>
-                    Maximum 10 images, JPG or PNG
+                    {t.pages.sell.photos.maxImages}
                   </Typography>
                 </UploadBox>
               </label>
@@ -951,14 +955,14 @@ const Sell: React.FC = () => {
 
             <FormSection>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
-                Contact Information
+                {t.pages.sell.photos.contactTitle}
               </Typography>
 
               <Box sx={{ display: 'grid', gap: 3 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <TextField
                     fullWidth
-                    label="Full Name"
+                    label={t.pages.sell.photos.fullName}
                     value={formData.contactName}
                     onChange={(e) => handleInputChange('contactName', e.target.value)}
                     required
@@ -966,7 +970,7 @@ const Sell: React.FC = () => {
 
                   <TextField
                     fullWidth
-                    label="Email"
+                    label={t.pages.sell.photos.email}
                     type="email"
                     value={formData.contactEmail}
                     onChange={(e) => handleInputChange('contactEmail', e.target.value)}
@@ -977,11 +981,11 @@ const Sell: React.FC = () => {
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
                   <TextField
                     fullWidth
-                    label="Phone Number"
+                    label={t.pages.sell.photos.phone}
                     value={formData.contactPhone}
                     onChange={(e) => handleInputChange('contactPhone', e.target.value)}
                     required
-                    placeholder="+961 3 XXX XXX"
+                    placeholder={t.pages.sell.photos.phonePlaceholder}
                   />
                 </Box>
 
@@ -989,25 +993,25 @@ const Sell: React.FC = () => {
                 {formData.sellerType === 'realtor' && (
                   <>
                     <Alert severity="warning" sx={{ mt: 2 }}>
-                      As a real estate agent, please provide your professional credentials
+                      {t.pages.sell.photos.warningRealtor}
                     </Alert>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3, mt: 2 }}>
                       <TextField
                         fullWidth
-                        label="Agency Name"
+                        label={t.pages.sell.photos.agencyName}
                         value={formData.agencyName}
                         onChange={(e) => handleInputChange('agencyName', e.target.value)}
                         required
-                        placeholder="e.g., Century 21 Lebanon"
+                        placeholder={t.pages.sell.photos.agencyPlaceholder}
                       />
 
                       <TextField
                         fullWidth
-                        label="License Number"
+                        label={t.pages.sell.photos.licenseNumber}
                         value={formData.licenseNumber}
                         onChange={(e) => handleInputChange('licenseNumber', e.target.value)}
                         required
-                        placeholder="e.g., RE-123456"
+                        placeholder={t.pages.sell.photos.licensePlaceholder}
                       />
                     </Box>
                   </>
@@ -1016,8 +1020,8 @@ const Sell: React.FC = () => {
 
               <Alert severity="info" sx={{ mt: 3 }}>
                 {formData.sellerType === 'owner' 
-                  ? 'Your contact information will be displayed to interested buyers/renters.'
-                  : 'Your agency information and license will be verified before listing approval.'}
+                  ? t.pages.sell.photos.infoOwner
+                  : t.pages.sell.photos.infoRealtor}
               </Alert>
             </FormSection>
           </>
@@ -1038,7 +1042,7 @@ const Sell: React.FC = () => {
               },
             }}
           >
-            Back
+            {t.pages.sell.buttons.back}
           </Button>
 
           {activeStep < steps.length - 1 ? (
@@ -1053,7 +1057,7 @@ const Sell: React.FC = () => {
                 },
               }}
             >
-              Next
+              {t.pages.sell.buttons.next}
             </Button>
           ) : (
             <Button
@@ -1069,7 +1073,7 @@ const Sell: React.FC = () => {
                 },
               }}
             >
-              {submitting ? 'Submitting...' : 'Submit Listing'}
+              {submitting ? t.pages.sell.buttons.submitting : t.pages.sell.buttons.submit}
             </Button>
           )}
         </Box>

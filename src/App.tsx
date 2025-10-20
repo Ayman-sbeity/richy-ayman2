@@ -29,9 +29,9 @@ const App: React.FC = () => {
         <Route 
           path="sell" 
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <Sell />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } 
         />
       </Route>

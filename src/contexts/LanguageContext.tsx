@@ -394,18 +394,110 @@ interface Translations {
         features: string;
         photos: string;
       };
-      form: {
+      accountType: {
         title: string;
         description: string;
+        owner: {
+          title: string;
+          description: string;
+        };
+        realtor: {
+          title: string;
+          description: string;
+        };
+        ownerInfo: string;
+        realtorInfo: string;
+      };
+      subscription: {
+        title: string;
+        description: string;
+        monthly: string;
+        yearly: string;
+        savingsBadge: string;
+      };
+      propertyDetails: {
+        title: string;
+        propertyTitle: string;
+        propertyTitlePlaceholder: string;
         propertyType: string;
         listingType: string;
+        forSale: string;
+        forRent: string;
         price: string;
-        location: string;
+        pricePlaceholder: string;
         city: string;
+        location: string;
+        locationPlaceholder: string;
+        description: string;
+        descriptionPlaceholder: string;
+      };
+      features: {
+        title: string;
         bedrooms: string;
         bathrooms: string;
         area: string;
+        areaPlaceholder: string;
+        parking: string;
+        yearBuilt: string;
+        yearBuiltPlaceholder: string;
+        selectFeatures: string;
+        balcony: string;
+        garden: string;
+        pool: string;
+        gym: string;
+        security: string;
+        elevator: string;
+        heating: string;
+        ac: string;
+        furnished: string;
+        seaView: string;
+        mountainView: string;
+        parkingSpace: string;
+      };
+      photos: {
+        title: string;
+        upload: string;
+        uploadDescription: string;
+        dragDrop: string;
+        maxImages: string;
+        contactTitle: string;
+        fullName: string;
+        email: string;
+        phone: string;
+        phonePlaceholder: string;
+        warningRealtor: string;
+        agencyName: string;
+        agencyPlaceholder: string;
+        licenseNumber: string;
+        licensePlaceholder: string;
+        infoOwner: string;
+        infoRealtor: string;
+      };
+      buttons: {
+        back: string;
+        next: string;
         submit: string;
+        submitting: string;
+      };
+      propertyTypes: {
+        apartment: string;
+        house: string;
+        villa: string;
+        penthouse: string;
+        studio: string;
+        duplex: string;
+        land: string;
+        commercial: string;
+      };
+      cities: {
+        beirut: string;
+        mountLebanon: string;
+        tripoli: string;
+        sidon: string;
+        tyre: string;
+        jounieh: string;
+        byblos: string;
+        zahle: string;
       };
     };
     common: {
@@ -832,7 +924,7 @@ const translations: Record<Language, Translations> = {
       sell: {
         hero: {
           title: 'List Your Property',
-          subtitle: 'Reach thousands of potential buyers',
+          subtitle: 'Reach thousands of potential buyers and renters across Lebanon',
         },
         steps: {
           accountType: 'Account Type',
@@ -841,18 +933,110 @@ const translations: Record<Language, Translations> = {
           features: 'Features & Amenities',
           photos: 'Photos & Contact',
         },
-        form: {
-          title: 'Property Title',
-          description: 'Description',
+        accountType: {
+          title: 'Who are you?',
+          description: 'Please select your account type to continue',
+          owner: {
+            title: 'Property Owner',
+            description: 'I own the property and want to sell or rent it directly',
+          },
+          realtor: {
+            title: 'Real Estate Agent',
+            description: "I'm a licensed realtor representing the property owner",
+          },
+          ownerInfo: 'As a property owner, you can list your property directly without any agency fees.',
+          realtorInfo: "As a realtor, you'll need to provide your agency information and license number.",
+        },
+        subscription: {
+          title: 'Choose Your Perfect Plan',
+          description: 'Select the plan that best fits your property listing needs',
+          monthly: 'Monthly',
+          yearly: 'Yearly',
+          savingsBadge: 'Save up to 20%',
+        },
+        propertyDetails: {
+          title: 'Property Details',
+          propertyTitle: 'Property Title',
+          propertyTitlePlaceholder: 'e.g., Luxury 3BR Apartment in Achrafieh',
           propertyType: 'Property Type',
           listingType: 'Listing Type',
+          forSale: 'For Sale',
+          forRent: 'For Rent',
           price: 'Price',
-          location: 'Location',
+          pricePlaceholder: 'e.g., 450000',
           city: 'City',
+          location: 'Location / Address',
+          locationPlaceholder: 'e.g., Sassine Square, Achrafieh',
+          description: 'Property Description',
+          descriptionPlaceholder: 'Describe your property in detail...',
+        },
+        features: {
+          title: 'Features & Amenities',
           bedrooms: 'Bedrooms',
           bathrooms: 'Bathrooms',
-          area: 'Area (sq ft)',
+          area: 'Area (sqm)',
+          areaPlaceholder: 'Area in square meters',
+          parking: 'Parking Spaces',
+          yearBuilt: 'Year Built',
+          yearBuiltPlaceholder: 'e.g., 2020',
+          selectFeatures: 'Select Features',
+          balcony: 'Balcony',
+          garden: 'Garden',
+          pool: 'Swimming Pool',
+          gym: 'Gym',
+          security: 'Security',
+          elevator: 'Elevator',
+          heating: 'Central Heating',
+          ac: 'Air Conditioning',
+          furnished: 'Furnished',
+          seaView: 'Sea View',
+          mountainView: 'Mountain View',
+          parkingSpace: 'Parking',
+        },
+        photos: {
+          title: 'Property Photos',
+          upload: 'Upload Property Images',
+          uploadDescription: 'Click to select or drag and drop images here',
+          dragDrop: 'Click to select or drag and drop images here',
+          maxImages: 'Maximum 10 images, JPG or PNG',
+          contactTitle: 'Contact Information',
+          fullName: 'Full Name',
+          email: 'Email',
+          phone: 'Phone Number',
+          phonePlaceholder: '+961 3 XXX XXX',
+          warningRealtor: 'As a real estate agent, please provide your professional credentials',
+          agencyName: 'Agency Name',
+          agencyPlaceholder: 'e.g., Century 21 Lebanon',
+          licenseNumber: 'License Number',
+          licensePlaceholder: 'e.g., RE-123456',
+          infoOwner: 'Your contact information will be displayed to interested buyers/renters.',
+          infoRealtor: 'Your agency information and license will be verified before listing approval.',
+        },
+        buttons: {
+          back: 'Back',
+          next: 'Next',
           submit: 'Submit Listing',
+          submitting: 'Submitting...',
+        },
+        propertyTypes: {
+          apartment: 'Apartment',
+          house: 'House',
+          villa: 'Villa',
+          penthouse: 'Penthouse',
+          studio: 'Studio',
+          duplex: 'Duplex',
+          land: 'Land',
+          commercial: 'Commercial',
+        },
+        cities: {
+          beirut: 'Beirut',
+          mountLebanon: 'Mount Lebanon',
+          tripoli: 'Tripoli',
+          sidon: 'Sidon',
+          tyre: 'Tyre',
+          jounieh: 'Jounieh',
+          byblos: 'Byblos',
+          zahle: 'Zahle',
         },
       },
       common: {
@@ -1303,7 +1487,7 @@ const translations: Record<Language, Translations> = {
       sell: {
         hero: {
           title: 'أدرج عقارك',
-          subtitle: 'تواصل مع الآلاف من المشترين المحتملين',
+          subtitle: 'تواصل مع الآلاف من المشترين والمستأجرين المحتملين في جميع أنحاء لبنان',
         },
         steps: {
           accountType: 'نوع الحساب',
@@ -1312,18 +1496,110 @@ const translations: Record<Language, Translations> = {
           features: 'الميزات والمرافق',
           photos: 'الصور وجهة الاتصال',
         },
-        form: {
-          title: 'عنوان العقار',
-          description: 'الوصف',
+        accountType: {
+          title: 'من أنت؟',
+          description: 'الرجاء اختيار نوع حسابك للمتابعة',
+          owner: {
+            title: 'مالك العقار',
+            description: 'أنا مالك العقار وأريد بيعه أو تأجيره مباشرة',
+          },
+          realtor: {
+            title: 'وكيل عقاري',
+            description: 'أنا وكيل عقاري مرخص أمثل مالك العقار',
+          },
+          ownerInfo: 'كمالك عقار، يمكنك إدراج عقارك مباشرة دون أي رسوم وكالة.',
+          realtorInfo: 'كوكيل عقاري، ستحتاج إلى تقديم معلومات وكالتك ورقم الترخيص.',
+        },
+        subscription: {
+          title: 'اختر خطتك المثالية',
+          description: 'حدد الخطة التي تناسب احتياجات قائمة العقارات الخاصة بك',
+          monthly: 'شهري',
+          yearly: 'سنوي',
+          savingsBadge: 'وفر حتى 20%',
+        },
+        propertyDetails: {
+          title: 'تفاصيل العقار',
+          propertyTitle: 'عنوان العقار',
+          propertyTitlePlaceholder: 'مثال: شقة فاخرة 3 غرف نوم في الأشرفية',
           propertyType: 'نوع العقار',
           listingType: 'نوع القائمة',
+          forSale: 'للبيع',
+          forRent: 'للإيجار',
           price: 'السعر',
-          location: 'الموقع',
+          pricePlaceholder: 'مثال: 450000',
           city: 'المدينة',
+          location: 'الموقع / العنوان',
+          locationPlaceholder: 'مثال: ساحة ساسين، الأشرفية',
+          description: 'وصف العقار',
+          descriptionPlaceholder: 'صف عقارك بالتفصيل...',
+        },
+        features: {
+          title: 'الميزات والمرافق',
           bedrooms: 'غرف النوم',
           bathrooms: 'الحمامات',
-          area: 'المساحة (قدم مربع)',
+          area: 'المساحة (متر مربع)',
+          areaPlaceholder: 'المساحة بالمتر المربع',
+          parking: 'مواقف السيارات',
+          yearBuilt: 'سنة البناء',
+          yearBuiltPlaceholder: 'مثال: 2020',
+          selectFeatures: 'اختر الميزات',
+          balcony: 'شرفة',
+          garden: 'حديقة',
+          pool: 'مسبح',
+          gym: 'نادي رياضي',
+          security: 'أمن',
+          elevator: 'مصعد',
+          heating: 'تدفئة مركزية',
+          ac: 'تكييف',
+          furnished: 'مفروش',
+          seaView: 'إطلالة بحرية',
+          mountainView: 'إطلالة جبلية',
+          parkingSpace: 'موقف سيارات',
+        },
+        photos: {
+          title: 'صور العقار',
+          upload: 'تحميل صور العقار',
+          uploadDescription: 'انقر للاختيار أو اسحب وأفلت الصور هنا',
+          dragDrop: 'انقر للاختيار أو اسحب وأفلت الصور هنا',
+          maxImages: 'بحد أقصى 10 صور، JPG أو PNG',
+          contactTitle: 'معلومات الاتصال',
+          fullName: 'الاسم الكامل',
+          email: 'البريد الإلكتروني',
+          phone: 'رقم الهاتف',
+          phonePlaceholder: '+961 3 XXX XXX',
+          warningRealtor: 'كوكيل عقاري، يرجى تقديم بيانات اعتمادك المهنية',
+          agencyName: 'اسم الوكالة',
+          agencyPlaceholder: 'مثال: سنشري 21 لبنان',
+          licenseNumber: 'رقم الترخيص',
+          licensePlaceholder: 'مثال: RE-123456',
+          infoOwner: 'سيتم عرض معلومات الاتصال الخاصة بك للمشترين / المستأجرين المهتمين.',
+          infoRealtor: 'سيتم التحقق من معلومات وكالتك والترخيص قبل الموافقة على القائمة.',
+        },
+        buttons: {
+          back: 'رجوع',
+          next: 'التالي',
           submit: 'إرسال القائمة',
+          submitting: 'جار الإرسال...',
+        },
+        propertyTypes: {
+          apartment: 'شقة',
+          house: 'منزل',
+          villa: 'فيلا',
+          penthouse: 'بنتهاوس',
+          studio: 'استوديو',
+          duplex: 'دوبلكس',
+          land: 'أرض',
+          commercial: 'تجاري',
+        },
+        cities: {
+          beirut: 'بيروت',
+          mountLebanon: 'جبل لبنان',
+          tripoli: 'طرابلس',
+          sidon: 'صيدا',
+          tyre: 'صور',
+          jounieh: 'جونية',
+          byblos: 'جبيل',
+          zahle: 'زحلة',
         },
       },
       common: {
@@ -1397,7 +1673,6 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>(() => {
-    // Get saved language from localStorage or default to English
     const saved = localStorage.getItem('language');
     return (saved === 'ar' || saved === 'en') ? saved : 'en';
   });
@@ -1435,19 +1710,16 @@ export const useLanguage = (): LanguageContextType => {
   return context;
 };
 
-// Helper function to translate city names
 export const translateCity = (city: string, language: Language): string => {
   const cityTranslations = translations[language].locations.cities;
   return cityTranslations[city as keyof typeof cityTranslations] || city;
 };
 
-// Helper function to translate neighborhood names
 export const translateNeighborhood = (neighborhood: string, language: Language): string => {
   const neighborhoodTranslations = translations[language].locations.neighborhoods;
   return neighborhoodTranslations[neighborhood as keyof typeof neighborhoodTranslations] || neighborhood;
 };
 
-// Helper function to translate listing titles
 export const translateListingTitle = (listingId: string, language: Language): string => {
   const titleTranslations = translations[language].listingTitles;
   return titleTranslations[listingId as keyof typeof titleTranslations] || '';
