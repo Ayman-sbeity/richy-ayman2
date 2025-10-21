@@ -419,14 +419,37 @@ const Sell: React.FC = () => {
               >
                 <ToggleButton value="monthly">
                   {t.pages.sell.subscription.monthly}
-                    <a href="https://whish.money/pay/aDn2rx9hs" target="_blank" rel="noopener noreferrer">
-               wish
-              </a>
                 </ToggleButton>
                 <ToggleButton value="yearly">
                   {t.pages.sell.subscription.yearly} <Chip label={t.pages.sell.subscription.savingsBadge} size="small" sx={{ ml: 1, backgroundColor: '#28a745', color: 'white' }} />
                 </ToggleButton>
               </ToggleButtonGroup>
+            </Box>
+
+            {/* Payment Button */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+              <Button
+                variant="contained"
+                component="a"
+                href="https://whish.money/pay/aDn2rx9hs"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  backgroundColor: '#d92228',
+                  color: 'white',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  '&:hover': {
+                    backgroundColor: '#b91c22',
+                  },
+                }}
+              >
+                Pay with Whish Money
+              </Button>
             </Box>
 
             <Box sx={{ 
