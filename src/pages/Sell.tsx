@@ -391,9 +391,7 @@ const Sell: React.FC = () => {
               }}
             >
               {t.pages.sell.subscription.description}
-              <a href="https://whish.money/pay/aDn2rx9hs" target="_blank" rel="noopener noreferrer">
-               wish
-              </a>
+            
             </Typography>
 
             {/* Billing Cycle Toggle */}
@@ -421,6 +419,9 @@ const Sell: React.FC = () => {
               >
                 <ToggleButton value="monthly">
                   {t.pages.sell.subscription.monthly}
+                    <a href="https://whish.money/pay/aDn2rx9hs" target="_blank" rel="noopener noreferrer">
+               wish
+              </a>
                 </ToggleButton>
                 <ToggleButton value="yearly">
                   {t.pages.sell.subscription.yearly} <Chip label={t.pages.sell.subscription.savingsBadge} size="small" sx={{ ml: 1, backgroundColor: '#28a745', color: 'white' }} />
