@@ -101,8 +101,8 @@ const Sell: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   
   const [formData, setFormData] = useState({
-    sellerType: '', // 'owner' or 'realtor'
-    subscriptionPlan: '', // plan id
+    sellerType: '',
+    subscriptionPlan: '',
     billingCycle: 'monthly' as 'monthly' | 'yearly',
     title: '',
     description: '',
