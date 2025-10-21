@@ -391,6 +391,9 @@ const Sell: React.FC = () => {
               }}
             >
               {t.pages.sell.subscription.description}
+              <a href="https://whish.money/pay/aDn2rx9hs" target="_blank" rel="noopener noreferrer">
+               wish
+              </a>
             </Typography>
 
             {/* Billing Cycle Toggle */}
