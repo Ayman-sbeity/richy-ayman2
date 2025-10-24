@@ -481,7 +481,6 @@ const Sell: React.FC = () => {
                       display: 'flex',
                       flexDirection: 'column',
                       overflow: 'visible',
-                      // Enhanced styling for Professional plan
                       ...(plan.highlighted && {
                         background: 'linear-gradient(145deg, #ffffff 0%, #fff9f9 50%, #fff0f0 100%)',
                         border: isSelected ? '3px solid #d92228' : '2px solid #f0a500',
@@ -489,7 +488,6 @@ const Sell: React.FC = () => {
                           ? '0 12px 40px rgba(217, 34, 40, 0.25)'
                           : '0 8px 30px rgba(240, 165, 0, 0.15)',
                       }),
-                      // Styling for other plans
                       ...(!plan.highlighted && {
                         border: isSelected ? '2px solid #d92228' : '1px solid #e0e0e0',
                         backgroundColor: '#ffffff',
@@ -507,7 +505,6 @@ const Sell: React.FC = () => {
                       },
                     }}
                   >
-                    {/* Selection Checkmark - Small and positioned at top right */}
                     {isSelected && (
                       <Box sx={{ 
                         position: 'absolute', 
@@ -527,7 +524,6 @@ const Sell: React.FC = () => {
                       </Box>
                     )}
 
-                    {/* Most Popular Badge */}
                     {plan.highlighted && (
                       <Chip
                         label="⭐ MOST POPULAR"
@@ -561,7 +557,6 @@ const Sell: React.FC = () => {
                         pb: plan.highlighted ? 2.5 : 2,
                       }
                     }}>
-                      {/* Plan Name */}
                       <Typography 
                         variant="h6" 
                         sx={{ 
@@ -582,8 +577,6 @@ const Sell: React.FC = () => {
                       >
                         {plan.name}
                       </Typography>
-                      
-                      {/* Description */}
                       <Typography 
                         variant="body2" 
                         sx={{ 
