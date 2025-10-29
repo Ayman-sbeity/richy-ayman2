@@ -11,6 +11,8 @@ interface Translations {
     contact: string;
     login: string;
     signup: string;
+    welcome: string;
+    logout: string;
   };
   footer: {
     sections: {
@@ -543,6 +545,8 @@ const translations: Record<Language, Translations> = {
       contact: 'Contact',
       login: 'Log in',
       signup: 'Sign up',
+      welcome: 'Welcome',
+      logout: 'Logout',
     },
     footer: {
       sections: {
@@ -1106,6 +1110,8 @@ const translations: Record<Language, Translations> = {
       contact: 'اتصل بنا',
       login: 'تسجيل الدخول',
       signup: 'إنشاء حساب',
+      welcome: 'مرحبا',
+      logout: 'تسجيل الخروج',
     },
     footer: {
       sections: {

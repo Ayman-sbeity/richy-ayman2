@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import LockIcon from '@mui/icons-material/Lock';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { useAuth } from '../contexts/AuthContext';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(6),
@@ -43,10 +44,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
-  
-  // TODO: Replace with actual authentication check
-  // This is a placeholder - you'll need to implement your authentication logic
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const { isAuthenticated } = useAuth();
   
   if (!isAuthenticated) {
     // Show authentication required message instead of redirecting immediately

@@ -7,6 +7,10 @@ import {
   Drawer,
   useTheme,
   useMediaQuery,
+  Typography,
+  Button,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
@@ -19,6 +23,7 @@ import {
   LanguageToggle
 } from '../components/UI';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: '#ffffff',
@@ -75,9 +80,11 @@ const DrawerContent = styled(Box)(({ theme }) => ({
 
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { t } = useLanguage();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const navigationItems: NavigationItem[] = [
     { label: t.nav.buy, href: '/listings?type=sale' },
@@ -87,13 +94,26 @@ const Navbar: React.FC = () => {
     { label: t.nav.contact, href: '/contact' },
   ];
 
-  const actionButtons = [
+  const actionButtons = isAuthenticated ? [] : [
     { label: t.nav.login, variant: 'outlined' as const, href: '/login' },
     { label: t.nav.signup, variant: 'contained' as const, href: '/signup' },
   ];
 
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setUserMenuAnchor(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setUserMenuAnchor(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleUserMenuClose();
   };
 
   const handleSearch = (query: string) => {
@@ -125,8 +145,33 @@ const Navbar: React.FC = () => {
                 {/* Language Toggle */}
                 <LanguageToggle />
 
-                {/* Action Buttons */}
-                <ActionButtons buttons={actionButtons} />
+                {/* User Menu or Action Buttons */}
+                {isAuthenticated && user ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="body1" sx={{ color: '#333' }}>
+                      {t.nav.welcome}, {user.name}
+                    </Typography>
+                    <Button
+                      onClick={handleUserMenuOpen}
+                      sx={{
+                        color: '#333',
+                        textTransform: 'none',
+                        '&:hover': { backgroundColor: 'rgba(0,0,0,0.04)' }
+                      }}
+                    >
+                      ▼
+                    </Button>
+                    <Menu
+                      anchorEl={userMenuAnchor}
+                      open={Boolean(userMenuAnchor)}
+                      onClose={handleUserMenuClose}
+                    >
+                      <MenuItem onClick={handleLogout}>{t.nav.logout}</MenuItem>
+                    </Menu>
+                  </Box>
+                ) : (
+                  <ActionButtons buttons={actionButtons} />
+                )}
               </>
             ) : (
               <>
@@ -173,11 +218,29 @@ const Navbar: React.FC = () => {
             variant="mobile" 
           />
 
-          {/* Mobile Actions */}
-          <ActionButtons 
-            buttons={actionButtons} 
-            variant="mobile" 
-          />
+          {/* Mobile User or Actions */}
+          {isAuthenticated && user ? (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Typography variant="body1" sx={{ color: '#333', textAlign: 'center' }}>
+                {t.nav.welcome}, {user.name}
+              </Typography>
+              <Button
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+                variant="outlined"
+                fullWidth
+              >
+                {t.nav.logout}
+              </Button>
+            </Box>
+          ) : (
+            <ActionButtons 
+              buttons={actionButtons} 
+              variant="mobile" 
+            />
+          )}
         </DrawerContent>
       </Drawer>
     </>

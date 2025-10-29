@@ -27,6 +27,8 @@ import {
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { authService } from '../services/authService';
+import { useAuth } from '../contexts/AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -182,6 +184,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [searchParams] = useSearchParams();
+  const { login } = useAuth();
   const redirectPath = searchParams.get('redirect') || '/';
   
   const [showPassword, setShowPassword] = useState(false);
@@ -207,18 +210,21 @@ const Login: React.FC = () => {
     setError('');
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      if (formData.email && formData.password) {
-        // Success - Set authentication status
-        localStorage.setItem('isAuthenticated', 'true');
-        console.log('Login successful:', formData);
-        navigate(redirectPath);
-      } else {
-        setError('Please enter valid credentials');
-      }
+    try {
+      const user = await authService.login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      login(user);
+
+      console.log('Login successful:', user);
+      navigate(redirectPath);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const handleSocialLogin = (provider: string) => {

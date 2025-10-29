@@ -15,6 +15,10 @@ import {
   Alert,
   CircularProgress,
   LinearProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import {
   Visibility,
@@ -31,6 +35,8 @@ import {
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { authService } from '../services/authService';
+import { useAuth } from '../contexts/AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -228,6 +234,7 @@ const PasswordStrengthBar = styled(Box)<{ strength: number }>(
 const Signup: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -239,6 +246,7 @@ const Signup: React.FC = () => {
     phone: '',
     password: '',
     confirmPassword: '',
+    type: 'owner',
     agreeToTerms: false,
   });
 
@@ -254,7 +262,7 @@ const Signup: React.FC = () => {
 
   const passwordStrength = calculatePasswordStrength(formData.password);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any) => {
     const { name, value, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -264,7 +272,7 @@ const Signup: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
-    if (!formData.fullName || !formData.email || !formData.password) {
+    if (!formData.fullName || !formData.email || !formData.password || !formData.type) {
       setError(t.pages.signup.validation.fillAllFields);
       return false;
     }
@@ -274,13 +282,18 @@ const Signup: React.FC = () => {
       return false;
     }
 
-    if (formData.password.length < 8) {
+    if (formData.password.length < 6) {
       setError(t.pages.signup.validation.passwordTooShort);
       return false;
     }
 
     if (formData.password !== formData.confirmPassword) {
       setError(t.pages.signup.validation.passwordsMismatch);
+      return false;
+    }
+
+    if (!['owner', 'realtor'].includes(formData.type)) {
+      setError('Invalid user type');
       return false;
     }
 
@@ -300,14 +313,26 @@ const Signup: React.FC = () => {
 
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Signup successful:', formData);
+    try {
+      const user = await authService.register({
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        type: formData.type,
+        phone: formData.phone,
+      });
+
+      login(user);
+
       setSuccess(true);
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-    }, 1500);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSocialSignup = (provider: string) => {
@@ -491,6 +516,26 @@ const Signup: React.FC = () => {
                 ),
               }}
             />
+
+            {/* Type Field */}
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>User Type</InputLabel>
+              <Select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                label="User Type"
+                sx={{
+                  borderRadius: 12,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: 12,
+                  },
+                }}
+              >
+                <MenuItem value="owner">Owner</MenuItem>
+                <MenuItem value="realtor">Realtor</MenuItem>
+              </Select>
+            </FormControl>
 
             {/* Phone Field */}
             <StyledTextField
