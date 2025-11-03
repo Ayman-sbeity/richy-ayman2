@@ -1,10 +1,8 @@
-import { apiClient } from './authService';
+import { apiClient } from "./authService";
 
 export interface ListingPayload {
   user_id: string;
   sellerType: string;
-  subscriptionPlan: string;
-  billingCycle: 'monthly' | 'yearly';
   title: string;
   description: string;
   propertyType: string;
@@ -34,23 +32,33 @@ export interface ListingResponse {
 }
 
 export const listingsService = {
-  async addListing(listingData: ListingPayload, token?: string): Promise<ListingResponse> {
+  async addListing(
+    listingData: ListingPayload,
+    token?: string
+  ): Promise<ListingResponse> {
     try {
       // Token is automatically added by axios interceptor
-      const response = await apiClient.post<ListingResponse>('/listings', listingData);
+      const response = await apiClient.post<ListingResponse>(
+        "/listings",
+        listingData
+      );
       return response.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to create listing';
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to create listing";
       throw new Error(errorMessage);
     }
   },
 
   async getListings(filters?: Record<string, any>): Promise<any[]> {
     try {
-      const response = await apiClient.get('/listings', { params: filters });
+      const response = await apiClient.get("/listings", { params: filters });
       return response.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch listings';
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch listings";
       throw new Error(errorMessage);
     }
   },
@@ -60,29 +68,48 @@ export const listingsService = {
       const response = await apiClient.get(`/listings/${id}`);
       return response.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch listing';
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch listing";
       throw new Error(errorMessage);
     }
   },
 
-  async updateListing(id: string, listingData: Partial<ListingPayload>, token?: string): Promise<ListingResponse> {
+  async updateListing(
+    id: string,
+    listingData: Partial<ListingPayload>,
+    token?: string
+  ): Promise<ListingResponse> {
     try {
       // Token is automatically added by axios interceptor
-      const response = await apiClient.put<ListingResponse>(`/listings/${id}`, listingData);
+      const response = await apiClient.put<ListingResponse>(
+        `/listings/${id}`,
+        listingData
+      );
       return response.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to update listing';
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to update listing";
       throw new Error(errorMessage);
     }
   },
 
-  async deleteListing(id: string, token?: string): Promise<{ message: string }> {
+  async deleteListing(
+    id: string,
+    token?: string
+  ): Promise<{ message: string }> {
     try {
       // Token is automatically added by axios interceptor
-      const response = await apiClient.delete<{ message: string }>(`/listings/${id}`);
+      const response = await apiClient.delete<{ message: string }>(
+        `/listings/${id}`
+      );
       return response.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to delete listing';
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to delete listing";
       throw new Error(errorMessage);
     }
   },
