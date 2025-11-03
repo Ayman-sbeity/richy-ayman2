@@ -27,6 +27,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Divider,
+  Snackbar,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -42,6 +43,7 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { subscriptionPlans, getPlansByUserType, calculateYearlySavings } from '../data/subscriptionPlans';
 import { useLanguage } from '../contexts/LanguageContext';
+import { listingsService } from '../services/listingsService';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -99,6 +101,11 @@ const Sell: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+  const [notification, setNotification] = useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'info' }>({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
   
   const [formData, setFormData] = useState({
     sellerType: '',
@@ -191,19 +198,68 @@ const Sell: React.FC = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
+      const maxFileSize = 5 * 1024 * 1024; // 5MB per image
+      const maxImages = 10;
+      
+      // Check total images limit
+      if (images.length + files.length > maxImages) {
+        setNotification({
+          open: true,
+          message: `Maximum ${maxImages} images allowed. You can upload ${maxImages - images.length} more.`,
+          severity: 'error',
+        });
+        return;
+      }
+
+      let loadedCount = 0;
       const newImages: string[] = [];
-      Array.from(files).forEach((file) => {
+
+      Array.from(files).forEach((file, index) => {
+        // Check file size
+        if (file.size > maxFileSize) {
+          setNotification({
+            open: true,
+            message: `Image ${file.name} is too large. Maximum size is 5MB.`,
+            severity: 'error',
+          });
+          loadedCount++;
+          if (loadedCount === files.length) {
+            setUploadProgress(0);
+          }
+          return;
+        }
+
         const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target?.result) {
-            newImages.push(e.target.result as string);
-            if (newImages.length === files.length) {
+            const base64String = e.target.result as string;
+            newImages.push(base64String);
+            loadedCount++;
+            
+            // Update progress
+            const progress = Math.round((loadedCount / files.length) * 100);
+            setUploadProgress(progress);
+
+            // When all images are loaded
+            if (loadedCount === files.length) {
               setImages([...images, ...newImages]);
-              setUploadProgress(100);
-              setTimeout(() => setUploadProgress(0), 1000);
+              setTimeout(() => setUploadProgress(0), 500);
             }
           }
         };
+
+        reader.onerror = () => {
+          loadedCount++;
+          setNotification({
+            open: true,
+            message: `Failed to read image ${file.name}`,
+            severity: 'error',
+          });
+          if (loadedCount === files.length) {
+            setUploadProgress(0);
+          }
+        };
+
         reader.readAsDataURL(file);
       });
     }
@@ -224,11 +280,85 @@ const Sell: React.FC = () => {
   const handleSubmit = async () => {
     setSubmitting(true);
     
-    setTimeout(() => {
-      console.log('Form submitted:', formData, images);
+    try {
+      // Get token from localStorage if available
+      const token = localStorage.getItem('authToken');
+
+      // Prepare the payload
+      const payload = {
+        sellerType: formData.sellerType,
+        subscriptionPlan: formData.subscriptionPlan,
+        billingCycle: formData.billingCycle,
+        title: formData.title,
+        description: formData.description,
+        propertyType: formData.propertyType,
+        listingType: formData.listingType,
+        price: formData.price,
+        location: formData.location,
+        city: formData.city,
+        bedrooms: formData.bedrooms,
+        bathrooms: formData.bathrooms,
+        area: formData.area,
+        parkingSpaces: formData.parkingSpaces,
+        yearBuilt: formData.yearBuilt,
+        features: formData.features,
+        images: images,
+        contactName: formData.contactName,
+        contactEmail: formData.contactEmail,
+        contactPhone: formData.contactPhone,
+        ...(formData.sellerType === 'realtor' && {
+          agencyName: formData.agencyName,
+          licenseNumber: formData.licenseNumber,
+        }),
+      };
+
+      // Call the listings service
+      const response = await listingsService.addListing(payload, token || undefined);
+
+      // Success notification
+      setNotification({
+        open: true,
+        message: 'Property listing created successfully! Our team will review it shortly.',
+        severity: 'success',
+      });
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        setActiveStep(0);
+        setFormData({
+          sellerType: '',
+          subscriptionPlan: 'free',
+          billingCycle: 'monthly',
+          title: '',
+          description: '',
+          propertyType: '',
+          listingType: '',
+          price: '',
+          location: '',
+          city: '',
+          bedrooms: '',
+          bathrooms: '',
+          area: '',
+          parkingSpaces: '',
+          yearBuilt: '',
+          features: [],
+          contactName: '',
+          contactEmail: '',
+          contactPhone: '',
+          agencyName: '',
+          licenseNumber: '',
+        });
+        setImages([]);
+      }, 2000);
+    } catch (error: any) {
+      setNotification({
+        open: true,
+        message: error.message || 'Failed to create listing. Please try again.',
+        severity: 'error',
+      });
+    } finally {
       setSubmitting(false);
-      alert('Property listing submitted successfully! Our team will review it shortly.');
-    }, 2000);
+    }
   };
 
   const isStepValid = () => {
@@ -1026,6 +1156,22 @@ const Sell: React.FC = () => {
 
         {submitting && <LinearProgress sx={{ mt: 2 }} />}
       </Container>
+
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={() => setNotification({ ...notification, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert
+          onClose={() => setNotification({ ...notification, open: false })}
+          severity={notification.severity}
+          sx={{ width: '100%' }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
