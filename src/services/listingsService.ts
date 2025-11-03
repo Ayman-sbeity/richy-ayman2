@@ -1,6 +1,7 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+import { apiClient } from './authService';
 
 export interface ListingPayload {
+  user_id: string;
   sellerType: string;
   subscriptionPlan: string;
   billingCycle: 'monthly' | 'yearly';
@@ -34,101 +35,55 @@ export interface ListingResponse {
 
 export const listingsService = {
   async addListing(listingData: ListingPayload, token?: string): Promise<ListingResponse> {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
-
-    // Add authorization header if token is provided
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+    try {
+      // Token is automatically added by axios interceptor
+      const response = await apiClient.post<ListingResponse>('/listings', listingData);
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to create listing';
+      throw new Error(errorMessage);
     }
-
-    const response = await fetch(`${API_BASE_URL}/listings`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(listingData),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to create listing');
-    }
-
-    return response.json();
   },
 
   async getListings(filters?: Record<string, any>): Promise<any[]> {
-    let url = `${API_BASE_URL}/listings`;
-    if (filters) {
-      const params = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          params.append(key, String(value));
-        }
-      });
-      const queryString = params.toString();
-      if (queryString) url += `?${queryString}`;
+    try {
+      const response = await apiClient.get('/listings', { params: filters });
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to fetch listings';
+      throw new Error(errorMessage);
     }
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch listings');
-    }
-
-    return response.json();
   },
 
   async getListingById(id: string): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/listings/${id}`);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch listing');
+    try {
+      const response = await apiClient.get(`/listings/${id}`);
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to fetch listing';
+      throw new Error(errorMessage);
     }
-
-    return response.json();
   },
 
   async updateListing(id: string, listingData: Partial<ListingPayload>, token?: string): Promise<ListingResponse> {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+    try {
+      // Token is automatically added by axios interceptor
+      const response = await apiClient.put<ListingResponse>(`/listings/${id}`, listingData);
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to update listing';
+      throw new Error(errorMessage);
     }
-
-    const response = await fetch(`${API_BASE_URL}/listings/${id}`, {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(listingData),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to update listing');
-    }
-
-    return response.json();
   },
 
   async deleteListing(id: string, token?: string): Promise<{ message: string }> {
-    const headers: HeadersInit = {};
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+    try {
+      // Token is automatically added by axios interceptor
+      const response = await apiClient.delete<{ message: string }>(`/listings/${id}`);
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to delete listing';
+      throw new Error(errorMessage);
     }
-
-    const response = await fetch(`${API_BASE_URL}/listings/${id}`, {
-      method: 'DELETE',
-      headers,
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to delete listing');
-    }
-
-    return response.json();
   },
 };

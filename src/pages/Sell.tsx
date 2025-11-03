@@ -43,6 +43,7 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { subscriptionPlans, getPlansByUserType, calculateYearlySavings } from '../data/subscriptionPlans';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { listingsService } from '../services/listingsService';
 
 const HeroSection = styled(Box)(({ theme }) => ({
@@ -97,6 +98,7 @@ const DeleteButton = styled(IconButton)(({ theme }) => ({
 
 const Sell: React.FC = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -281,11 +283,32 @@ const Sell: React.FC = () => {
     setSubmitting(true);
     
     try {
-      // Get token from localStorage if available
-      const token = localStorage.getItem('authToken');
+      // Get token from auth context or localStorage
+      const token = user?.token || localStorage.getItem('token');
+
+      if (!token) {
+        setNotification({
+          open: true,
+          message: 'You must be logged in to create a listing. Please log in first.',
+          severity: 'error',
+        });
+        setSubmitting(false);
+        return;
+      }
+
+      if (!user?._id) {
+        setNotification({
+          open: true,
+          message: 'User information is missing. Please log in again.',
+          severity: 'error',
+        });
+        setSubmitting(false);
+        return;
+      }
 
       // Prepare the payload
       const payload = {
+        user_id: user._id,
         sellerType: formData.sellerType,
         subscriptionPlan: formData.subscriptionPlan,
         billingCycle: formData.billingCycle,
@@ -312,8 +335,7 @@ const Sell: React.FC = () => {
         }),
       };
 
-      // Call the listings service
-      const response = await listingsService.addListing(payload, token || undefined);
+      const response = await listingsService.addListing(payload, token);
 
       // Success notification
       setNotification({
