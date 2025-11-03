@@ -132,7 +132,9 @@ const Navbar: React.FC = () => {
             {!isMobile ? (
               <>
                 {/* Desktop Navigation */}
-                <NavigationMenu items={navigationItems} gap={30} />
+                <Box sx={{ ml: 2 }}>
+                  <NavigationMenu items={navigationItems} gap={30} />
+                </Box>
 
                 {/* Search Bar */}
                 <SearchContainer>
