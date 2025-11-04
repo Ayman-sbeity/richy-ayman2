@@ -267,7 +267,6 @@ const Sell: React.FC = () => {
       const newImages: string[] = [];
 
       Array.from(files).forEach((file, index) => {
-        // Check file size
         if (file.size > maxFileSize) {
           setNotification({
             open: true,
@@ -331,7 +330,6 @@ const Sell: React.FC = () => {
     setSubmitting(true);
 
     try {
-      // Get token from auth context or localStorage
       const token = user?.token || localStorage.getItem("token");
 
       if (!token) {
