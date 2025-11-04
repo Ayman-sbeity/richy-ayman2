@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   FormControl,
@@ -11,9 +11,9 @@ import {
   Slider,
   Typography,
   Button,
-} from '@mui/material';
-import { cities, propertyTypes, features } from '../../data/listingsData';
-import { useLanguage } from '../../contexts/LanguageContext';
+} from "@mui/material";
+import { cities, propertyTypes, features } from "../../data/listingsData";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface FilterSidebarProps {
   transactionType: string;
@@ -51,7 +51,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   onClearFilters,
 }) => {
   const { t } = useLanguage();
-  
+
   return (
     <Box>
       <Typography
@@ -59,7 +59,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         sx={{
           mb: 3,
           fontWeight: 600,
-          fontSize: { xs: '1.1rem', md: '1.25rem' },
+          fontSize: { xs: "1.1rem", md: "1.25rem" },
         }}
       >
         {t.pages.listings.filter.title}
@@ -73,14 +73,20 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           label={t.pages.listings.filter.transactionType}
           onChange={(e) => setTransactionType(e.target.value)}
           sx={{
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#e0e0e0',
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e0e0e0",
             },
           }}
         >
-          <MenuItem value="all">{t.pages.listings.transactionTypes.all}</MenuItem>
-          <MenuItem value="sale">{t.pages.listings.transactionTypes.sale}</MenuItem>
-          <MenuItem value="rent">{t.pages.listings.transactionTypes.rent}</MenuItem>
+          <MenuItem value="all">
+            {t.pages.listings.transactionTypes.all}
+          </MenuItem>
+          <MenuItem value="sale">
+            {t.pages.listings.transactionTypes.sale}
+          </MenuItem>
+          <MenuItem value="rent">
+            {t.pages.listings.transactionTypes.rent}
+          </MenuItem>
         </Select>
       </FormControl>
 
@@ -120,9 +126,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* Price Range */}
       <Box sx={{ mb: 3 }}>
-        <Typography gutterBottom sx={{ fontWeight: 500, color: '#333' }}>
-          {t.pages.listings.filter.priceRange}: ${priceRange[0].toLocaleString()} - $
-          {priceRange[1].toLocaleString()}
+        <Typography gutterBottom sx={{ fontWeight: 500, color: "#333" }}>
+          {t.pages.listings.filter.priceRange}: $
+          {priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}
         </Typography>
         <Slider
           value={priceRange}
@@ -132,10 +138,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           max={2000000}
           step={50000}
           sx={{
-            color: '#d92228',
-            '& .MuiSlider-thumb': {
-              '&:hover, &.Mui-focusVisible': {
-                boxShadow: '0 0 0 8px rgba(217, 34, 40, 0.16)',
+            color: "#d92228",
+            "& .MuiSlider-thumb": {
+              "&:hover, &.Mui-focusVisible": {
+                boxShadow: "0 0 0 8px rgba(217, 34, 40, 0.16)",
               },
             },
           }}
@@ -178,7 +184,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {/* Features */}
       <Typography
         variant="subtitle2"
-        sx={{ mb: 2, fontWeight: 600, color: '#333' }}
+        sx={{ mb: 2, fontWeight: 600, color: "#333" }}
       >
         {t.pages.listings.filter.features}
       </Typography>
@@ -191,13 +197,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 checked={selectedFeatures.includes(feature)}
                 onChange={() => handleFeatureToggle(feature)}
                 sx={{
-                  color: '#d92228',
-                  '&.Mui-checked': { color: '#d92228' },
+                  color: "#d92228",
+                  "&.Mui-checked": { color: "#d92228" },
                 }}
               />
             }
             label={
-              <Typography variant="body2" sx={{ fontSize: '0.9rem' }}>
+              <Typography variant="body2" sx={{ fontSize: "0.9rem" }}>
                 {feature}
               </Typography>
             }
@@ -211,13 +217,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         variant="outlined"
         onClick={onClearFilters}
         sx={{
-          borderColor: '#d92228',
-          color: '#d92228',
+          borderColor: "#d92228",
+          color: "#d92228",
           py: 1.5,
           fontWeight: 600,
-          '&:hover': {
-            borderColor: '#b91c22',
-            backgroundColor: 'rgba(217, 34, 40, 0.05)',
+          "&:hover": {
+            borderColor: "#b91c22",
+            backgroundColor: "rgba(217, 34, 40, 0.05)",
           },
         }}
       >

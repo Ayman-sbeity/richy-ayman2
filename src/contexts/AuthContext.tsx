@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export interface User {
   _id: string;
@@ -20,7 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -34,33 +40,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Check for stored user data on app load
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
 
     if (storedUser && storedToken) {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser({ ...parsedUser, token: storedToken });
       } catch (error) {
-        console.error('Error parsing stored user data:', error);
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        console.error("Error parsing stored user data:", error);
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
       }
     }
   }, []);
 
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', userData.token || '');
-    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", userData.token || "");
+    localStorage.setItem("isAuthenticated", "true");
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("isAuthenticated");
   };
 
   const isAuthenticated = !!user;

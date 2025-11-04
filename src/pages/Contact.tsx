@@ -13,7 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from "../contexts/LanguageContext";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -261,7 +261,17 @@ const Contact: React.FC = () => {
       <Container maxWidth="lg">
         {/* Contact Information Cards */}
         <Section>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 4 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(4, 1fr)",
+              },
+              gap: 4,
+            }}
+          >
             {/* Location Card */}
             <InfoCard elevation={2}>
               <CardContent sx={{ textAlign: "center", p: 3 }}>
@@ -478,12 +488,17 @@ const Contact: React.FC = () => {
                   variant="body2"
                   sx={{ color: "#666", lineHeight: 1.8 }}
                 >
-                  {t.pages.contact.info.businessHours.split('\n').map((line: string, idx: number) => (
-                    <React.Fragment key={idx}>
-                      {line}
-                      {idx < t.pages.contact.info.businessHours.split('\n').length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
+                  {t.pages.contact.info.businessHours
+                    .split("\n")
+                    .map((line: string, idx: number) => (
+                      <React.Fragment key={idx}>
+                        {line}
+                        {idx <
+                          t.pages.contact.info.businessHours.split("\n")
+                            .length -
+                            1 && <br />}
+                      </React.Fragment>
+                    ))}
                 </Typography>
               </CardContent>
             </InfoCard>
@@ -492,7 +507,13 @@ const Contact: React.FC = () => {
 
         {/* Contact Form Section */}
         <Section sx={{ pb: 8 }}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '2fr 1fr' }, gap: 6 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" },
+              gap: 6,
+            }}
+          >
             {/* Form */}
             <ContactForm elevation={3}>
               <Typography
@@ -511,7 +532,13 @@ const Contact: React.FC = () => {
               </Typography>
 
               <form onSubmit={handleSubmit}>
-                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3 }}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+                    gap: 3,
+                  }}
+                >
                   <TextField
                     fullWidth
                     label={t.pages.contact.form.name}
@@ -664,24 +691,26 @@ const Contact: React.FC = () => {
                 >
                   {t.pages.contact.sidebar.title}
                 </Typography>
-                {t.pages.contact.sidebar.features.map((item: string, index: number) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mb: 2,
-                      "&:last-child": { mb: 0 },
-                    }}
-                  >
-                    <CheckCircleIcon
-                      sx={{ color: "#d92228", mr: 2, fontSize: 24 }}
-                    />
-                    <Typography variant="body1" sx={{ color: "#555" }}>
-                      {item}
-                    </Typography>
-                  </Box>
-                ))}
+                {t.pages.contact.sidebar.features.map(
+                  (item: string, index: number) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mb: 2,
+                        "&:last-child": { mb: 0 },
+                      }}
+                    >
+                      <CheckCircleIcon
+                        sx={{ color: "#d92228", mr: 2, fontSize: 24 }}
+                      />
+                      <Typography variant="body1" sx={{ color: "#555" }}>
+                        {item}
+                      </Typography>
+                    </Box>
+                  )
+                )}
               </Paper>
 
               <Paper

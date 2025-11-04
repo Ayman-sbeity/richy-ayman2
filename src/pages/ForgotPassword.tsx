@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Container,
   Box,
@@ -10,35 +10,37 @@ import {
   Paper,
   Alert,
   CircularProgress,
-} from '@mui/material';
-import { Email, ArrowBack, CheckCircle } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
-import { useLanguage } from '../contexts/LanguageContext';
+} from "@mui/material";
+import { Email, ArrowBack, CheckCircle } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
+import { Link as RouterLink } from "react-router-dom";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  minHeight: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
   padding: theme.spacing(3),
-  position: 'relative',
-  background: 'linear-gradient(135deg, rgba(0, 30, 60, 0.85) 0%, rgba(0, 60, 100, 0.9) 100%)',
-  '&::before': {
+  position: "relative",
+  background:
+    "linear-gradient(135deg, rgba(0, 30, 60, 0.85) 0%, rgba(0, 60, 100, 0.9) 100%)",
+  "&::before": {
     content: '""',
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundImage: 'url("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
+    backgroundImage:
+      'url("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80")',
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
     opacity: 0.3,
     zIndex: 0,
   },
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down("sm")]: {
     padding: theme.spacing(2),
   },
 }));
@@ -47,69 +49,69 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(5),
   borderRadius: 20,
   maxWidth: 480,
-  width: '100%',
-  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-  animation: 'fadeInUp 0.6s ease-out',
-  position: 'relative',
+  width: "100%",
+  boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5)",
+  animation: "fadeInUp 0.6s ease-out",
+  position: "relative",
   zIndex: 1,
-  backgroundColor: 'rgba(255, 255, 255, 0.98)',
-  backdropFilter: 'blur(10px)',
-  '@keyframes fadeInUp': {
+  backgroundColor: "rgba(255, 255, 255, 0.98)",
+  backdropFilter: "blur(10px)",
+  "@keyframes fadeInUp": {
     from: {
       opacity: 0,
-      transform: 'translateY(30px)',
+      transform: "translateY(30px)",
     },
     to: {
       opacity: 1,
-      transform: 'translateY(0)',
+      transform: "translateY(0)",
     },
   },
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down("sm")]: {
     padding: theme.spacing(3),
   },
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
-  '& .MuiOutlinedInput-root': {
+  "& .MuiOutlinedInput-root": {
     borderRadius: 12,
-    transition: 'all 0.3s ease',
-    '&:hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.15)',
+    transition: "all 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 4px 12px rgba(102, 126, 234, 0.15)",
     },
-    '&.Mui-focused': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.25)',
+    "&.Mui-focused": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 4px 12px rgba(102, 126, 234, 0.25)",
     },
   },
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 12,
-  padding: '12px 24px',
-  fontSize: '1rem',
+  padding: "12px 24px",
+  fontSize: "1rem",
   fontWeight: 600,
-  textTransform: 'none',
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
+  textTransform: "none",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    transform: "translateY(-2px)",
+    boxShadow: "0 6px 20px rgba(102, 126, 234, 0.4)",
   },
-  '&:active': {
-    transform: 'translateY(0)',
+  "&:active": {
+    transform: "translateY(0)",
   },
 }));
 
 const ForgotPassword: React.FC = () => {
   const { t } = useLanguage();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!email) {
       setError(t.pages.forgotPassword.validation.emailRequired);
@@ -125,7 +127,7 @@ const ForgotPassword: React.FC = () => {
 
     // Simulate API call
     setTimeout(() => {
-      console.log('Password reset email sent to:', email);
+      console.log("Password reset email sent to:", email);
       setSuccess(true);
       setLoading(false);
     }, 1500);
@@ -139,12 +141,12 @@ const ForgotPassword: React.FC = () => {
             <CheckCircle
               sx={{
                 fontSize: 80,
-                color: '#4caf50',
+                color: "#4caf50",
                 mb: 2,
-                animation: 'scaleIn 0.5s ease-out',
-                '@keyframes scaleIn': {
-                  from: { transform: 'scale(0)' },
-                  to: { transform: 'scale(1)' },
+                animation: "scaleIn 0.5s ease-out",
+                "@keyframes scaleIn": {
+                  from: { transform: "scale(0)" },
+                  to: { transform: "scale(1)" },
                 },
               }}
             />
@@ -170,8 +172,8 @@ const ForgotPassword: React.FC = () => {
               variant="contained"
               fullWidth
               sx={{
-                background: 'linear-gradient(135deg, #d92228 0%, #b91c22 100%)',
-                color: 'white',
+                background: "linear-gradient(135deg, #d92228 0%, #b91c22 100%)",
+                color: "white",
               }}
             >
               {t.pages.forgotPassword.success.backToLogin}
@@ -192,11 +194,11 @@ const ForgotPassword: React.FC = () => {
             to="/login"
             startIcon={<ArrowBack />}
             sx={{
-              color: '#d92228',
-              textTransform: 'none',
+              color: "#d92228",
+              textTransform: "none",
               fontWeight: 600,
-              '&:hover': {
-                backgroundColor: 'rgba(217, 34, 40, 0.05)',
+              "&:hover": {
+                backgroundColor: "rgba(217, 34, 40, 0.05)",
               },
             }}
           >
@@ -211,11 +213,11 @@ const ForgotPassword: React.FC = () => {
             fontWeight="700"
             gutterBottom
             sx={{
-              background: 'linear-gradient(135deg, #d92228 0%, #b91c22 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              animation: 'fadeIn 0.8s ease-out',
-              '@keyframes fadeIn': {
+              background: "linear-gradient(135deg, #d92228 0%, #b91c22 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              animation: "fadeIn 0.8s ease-out",
+              "@keyframes fadeIn": {
                 from: { opacity: 0 },
                 to: { opacity: 1 },
               },
@@ -246,7 +248,7 @@ const ForgotPassword: React.FC = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setError('');
+                setError("");
               }}
               required
               InputProps={{
@@ -266,8 +268,8 @@ const ForgotPassword: React.FC = () => {
               size="large"
               disabled={loading}
               sx={{
-                background: 'linear-gradient(135deg, #d92228 0%, #b91c22 100%)',
-                color: 'white',
+                background: "linear-gradient(135deg, #d92228 0%, #b91c22 100%)",
+                color: "white",
               }}
             >
               {loading ? (
@@ -282,16 +284,16 @@ const ForgotPassword: React.FC = () => {
         {/* Additional Help */}
         <Box textAlign="center" mt={4}>
           <Typography variant="body2" color="text.secondary">
-            {t.pages.forgotPassword.remember.question}{' '}
+            {t.pages.forgotPassword.remember.question}{" "}
             <Link
               component={RouterLink}
               to="/login"
               sx={{
-                color: '#d92228',
+                color: "#d92228",
                 fontWeight: 600,
-                textDecoration: 'none',
-                '&:hover': {
-                  textDecoration: 'underline',
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
                 },
               }}
             >

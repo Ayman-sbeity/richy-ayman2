@@ -85,7 +85,7 @@ export const authService = {
   async login(credentials: { email: string; password: string }): Promise<User> {
     try {
       const response = await apiClient.post<User>("/users/login", credentials);
-      
+
       if (response.data.token) {
         setAuthToken(response.data.token);
       }

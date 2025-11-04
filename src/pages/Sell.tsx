@@ -49,7 +49,10 @@ import {
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { listingsService } from "../services/listingsService";
-import { subscriptionService, Subscription } from "../services/subscriptionService";
+import {
+  subscriptionService,
+  Subscription,
+} from "../services/subscriptionService";
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -108,7 +111,8 @@ const Sell: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<string[]>([]);
-  const [currentSubscription, setCurrentSubscription] = useState<Subscription | null>(null);
+  const [currentSubscription, setCurrentSubscription] =
+    useState<Subscription | null>(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [notification, setNotification] = useState<{
     open: boolean;
@@ -151,17 +155,17 @@ const Sell: React.FC = () => {
       try {
         const subscription = await subscriptionService.getCurrentSubscription();
         setCurrentSubscription(subscription);
-        
+
         // Set the subscription plan in form if user has one
         if (subscription) {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             subscriptionPlan: subscription.plan,
             billingCycle: subscription.billingCycle,
           }));
         }
       } catch (error) {
-        console.error('Failed to load subscription:', error);
+        console.error("Failed to load subscription:", error);
       } finally {
         setLoadingSubscription(false);
       }
@@ -358,16 +362,20 @@ const Sell: React.FC = () => {
       }
 
       // Check if user needs to subscribe or update subscription
-      const isActive = subscriptionService.isSubscriptionActive(currentSubscription);
-      const planChanged = currentSubscription?.plan !== formData.subscriptionPlan;
-      const billingChanged = currentSubscription?.billingCycle !== formData.billingCycle;
+      const isActive =
+        subscriptionService.isSubscriptionActive(currentSubscription);
+      const planChanged =
+        currentSubscription?.plan !== formData.subscriptionPlan;
+      const billingChanged =
+        currentSubscription?.billingCycle !== formData.billingCycle;
 
+      // Only call subscription API if user doesn't have an active subscription with the same plan
       if (!currentSubscription || !isActive || planChanged || billingChanged) {
         try {
           // Calculate expiration date
           const startDate = new Date();
           const expirationDate = new Date();
-          if (formData.billingCycle === 'monthly') {
+          if (formData.billingCycle === "monthly") {
             expirationDate.setMonth(expirationDate.getMonth() + 1);
           } else {
             expirationDate.setFullYear(expirationDate.getFullYear() + 1);
@@ -381,7 +389,8 @@ const Sell: React.FC = () => {
             professional: { monthly: 99, yearly: 999 },
           };
 
-          const price = prices[formData.subscriptionPlan]?.[formData.billingCycle] || 0;
+          const price =
+            prices[formData.subscriptionPlan]?.[formData.billingCycle] || 0;
 
           const subscriptionData = {
             plan: formData.subscriptionPlan,
@@ -391,37 +400,53 @@ const Sell: React.FC = () => {
             start_date: startDate.toISOString(), // Also send snake_case
             expirationDate: expirationDate.toISOString(),
             expiration_date: expirationDate.toISOString(), // Also send snake_case
-            status: 'active',
+            status: "active",
             autoRenew: false,
             auto_renew: false, // Also send snake_case
             price,
           };
 
-          console.log('Subscription data to be sent:', subscriptionData);
-          console.log('User ID:', user._id);
+          console.log("Subscription data to be sent:", subscriptionData);
+          console.log("User ID:", user._id);
 
           let newSubscription;
           if (!currentSubscription || !isActive) {
             // Create new subscription
-            newSubscription = await subscriptionService.subscribe(subscriptionData);
+            newSubscription = await subscriptionService.subscribe(
+              subscriptionData
+            );
+            setNotification({
+              open: true,
+              message: `Successfully subscribed to ${formData.subscriptionPlan} plan!`,
+              severity: "success",
+            });
           } else {
             // Update existing subscription
-            newSubscription = await subscriptionService.updateSubscription(subscriptionData);
+            newSubscription = await subscriptionService.updateSubscription(
+              subscriptionData
+            );
+            setNotification({
+              open: true,
+              message: `Subscription updated to ${formData.subscriptionPlan} plan!`,
+              severity: "success",
+            });
           }
 
           setCurrentSubscription(newSubscription);
         } catch (error: any) {
           setNotification({
             open: true,
-            message: error.message || "Failed to process subscription. Please try again.",
+            message:
+              error.message ||
+              "Failed to process subscription. Please try again.",
             severity: "error",
           });
           setSubmitting(false);
           return;
         }
+      } else {
+        console.log("User already has an active subscription with this plan. Skipping subscription API call.");
       }
-
-      // Prepare the payload WITHOUT subscription fields
       const payload = {
         user_id: user._id,
         sellerType: formData.sellerType,
@@ -744,17 +769,34 @@ const Sell: React.FC = () => {
                 </Typography>
 
                 {/* Current Subscription Status */}
-                {currentSubscription && subscriptionService.isSubscriptionActive(currentSubscription) && (
-                  <Alert severity="info" sx={{ mb: 3, maxWidth: 800, mx: 'auto' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-                      Current Plan: {currentSubscription.plan.toUpperCase()} ({currentSubscription.billingCycle})
-                    </Typography>
-                    <Typography variant="caption">
-                      Expires: {new Date(currentSubscription.expirationDate).toLocaleDateString()} 
-                      {' '}({subscriptionService.getDaysUntilExpiration(currentSubscription)} days remaining)
-                    </Typography>
-                  </Alert>
-                )}
+                {currentSubscription &&
+                  subscriptionService.isSubscriptionActive(
+                    currentSubscription
+                  ) && (
+                    <Alert
+                      severity="info"
+                      sx={{ mb: 3, maxWidth: 800, mx: "auto" }}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 600, mb: 0.5 }}
+                      >
+                        Current Plan: {currentSubscription.plan.toUpperCase()} (
+                        {currentSubscription.billingCycle})
+                      </Typography>
+                      <Typography variant="caption">
+                        Expires:{" "}
+                        {new Date(
+                          currentSubscription.expirationDate
+                        ).toLocaleDateString()}{" "}
+                        (
+                        {subscriptionService.getDaysUntilExpiration(
+                          currentSubscription
+                        )}{" "}
+                        days remaining)
+                      </Typography>
+                    </Alert>
+                  )}
 
                 {/* Billing Cycle Toggle */}
                 <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
@@ -933,7 +975,6 @@ const Sell: React.FC = () => {
                             {plan.name}
                           </Typography>
 
-                          {/* Price Section */}
                           <Box
                             sx={{
                               textAlign: "center",

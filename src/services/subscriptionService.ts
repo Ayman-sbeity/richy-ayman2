@@ -13,37 +13,35 @@ export interface Subscription {
 }
 
 export interface SubscriptionPayload {
-  userId?: string; // Try camelCase
-  user_id?: string; // Keep snake_case as fallback
+  userId?: string;
+  user_id?: string;
   plan: string;
   billingCycle: string;
-  billing_cycle?: string; // Also snake_case
+  billing_cycle?: string;
   startDate: string;
-  start_date?: string; // Also snake_case
+  start_date?: string;
   expirationDate: string;
-  expiration_date?: string; // Also snake_case
+  expiration_date?: string;
   status: string;
   autoRenew: boolean;
-  auto_renew?: boolean; // Also snake_case
+  auto_renew?: boolean; 
   price: number;
 }
 
 export const subscriptionService = {
-  // Get user's current subscription
   async getCurrentSubscription(): Promise<Subscription | null> {
     try {
       const response = await apiClient.get<Subscription>('/user-subscriptions/current');
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 404) {
-        return null; // No subscription found
+        return null;
       }
       const errorMessage = error.response?.data?.message || 'Failed to fetch subscription';
       throw new Error(errorMessage);
     }
   },
 
-  // Subscribe to a plan
   subscribe: async (subscriptionData: SubscriptionPayload): Promise<Subscription> => {
     try {
       console.log('Sending subscription data:', subscriptionData);
@@ -64,7 +62,6 @@ export const subscriptionService = {
     }
   },
 
-  // Update subscription
   async updateSubscription(subscriptionData: Partial<SubscriptionPayload>): Promise<Subscription> {
     try {
       const response = await apiClient.put<Subscription>('/user-subscriptions', subscriptionData);
@@ -75,7 +72,6 @@ export const subscriptionService = {
     }
   },
 
-  // Cancel subscription
   async cancelSubscription(): Promise<{ message: string }> {
     try {
       const response = await apiClient.delete<{ message: string }>('/user-subscriptions');
