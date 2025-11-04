@@ -144,19 +144,16 @@ const Sell: React.FC = () => {
     contactName: "",
     contactEmail: "",
     contactPhone: "",
-    // Realtor specific fields
     agencyName: "",
     licenseNumber: "",
   });
 
-  // Load user's subscription on mount
   useEffect(() => {
     const loadSubscription = async () => {
       try {
         const subscription = await subscriptionService.getCurrentSubscription();
         setCurrentSubscription(subscription);
 
-        // Set the subscription plan in form if user has one
         if (subscription) {
           setFormData((prev) => ({
             ...prev,
@@ -252,10 +249,9 @@ const Sell: React.FC = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const maxFileSize = 5 * 1024 * 1024; // 5MB per image
+      const maxFileSize = 5 * 1024 * 1024;
       const maxImages = 10;
 
-      // Check total images limit
       if (images.length + files.length > maxImages) {
         setNotification({
           open: true,
@@ -292,11 +288,9 @@ const Sell: React.FC = () => {
             newImages.push(base64String);
             loadedCount++;
 
-            // Update progress
             const progress = Math.round((loadedCount / files.length) * 100);
             setUploadProgress(progress);
 
-            // When all images are loaded
             if (loadedCount === files.length) {
               setImages([...images, ...newImages]);
               setTimeout(() => setUploadProgress(0), 500);
@@ -361,7 +355,6 @@ const Sell: React.FC = () => {
         return;
       }
 
-      // Check if user needs to subscribe or update subscription
       const isActive =
         subscriptionService.isSubscriptionActive(currentSubscription);
       const planChanged =
@@ -369,10 +362,8 @@ const Sell: React.FC = () => {
       const billingChanged =
         currentSubscription?.billingCycle !== formData.billingCycle;
 
-      // Only call subscription API if user doesn't have an active subscription with the same plan
       if (!currentSubscription || !isActive || planChanged || billingChanged) {
         try {
-          // Calculate expiration date
           const startDate = new Date();
           const expirationDate = new Date();
           if (formData.billingCycle === "monthly") {
@@ -381,7 +372,6 @@ const Sell: React.FC = () => {
             expirationDate.setFullYear(expirationDate.getFullYear() + 1);
           }
 
-          // Calculate price based on plan and billing cycle
           const prices: Record<string, { monthly: number; yearly: number }> = {
             free: { monthly: 0, yearly: 0 },
             basic: { monthly: 19, yearly: 199 },
@@ -395,14 +385,14 @@ const Sell: React.FC = () => {
           const subscriptionData = {
             plan: formData.subscriptionPlan,
             billingCycle: formData.billingCycle,
-            billing_cycle: formData.billingCycle, // Also send snake_case
+            billing_cycle: formData.billingCycle,
             startDate: startDate.toISOString(),
-            start_date: startDate.toISOString(), // Also send snake_case
+            start_date: startDate.toISOString(), 
             expirationDate: expirationDate.toISOString(),
-            expiration_date: expirationDate.toISOString(), // Also send snake_case
+            expiration_date: expirationDate.toISOString(), 
             status: "active",
             autoRenew: false,
-            auto_renew: false, // Also send snake_case
+            auto_renew: false,
             price,
           };
 
