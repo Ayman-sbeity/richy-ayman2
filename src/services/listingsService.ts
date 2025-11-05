@@ -31,13 +31,19 @@ export interface ListingResponse {
   success?: boolean;
 }
 
+export interface ListingsApiResponse {
+  data: any[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export const listingsService = {
   async addListing(
     listingData: ListingPayload,
     token?: string
   ): Promise<ListingResponse> {
     try {
-      // Token is automatically added by axios interceptor
       const response = await apiClient.post<ListingResponse>(
         "/listings",
         listingData
@@ -52,7 +58,7 @@ export const listingsService = {
     }
   },
 
-  async getListings(filters?: Record<string, any>): Promise<any[]> {
+  async getListings(filters?: Record<string, any>): Promise<any[] | ListingsApiResponse> {
     try {
       const response = await apiClient.get("/listings", { params: filters });
       return response.data;

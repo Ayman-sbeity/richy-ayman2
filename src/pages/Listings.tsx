@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -8,12 +8,15 @@ import {
   IconButton,
   useMediaQuery,
   useTheme,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { listings } from '../data/listingsData';
+import { listingsService } from '../services/listingsService';
+import { Listing } from '../data/listingsData';
 import { FilterSidebar, PropertyCard, Pagination } from '../components/listings';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -52,11 +55,9 @@ const Listings: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Get initial filter from URL
   const initialType = searchParams.get('type') || 'all';
   const initialCity = searchParams.get('city') || '';
 
-  // Filter states
   const [transactionType, setTransactionType] = useState(initialType);
   const [selectedCity, setSelectedCity] = useState(initialCity);
   const [selectedPropertyType, setSelectedPropertyType] = useState('');
@@ -66,54 +67,90 @@ const Listings: React.FC = () => {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // API states
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
 
-  // Scroll to top when page changes
+  // Fetch listings from API
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage]);
+    const fetchListings = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const filters: Record<string, any> = {
+          page: currentPage,
+          limit: ITEMS_PER_PAGE,
+        };
 
-  // Filtered listings
-  const filteredListings = useMemo(() => {
-    return listings.filter((listing) => {
-      // Transaction type filter
-      if (transactionType !== 'all') {
-        if (transactionType === 'sale' && listing.priceType !== 'sale')
-          return false;
-        if (transactionType === 'rent' && listing.priceType !== 'rent')
-          return false;
+        if (transactionType !== 'all') {
+          filters.listing_type = transactionType;
+        }
+
+        if (selectedCity) {
+          filters.city = selectedCity;
+        }
+
+        if (selectedPropertyType) {
+          filters.propertyType = selectedPropertyType.toLowerCase();
+        }
+
+        if (priceRange[0] > 0) {
+          filters.minPrice = priceRange[0];
+        }
+
+        if (priceRange[1] < 2000000) {
+          filters.maxPrice = priceRange[1];
+        }
+
+        if (bedrooms) {
+          filters.minBedrooms = parseInt(bedrooms);
+        }
+
+        if (bathrooms) {
+          filters.minBathrooms = parseInt(bathrooms);
+        }
+
+        if (selectedFeatures.length > 0) {
+          filters.features = selectedFeatures.join(',');
+        }
+
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            params.set(key, value.toString());
+          }
+        });
+        setSearchParams(params);
+
+        const response = await listingsService.getListings(filters);
+        
+        if (Array.isArray(response)) {
+          setListings(response);
+          setTotalCount(response.length);
+        } else if (response.data && Array.isArray(response.data)) {
+          setListings(response.data);
+          setTotalCount(response.total || response.data.length);
+        } else {
+          setListings([]);
+          setTotalCount(0);
+        }
+      } catch (err: any) {
+        console.error('Error fetching listings:', err);
+        setError(err.message || 'Failed to fetch listings');
+        setListings([]);
+        setTotalCount(0);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // City filter
-      if (selectedCity && listing.location.city !== selectedCity) return false;
-
-      // Property type filter
-      if (
-        selectedPropertyType &&
-        listing.propertyType !== selectedPropertyType.toLowerCase()
-      )
-        return false;
-
-      // Price filter
-      if (listing.price < priceRange[0] || listing.price > priceRange[1])
-        return false;
-
-      // Bedrooms filter
-      if (bedrooms && listing.bedrooms < parseInt(bedrooms)) return false;
-
-      // Bathrooms filter
-      if (bathrooms && listing.bathrooms < parseInt(bathrooms)) return false;
-
-      // Features filter
-      if (selectedFeatures.length > 0) {
-        const hasAllFeatures = selectedFeatures.every((feature) =>
-          listing.features.includes(feature)
-        );
-        if (!hasAllFeatures) return false;
-      }
-
-      return true;
-    });
+    fetchListings();
   }, [
+    currentPage,
     transactionType,
     selectedCity,
     selectedPropertyType,
@@ -121,16 +158,14 @@ const Listings: React.FC = () => {
     bedrooms,
     bathrooms,
     selectedFeatures,
+    setSearchParams,
   ]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
-  const paginatedListings = filteredListings.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
-  // Reset to page 1 when filters change
+  // Reset to page 1 when filters change (except page itself)
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -171,6 +206,9 @@ const Listings: React.FC = () => {
     setCurrentPage(page);
   };
 
+  // Calculate total pages
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
   return (
     <Box sx={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
       {/* Header */}
@@ -194,9 +232,15 @@ const Listings: React.FC = () => {
               fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
             }}
           >
-            {filteredListings.length}{' '}
-            {filteredListings.length === 1 ? t.pages.listings.property : t.pages.listings.properties}{' '}
-            {t.pages.listings.available}
+            {loading ? (
+              'Loading...'
+            ) : (
+              <>
+                {totalCount}{' '}
+                {totalCount === 1 ? t.pages.listings.property : t.pages.listings.properties}{' '}
+                {t.pages.listings.available}
+              </>
+            )}
           </Typography>
         </Container>
       </PageHeader>
@@ -261,12 +305,42 @@ const Listings: React.FC = () => {
                   boxShadow: '0 2px 8px rgba(217, 34, 40, 0.3)',
                 }}
               >
-                {t.pages.listings.filter.filtersButton} ({filteredListings.length} {t.pages.listings.filter.results})
+                {t.pages.listings.filter.filtersButton} ({totalCount} {t.pages.listings.filter.results})
               </Button>
             </Box>
 
+            {/* Loading State */}
+            {loading && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  py: { xs: 8, sm: 10, md: 12 },
+                }}
+              >
+                <CircularProgress
+                  size={60}
+                  sx={{ color: '#d92228' }}
+                />
+              </Box>
+            )}
+
+            {/* Error State */}
+            {error && !loading && (
+              <Box sx={{ mb: 3 }}>
+                <Alert 
+                  severity="error" 
+                  onClose={() => setError(null)}
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+                >
+                  {error}
+                </Alert>
+              </Box>
+            )}
+
             {/* No Results */}
-            {filteredListings.length === 0 ? (
+            {!loading && !error && listings.length === 0 ? (
               <Box
                 sx={{
                   textAlign: 'center',
@@ -325,7 +399,7 @@ const Listings: React.FC = () => {
                     gap: { xs: 2, sm: 2.5, md: 3 },
                   }}
                 >
-                  {paginatedListings.map((listing) => (
+                  {listings.map((listing: Listing) => (
                     <PropertyCard
                       key={listing.id}
                       listing={listing}
@@ -340,7 +414,7 @@ const Listings: React.FC = () => {
                   totalPages={totalPages}
                   onPageChange={handlePageChange}
                   itemsPerPage={ITEMS_PER_PAGE}
-                  totalItems={filteredListings.length}
+                  totalItems={totalCount}
                 />
               </>
             )}
