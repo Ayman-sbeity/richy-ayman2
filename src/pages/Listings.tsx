@@ -128,16 +128,26 @@ const Listings: React.FC = () => {
 
         const response = await listingsService.getListings(filters);
         
+        let fetchedListings: Listing[] = [];
         if (Array.isArray(response)) {
-          setListings(response);
+          fetchedListings = response;
           setTotalCount(response.length);
         } else if (response.data && Array.isArray(response.data)) {
-          setListings(response.data);
+          fetchedListings = response.data;
           setTotalCount(response.total || response.data.length);
         } else {
           setListings([]);
           setTotalCount(0);
+          return;
         }
+        
+        // Normalize the data: convert _id to id if needed
+        const normalizedListings = fetchedListings.map((listing: any) => ({
+          ...listing,
+          id: listing.id || listing._id,
+        }));
+        
+        setListings(normalizedListings);
       } catch (err: any) {
         console.error('Error fetching listings:', err);
         setError(err.message || 'Failed to fetch listings');
@@ -165,7 +175,6 @@ const Listings: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
-  // Reset to page 1 when filters change (except page itself)
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -206,7 +215,6 @@ const Listings: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // Calculate total pages
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
@@ -277,9 +285,7 @@ const Listings: React.FC = () => {
             </FilterSection>
           </Box>
 
-          {/* Listings Content */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            {/* Mobile Filter Button */}
             <Box
               sx={{
                 display: { xs: 'block', md: 'none' },

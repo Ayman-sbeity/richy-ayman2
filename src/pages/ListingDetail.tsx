@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -11,6 +11,8 @@ import {
   CardMedia,
   TextField,
   Avatar,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -23,7 +25,8 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
-import { listings } from "../data/listingsData";
+import { Listing } from "../data/listingsData";
+import { listingsService } from "../services/listingsService";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const ImageGallery = styled(Box)(({ theme }) => ({
@@ -74,37 +77,67 @@ const ListingDetail: React.FC = () => {
     phone: "",
     message: "",
   });
+  
+  // API states
+  const [listing, setListing] = useState<any>(null);
+  const [similarListings, setSimilarListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const listing = listings.find((l) => l.id === id);
+  // Fetch listing details
+  useEffect(() => {
+    const fetchListing = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const data = await listingsService.getListingById(id);
+        
+        // Normalize the data: convert _id to id if needed
+        const normalizedListing = {
+          ...data,
+          id: data.id || data._id,
+        };
+        
+        setListing(normalizedListing);
+        
+        // Fetch similar listings
+        const response = await listingsService.getListings({
+          limit: 3,
+        });
+        
+        const allListings = Array.isArray(response) ? response : response.data;
+        
+        // Normalize all listings data
+        const normalizedAllListings = allListings.map((l: any) => ({
+          ...l,
+          id: l.id || l._id,
+        }));
+        
+        const similar = normalizedAllListings
+          .filter((l: Listing) => 
+            l.id !== id && 
+            (l.location?.city === normalizedListing.location?.city || l.propertyType === normalizedListing.propertyType)
+          )
+          .slice(0, 3);
+        
+        setSimilarListings(similar);
+      } catch (err: any) {
+        console.error('Error fetching listing:', err);
+        setError(err.message || 'Failed to fetch listing details');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!listing) {
-    return (
-      <Container maxWidth="lg" sx={{ py: 8, textAlign: "center" }}>
-        <Typography variant="h4" sx={{ mb: 2 }}>
-          {t.pages.listingDetail.propertyNotFound}
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => navigate("/listings")}
-          sx={{
-            backgroundColor: "#d92228",
-            "&:hover": { backgroundColor: "#b91c22" },
-          }}
-        >
-          {t.pages.listingDetail.backToListings}
-        </Button>
-      </Container>
-    );
-  }
+    fetchListing();
+  }, [id]);
 
-  const similarListings = listings
-    .filter(
-      (l) =>
-        l.id !== listing.id &&
-        (l.location.city === listing.location.city ||
-          l.propertyType === listing.propertyType)
-    )
-    .slice(0, 3);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -117,6 +150,52 @@ const ListingDetail: React.FC = () => {
     alert(t.pages.listingDetail.agent.successMessage);
     setFormData({ name: "", email: "", phone: "", message: "" });
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <Box sx={{ backgroundColor: "#fff", minHeight: "100vh" }}>
+        <Container maxWidth="lg" sx={{ py: 8 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "60vh",
+            }}
+          >
+            <CircularProgress size={60} sx={{ color: "#d92228" }} />
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
+
+  // Error state
+  if (error || !listing) {
+    return (
+      <Box sx={{ backgroundColor: "#fff", minHeight: "100vh" }}>
+        <Container maxWidth="lg" sx={{ py: 8, textAlign: "center" }}>
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error || t.pages.listingDetail.propertyNotFound}
+          </Alert>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            {t.pages.listingDetail.propertyNotFound}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/listings")}
+            sx={{
+              backgroundColor: "#d92228",
+              "&:hover": { backgroundColor: "#b91c22" },
+            }}
+          >
+            {t.pages.listingDetail.backToListings}
+          </Button>
+        </Container>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ backgroundColor: "#fff", pb: 6 }}>
@@ -136,35 +215,53 @@ const ListingDetail: React.FC = () => {
 
       {/* Image Gallery */}
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <ImageGallery>
-          <Box
-            sx={{
-              gridColumn: { xs: "1", md: "1 / 3" },
-              gridRow: { xs: "1", md: "1 / 3" },
-            }}
-          >
-            <MainImage
-              src={listing.images[selectedImage]}
-              alt={listing.title}
-              onClick={() =>
-                setSelectedImage((selectedImage + 1) % listing.images.length)
-              }
-            />
-          </Box>
-          {listing.images.slice(1, 5).map((image, index) => (
-            <Box key={index} sx={{ height: { xs: "150px", md: "245px" } }}>
+        {listing.images && listing.images.length > 0 ? (
+          <ImageGallery>
+            <Box
+              sx={{
+                gridColumn: { xs: "1", md: "1 / 3" },
+                gridRow: { xs: "1", md: "1 / 3" },
+              }}
+            >
               <MainImage
-                src={image}
-                alt={`${listing.title} - Image ${index + 2}`}
-                onClick={() => setSelectedImage(index + 1)}
-                style={{
-                  border:
-                    selectedImage === index + 1 ? "3px solid #d92228" : "none",
-                }}
+                src={listing.images[selectedImage]}
+                alt={listing.title}
+                onClick={() =>
+                  setSelectedImage((selectedImage + 1) % listing.images.length)
+                }
               />
             </Box>
-          ))}
-        </ImageGallery>
+            {listing.images.slice(1, 5).map((image: string, index: number) => (
+              <Box key={index} sx={{ height: { xs: "150px", md: "245px" } }}>
+                <MainImage
+                  src={image}
+                  alt={`${listing.title} - Image ${index + 2}`}
+                  onClick={() => setSelectedImage(index + 1)}
+                  style={{
+                    border:
+                      selectedImage === index + 1 ? "3px solid #d92228" : "none",
+                  }}
+                />
+              </Box>
+            ))}
+          </ImageGallery>
+        ) : (
+          <Box
+            sx={{
+              height: 400,
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 4,
+            }}
+          >
+            <Typography variant="h6" sx={{ color: "#999" }}>
+              No images available
+            </Typography>
+          </Box>
+        )}
 
         <Box
           sx={{
@@ -209,8 +306,9 @@ const ListingDetail: React.FC = () => {
                 }}
               >
                 <LocationOnIcon sx={{ color: "#d92228" }} />
-                {listing.location.address}, {listing.location.neighborhood},{" "}
-                {listing.location.city}
+                {listing.location?.address && `${listing.location.address}, `}
+                {listing.location?.neighborhood && `${listing.location.neighborhood}, `}
+                {listing.location?.city || "Location not specified"}
               </Typography>
               <Typography
                 variant="h4"
@@ -239,7 +337,7 @@ const ListingDetail: React.FC = () => {
                 <BedIcon sx={{ fontSize: "2rem", color: "#d92228" }} />
                 <Box>
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {listing.bedrooms}
+                    {listing.bedrooms || 0}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#666" }}>
                     Bedrooms
@@ -250,7 +348,7 @@ const ListingDetail: React.FC = () => {
                 <BathtubIcon sx={{ fontSize: "2rem", color: "#d92228" }} />
                 <Box>
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {listing.bathrooms}
+                    {listing.bathrooms || 0}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#666" }}>
                     Bathrooms
@@ -261,7 +359,7 @@ const ListingDetail: React.FC = () => {
                 <SquareFootIcon sx={{ fontSize: "2rem", color: "#d92228" }} />
                 <Box>
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {listing.area.toLocaleString()}
+                    {listing.area?.toLocaleString() || 0}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#666" }}>
                     Sqft
@@ -272,7 +370,7 @@ const ListingDetail: React.FC = () => {
                 <LocalParkingIcon sx={{ fontSize: "2rem", color: "#d92228" }} />
                 <Box>
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {listing.parking}
+                    {listing.parking || listing.parkingSpaces || 0}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#666" }}>
                     Parking
@@ -366,17 +464,23 @@ const ListingDetail: React.FC = () => {
                   gap: 1.5,
                 }}
               >
-                {listing.features.map((feature, index) => (
-                  <Box
-                    key={index}
-                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                  >
-                    <CheckCircleIcon
-                      sx={{ color: "#28a745", fontSize: "1.2rem" }}
-                    />
-                    <Typography variant="body1">{feature}</Typography>
-                  </Box>
-                ))}
+                {listing.features && listing.features.length > 0 ? (
+                  listing.features.map((feature: string, index: number) => (
+                    <Box
+                      key={index}
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
+                      <CheckCircleIcon
+                        sx={{ color: "#28a745", fontSize: "1.2rem" }}
+                      />
+                      <Typography variant="body1">{feature}</Typography>
+                    </Box>
+                  ))
+                ) : (
+                  <Typography variant="body2" sx={{ color: "#999" }}>
+                    No features listed
+                  </Typography>
+                )}
               </Box>
             </Box>
 
@@ -403,7 +507,8 @@ const ListingDetail: React.FC = () => {
                     sx={{ fontSize: "4rem", color: "#d92228", mb: 1 }}
                   />
                   <Typography variant="h6" sx={{ color: "#666" }}>
-                    {listing.location.neighborhood}, {listing.location.city}
+                    {listing.location?.neighborhood && `${listing.location.neighborhood}, `}
+                    {listing.location?.city || "Location"}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#999" }}>
                     Interactive map coming soon
@@ -440,39 +545,43 @@ const ListingDetail: React.FC = () => {
                       fontSize: "2rem",
                     }}
                   >
-                    {listing.agentName.charAt(0)}
+                    {listing.agentName?.charAt(0) || listing.contactName?.charAt(0) || "A"}
                   </Avatar>
                   <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-                    {listing.agentName}
+                    {listing.agentName || listing.contactName || "Agent"}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#666", mb: 2 }}>
                     Real Estate Agent
                   </Typography>
-                  <Box
-                    sx={{ display: "flex", justifyContent: "center", gap: 2 }}
-                  >
+                  {(listing.agentPhone || listing.contactPhone) && (
                     <Box
-                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                      sx={{ display: "flex", justifyContent: "center", gap: 2 }}
                     >
-                      <PhoneIcon sx={{ fontSize: "1rem", color: "#d92228" }} />
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                      >
+                        <PhoneIcon sx={{ fontSize: "1rem", color: "#d92228" }} />
+                        <Typography variant="body2">
+                          {listing.agentPhone || listing.contactPhone}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                  {(listing.agentEmail || listing.contactEmail) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: 0.5,
+                        mt: 1,
+                      }}
+                    >
+                      <EmailIcon sx={{ fontSize: "1rem", color: "#d92228" }} />
                       <Typography variant="body2">
-                        {listing.agentPhone}
+                        {listing.agentEmail || listing.contactEmail}
                       </Typography>
                     </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: 0.5,
-                      mt: 1,
-                    }}
-                  >
-                    <EmailIcon sx={{ fontSize: "1rem", color: "#d92228" }} />
-                    <Typography variant="body2">
-                      {listing.agentEmail}
-                    </Typography>
-                  </Box>
+                  )}
                 </Box>
 
                 {/* Contact Form */}
@@ -569,24 +678,26 @@ const ListingDetail: React.FC = () => {
                   }}
                   onClick={() => navigate(`/listings/${similar.id}`)}
                 >
-                  <CardMedia
-                    component="img"
-                    height="180"
-                    image={similar.images[0]}
-                    alt={similar.title}
-                  />
+                  {similar.images && similar.images.length > 0 && (
+                    <CardMedia
+                      component="img"
+                      height="180"
+                      image={similar.images[0]}
+                      alt={similar.title}
+                    />
+                  )}
                   <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
                       {similar.title}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#666", mb: 1 }}>
-                      {similar.location.city}
+                      {similar.location?.city || "Location"}
                     </Typography>
                     <Typography
                       variant="h6"
                       sx={{ color: "#d92228", fontWeight: 700 }}
                     >
-                      ${similar.price.toLocaleString()}
+                      ${similar.price?.toLocaleString() || 0}
                       {similar.priceType === "rent" && "/mo"}
                     </Typography>
                   </CardContent>
