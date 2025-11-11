@@ -58,7 +58,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
         />
         <Chip
           label={
-            listing.priceType === "sale"
+            ((listing as any).listing_type) === "Sale"
               ? t.components.propertyCard.forSale
               : t.components.propertyCard.forRent
           }
@@ -68,7 +68,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
             top: 12,
             left: 12,
             backgroundColor:
-              listing.priceType === "sale" ? "#d92228" : "#28a745",
+              ((listing as any).listing_type || listing.priceType) === "sale" ? "#d92228" : "#28a745",
             color: "white",
             fontWeight: 600,
             fontSize: { xs: "0.75rem", sm: "0.8rem" },
@@ -134,7 +134,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, onClick }) => {
           }}
         >
           ${listing.price.toLocaleString()}
-          {listing.priceType === "rent" && (
+          {((listing as any).listing_type || listing.priceType) === "rent" && (
             <span style={{ fontSize: "0.85em", fontWeight: 500 }}>
               {t.components.propertyCard.perMonth}
             </span>
