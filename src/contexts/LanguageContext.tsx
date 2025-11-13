@@ -13,6 +13,7 @@ interface Translations {
     signup: string;
     welcome: string;
     logout: string;
+    profile: string;
   };
   footer: {
     sections: {
@@ -547,6 +548,7 @@ const translations: Record<Language, Translations> = {
       signup: "Sign up",
       welcome: "Welcome",
       logout: "Logout",
+      profile: "Profile",
     },
     footer: {
       sections: {
@@ -1145,6 +1147,7 @@ const translations: Record<Language, Translations> = {
       signup: "إنشاء حساب",
       welcome: "مرحبا",
       logout: "تسجيل الخروج",
+      profile: "الملف الشخصي",
     },
     footer: {
       sections: {

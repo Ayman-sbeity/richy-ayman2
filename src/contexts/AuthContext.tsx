@@ -11,6 +11,7 @@ export interface User {
   name: string;
   email: string;
   type: string;
+  phone?: string;
   token?: string;
 }
 
@@ -58,7 +59,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", userData.token || "");
+    // Only overwrite token if the server returned a new one
+    if (userData.token) {
+      localStorage.setItem("token", userData.token);
+    }
     localStorage.setItem("isAuthenticated", "true");
   };
 

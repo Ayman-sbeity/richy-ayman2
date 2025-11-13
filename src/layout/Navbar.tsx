@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import {
   Logo,
   SearchBar,
@@ -107,6 +108,7 @@ const Navbar: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const navigate = useNavigate();
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget);
   };
@@ -165,6 +167,7 @@ const Navbar: React.FC = () => {
                       open={Boolean(userMenuAnchor)}
                       onClose={handleUserMenuClose}
                     >
+                      <MenuItem onClick={() => { handleUserMenuClose(); navigate('/profile'); }}>{t.nav.profile || "Profile"}</MenuItem>
                       <MenuItem onClick={handleLogout}>{t.nav.logout}</MenuItem>
                     </Menu>
                   </Box>
@@ -214,6 +217,16 @@ const Navbar: React.FC = () => {
               >
                 {t.nav.welcome}, {user.name}
               </Typography>
+              <Button
+                onClick={() => {
+                  window.location.href = '/profile';
+                  setMobileMenuOpen(false);
+                }}
+                variant="contained"
+                fullWidth
+              >
+                {t.nav.profile || "Profile"}
+              </Button>
               <Button
                 onClick={() => {
                   logout();

@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { Layout } from "./layout";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -31,6 +32,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <Sell />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />

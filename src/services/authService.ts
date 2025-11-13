@@ -5,6 +5,7 @@ export interface User {
   name: string;
   email: string;
   type: string;
+  phone?: string;
   token?: string;
 }
 
@@ -96,6 +97,39 @@ export const authService = {
         error.response?.data?.message ||
         error.response?.data?.error ||
         "Login failed";
+      throw new Error(errorMessage);
+    }
+  },
+
+  async updateProfile(
+    userId: string | undefined,
+    userData: {
+      name: string;
+      email: string;
+      phone?: string;
+      type?: string;
+    },
+    token?: string
+  ): Promise<User> {
+    try {
+      // Prefer using path param /users/:id when userId is provided; fallback to /users/profile
+      const endpoint = userId ? `/users/${userId}` : "/users/profile";
+      const config: any = {};
+      if (token) {
+        config.headers = { Authorization: `Bearer ${token}` };
+      }
+      const response = await apiClient.put<User>(endpoint, userData, config);
+      
+      if (response.data.token) {
+        setAuthToken(response.data.token);
+      }
+
+      return response.data;
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Profile update failed";
       throw new Error(errorMessage);
     }
   },
