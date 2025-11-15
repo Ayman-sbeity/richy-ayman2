@@ -37,6 +37,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import BedIcon from "@mui/icons-material/Bed";
 import BathtubIcon from "@mui/icons-material/Bathtub";
 import SquareFootIcon from "@mui/icons-material/SquareFoot";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { authService } from "../services/authService";
@@ -80,6 +81,47 @@ const ListingCard = styled(Card)(({ theme }) => ({
   "&:hover": {
     transform: "translateY(-8px)",
     boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+  },
+}));
+
+const UploadBox = styled(Box)(({ theme }) => ({
+  border: `2px dashed ${theme.palette.divider}`,
+  borderRadius: 8,
+  padding: theme.spacing(2),
+  textAlign: "center",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: theme.spacing(1),
+  "&:hover": {
+    borderColor: "#d92228",
+    backgroundColor: "rgba(217,34,40,0.03)",
+  },
+}));
+
+const ImagePreview = styled(Box)(({ theme }) => ({
+  position: "relative",
+  width: 120,
+  height: 90,
+  borderRadius: 8,
+  overflow: "hidden",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundColor: theme.palette.background.default,
+}));
+
+const DeleteButton = styled(IconButton)(({ theme }) => ({
+  position: "absolute",
+  top: 6,
+  right: 6,
+  backgroundColor: "rgba(255,255,255,0.9)",
+  zIndex: 2,
+  "&:hover": {
+    backgroundColor: "#fff",
+    color: "#d92228",
   },
 }));
 
@@ -145,6 +187,10 @@ const Profile: React.FC = () => {
   });
 
   const [userListings, setUserListings] = useState<any[]>([]);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [listingToEdit, setListingToEdit] = useState<any | null>(null);
+  const [editForm, setEditForm] = useState<any>({});
+  const [editSaving, setEditSaving] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -189,7 +235,7 @@ const Profile: React.FC = () => {
       const response = await listingsService.getListings({
         user_id: user?._id,
       });
-      
+
       const listings = Array.isArray(response) ? response : response.data || [];
       setUserListings(listings);
     } catch (error) {
@@ -212,9 +258,15 @@ const Profile: React.FC = () => {
         navigate("/login");
         return;
       }
-  const updatedUser = await authService.updateProfile(userId, payload, token);
-  const currentToken = localStorage.getItem("token");
-  login({ ...(updatedUser as any), token: updatedUser.token || currentToken || undefined });
+    const updatedUser = await authService.updateProfile(userId, payload, token);
+    const currentToken = localStorage.getItem("token");
+    // Merge the returned user with the existing user to avoid overwriting
+    // existing fields if the API returns a partial user object
+    const mergedUser = { ...(user as any), ...(updatedUser as any) };
+    // Prefer token returned by the server, then localStorage, then existing
+    mergedUser.token = updatedUser.token || currentToken || (user as any)?.token;
+    login(mergedUser as any);
+    setProfileData({ _id: mergedUser._id || profileData._id, name: mergedUser.name || profileData.name, email: mergedUser.email || profileData.email, phone: mergedUser.phone || profileData.phone, type: mergedUser.type || profileData.type });
       setEditMode(false);
       showSnackbar("Profile updated successfully!", "success");
     } catch (error: any) {
@@ -252,13 +304,132 @@ const Profile: React.FC = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleEditListing = (listingId: string) => {
-    navigate(`/sell?edit=${listingId}`);
+  const handleEditListing = (listing: any) => {
+    setListingToEdit(listing);
+    setEditForm({
+      title: listing.title || "",
+      description: listing.description || "",
+      property_type: listing.property_type || listing.propertyType || "",
+      listing_type: listing.listing_type || listing.listingType || "",
+      price: listing.price || "",
+      location: listing.location || "",
+      city: listing.city || "",
+      bedrooms: listing.bedrooms || 0,
+      bathrooms: listing.bathrooms || 0,
+      area: listing.area || 0,
+      parking_spaces: listing.parking_spaces || listing.parkingSpaces || 0,
+      year_built: listing.year_built || listing.yearBuilt || 0,
+  features: Array.isArray(listing.features) ? listing.features.slice() : (typeof listing.features === 'string' ? listing.features.split(',').map((f: string)=>f.trim()).filter(Boolean) : []),
+  images: Array.isArray(listing.images) ? listing.images.slice() : (listing.images ? [listing.images] : []),
+      seller_type: listing.seller_type || listing.sellerType || "",
+      contact_name: listing.contact_name || listing.contactName || "",
+      contact_email: listing.contact_email || listing.contactEmail || "",
+      contact_phone: listing.contact_phone || listing.contactPhone || "",
+      status: listing.status || "",
+    });
+    setEditDialogOpen(true);
   };
 
   const openDeleteDialog = (listingId: string) => {
     setListingToDelete(listingId);
     setDeleteDialogOpen(true);
+  };
+
+  const handleEditDialogClose = () => {
+    setEditDialogOpen(false);
+    setListingToEdit(null);
+    setEditForm({});
+  };
+
+  const handleEditImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+    const maxFileSize = 5 * 1024 * 1024; // 5 MB
+    const maxImages = 10;
+    const currentImages = Array.isArray(editForm.images) ? editForm.images : [];
+    if (currentImages.length + files.length > maxImages) {
+      showSnackbar(`Maximum ${maxImages} images allowed. You can upload ${maxImages - currentImages.length} more.`, "error");
+      return;
+    }
+
+    let loadedCount = 0;
+    const newImages: string[] = [];
+
+    Array.from(files).forEach((file) => {
+      if (file.size > maxFileSize) {
+        showSnackbar(`Image ${file.name} is too large. Maximum size is 5MB.`, "error");
+        loadedCount++;
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          const base64String = e.target.result as string;
+          newImages.push(base64String);
+        }
+        loadedCount++;
+        if (loadedCount === files.length) {
+          setEditForm((prev: any) => ({ ...prev, images: [...(prev.images || []), ...newImages] }));
+        }
+      };
+
+      reader.onerror = () => {
+        loadedCount++;
+        showSnackbar(`Failed to read image ${file.name}`, "error");
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleDeleteEditImage = (index: number) => {
+    setEditForm((prev: any) => ({ ...prev, images: (prev.images || []).filter((_: any, i: number) => i !== index) }));
+  };
+
+  const handleEditFormChange = (field: string, value: any) => {
+    setEditForm((prev: any) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveEdit = async () => {
+    if (!listingToEdit) return;
+    try {
+      setEditSaving(true);
+      // Prepare payload
+      const payload: any = {
+        title: editForm.title,
+        description: editForm.description,
+        propertyType: editForm.property_type || editForm.propertyType,
+        listingType: editForm.listing_type || editForm.listingType,
+        price: editForm.price,
+        location: editForm.location,
+        city: editForm.city,
+        bedrooms: Number(editForm.bedrooms) || 0,
+        bathrooms: Number(editForm.bathrooms) || 0,
+        area: Number(editForm.area) || 0,
+        parkingSpaces: Number(editForm.parking_spaces) || Number(editForm.parkingSpaces) || 0,
+        yearBuilt: Number(editForm.year_built) || Number(editForm.yearBuilt) || 0,
+        features: Array.isArray(editForm.features) ? editForm.features : (typeof editForm.features === "string" ? editForm.features.split(",").map((f: string) => f.trim()).filter(Boolean) : []),
+        images: Array.isArray(editForm.images) ? editForm.images : (typeof editForm.images === "string" ? editForm.images.split(",").map((f: string) => f.trim()).filter(Boolean) : []),
+        sellerType: editForm.seller_type || editForm.sellerType,
+        contactName: editForm.contact_name || editForm.contactName,
+        contactEmail: editForm.contact_email || editForm.contactEmail,
+        contactPhone: editForm.contact_phone || editForm.contactPhone,
+        status: editForm.status,
+      };
+
+      await listingsService.updateListing(listingToEdit._id, payload);
+      // Fetch updated listing and update UI
+      const updated = await listingsService.getListingById(listingToEdit._id);
+      setUserListings((prev) => prev.map((l) => (l._id === updated._id ? updated : l)));
+      showSnackbar("Listing updated successfully", "success");
+      handleEditDialogClose();
+    } catch (error: any) {
+      console.error("Failed to update listing", error);
+      showSnackbar(error.message || "Failed to update listing", "error");
+    } finally {
+      setEditSaving(false);
+    }
   };
 
   const getInitials = (name: string) => {
@@ -446,7 +617,7 @@ const Profile: React.FC = () => {
                           _id: user?._id || profileData._id,
                           name: user ? user.name : profileData.name,
                           email: user ? user.email : profileData.email,
-                          phone: "",
+                          phone: user?.phone || profileData.phone || "",
                           type: user ? user.type : profileData.type,
                         });
                       }}
@@ -620,7 +791,7 @@ const Profile: React.FC = () => {
                         <Button
                           size="small"
                           startIcon={<EditIcon />}
-                          onClick={() => handleEditListing(listing._id)}
+                          onClick={() => handleEditListing(listing)}
                         >
                           Edit
                         </Button>
@@ -660,6 +831,123 @@ const Profile: React.FC = () => {
             disabled={loading}
           >
             {loading ? <CircularProgress size={24} /> : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit Listing Dialog */}
+      <Dialog open={editDialogOpen} onClose={handleEditDialogClose} maxWidth="md" fullWidth>
+        <DialogTitle>Edit Listing</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <TextField
+              label="Title"
+              value={editForm.title || ""}
+              onChange={(e) => handleEditFormChange("title", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Price"
+              value={String(editForm.price ?? "")}
+              onChange={(e) => handleEditFormChange("price", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Location"
+              value={editForm.location || ""}
+              onChange={(e) => handleEditFormChange("location", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="City"
+              value={editForm.city || ""}
+              onChange={(e) => handleEditFormChange("city", e.target.value)}
+              fullWidth
+            />
+            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+              <TextField
+                label="Bedrooms"
+                value={String(editForm.bedrooms ?? "")}
+                onChange={(e) => handleEditFormChange("bedrooms", e.target.value)}
+                fullWidth
+              />
+              <TextField
+                label="Bathrooms"
+                value={String(editForm.bathrooms ?? "")}
+                onChange={(e) => handleEditFormChange("bathrooms", e.target.value)}
+                fullWidth
+              />
+              <TextField
+                label="Area (sqft)"
+                value={String(editForm.area ?? "")}
+                onChange={(e) => handleEditFormChange("area", e.target.value)}
+                fullWidth
+              />
+            </Box>
+            <TextField
+              label="Features (comma separated)"
+              value={Array.isArray(editForm.features) ? editForm.features.join(", ") : editForm.features || ""}
+              onChange={(e) => handleEditFormChange("features", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
+              fullWidth
+            />
+
+            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
+              {(editForm.images || []).map((img: string, idx: number) => (
+                <Box key={idx} sx={{ position: "relative" }}>
+                  <ImagePreview sx={{ backgroundImage: `url(${img})` }} />
+                  <DeleteButton size="small" onClick={() => handleDeleteEditImage(idx)}>
+                    <DeleteIcon fontSize="small" />
+                  </DeleteButton>
+                </Box>
+              ))}
+
+              <div>
+                <input
+                  id="edit-image-upload"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  multiple
+                  type="file"
+                  onChange={handleEditImageUpload}
+                />
+                <label htmlFor="edit-image-upload">
+                  <UploadBox>
+                    <CloudUploadIcon sx={{ fontSize: 36, color: "#d92228" }} />
+                    <Typography variant="caption">Upload images</Typography>
+                  </UploadBox>
+                </label>
+              </div>
+            </Box>
+            <TextField
+              label="Contact Name"
+              value={editForm.contact_name || ""}
+              onChange={(e) => handleEditFormChange("contact_name", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Contact Email"
+              value={editForm.contact_email || ""}
+              onChange={(e) => handleEditFormChange("contact_email", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Contact Phone"
+              value={editForm.contact_phone || ""}
+              onChange={(e) => handleEditFormChange("contact_phone", e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Status"
+              value={editForm.status || ""}
+              onChange={(e) => handleEditFormChange("status", e.target.value)}
+              fullWidth
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditDialogClose}>Cancel</Button>
+          <Button onClick={handleSaveEdit} variant="contained" disabled={editSaving}>
+            {editSaving ? <CircularProgress size={20} /> : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
